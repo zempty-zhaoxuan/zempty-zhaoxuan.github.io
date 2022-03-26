@@ -5,7 +5,7 @@
 # Name of your site (displayed in the header)
 name: "zempty 笔记"
 # Short bio or description (displayed in the header)
-description: "个人技术公众号分享、记录、成长"
+description: "思考也是一种修行，认真写写文章是一件快乐的事情"
 
 #
 # Flags below are optional
@@ -32,7 +32,7 @@ excerpt_separator: <!-- more -->
 
 # Includes an icon in the footer for each username you enter
 footer-links:
-  zhihu: https://www.zhihu.com/column/zhaoxuan
+  zhihu: zemptyzhao
   email: kickcodeman@gmail.com
   facebook:
   flickr:
