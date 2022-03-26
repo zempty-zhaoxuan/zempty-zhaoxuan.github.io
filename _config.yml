@@ -55,8 +55,8 @@ disqus: # fromendworld
 gitalk:
   clientID: 135ef7d20bcf3a9e92aa
   clientSecret: b78e238865e60f5897fc6a604ab4cd1622df3261
-  repo: zempty-zhaoxuan.github.io
-  owner: zempty
+  repo: blog_comments
+  owner: zempty-zhaoxuan
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
 google_analytics: G-FXHE2HXDMM
