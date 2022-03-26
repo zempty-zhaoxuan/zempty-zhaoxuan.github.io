@@ -2,6 +2,7 @@
 layout: post
 title: "从 0 开始学习搭建自己的网站（速成版）"
 date:   2022-03-26
+toc: true 
 author: zempty
 ---
 ## 从 0 开始学习搭建自己的网站（速成版）
