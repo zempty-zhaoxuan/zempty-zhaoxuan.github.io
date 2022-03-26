@@ -1,3 +1,5 @@
 # jekyll local file
+# 
+.DS_Store
 .jekyll*
 _site
