@@ -21,7 +21,7 @@ author: zempty
 
 下面开始快速安装我们的安装包来搭建我们的网站，请参考如下图片提示在 server 上安装我们需要的安装包：
 
-##下载安装包
+## 下载安装包
 
 点解红色箭头提示，进入搜索安装：
 (img)
@@ -45,7 +45,7 @@ yum install wget
 
 现在 ～/software 路径下面应该有 bitnami-wordpresspro-5.3-0-linux-x64-installer.run 这个安装包。
 
-##执行安装包
+## 执行安装包
 
 给安装包赋予执行权限：
 chmod +x bitnami-wordpresspro-5.3-0-linux-x64-installer.run
@@ -66,7 +66,7 @@ chmod +x bitnami-wordpresspro-5.3-0-linux-x64-installer.run
 
 到这里我们的软件 wordpress + nginx + mysql + ssl 就都安装完毕了！！！
 
-##给自己的域名配置 ssl 证书
+## 给自己的域名配置 ssl 证书
 
 执行如下命令切换到该目录下：
 cd /opt/wordpresspro-5.3-0/letsencrypt/scripts/
@@ -77,7 +77,7 @@ cd /opt/wordpresspro-5.3-0/letsencrypt/scripts/
 查看 /opt/wordpresspro-5.3-0/nginx/conf 目录下面有没有生成根据你的域名命名的 ssl 证书文件：
 (img)
 
-##  重新启动所有服务
+## 重新启动所有服务
 
 切换到 /opt/wordpresspro-5.3-0 目录下面：
 cd /opt/wordpresspro-5.3-0
@@ -87,7 +87,7 @@ cd /opt/wordpresspro-5.3-0
 
 打开浏览器输入域名测试 zempty.cf  测试，测试成功！！！
 
-##总结
+## 总结
 
 以上详述了搭建网站的步骤流程，如有疑问，欢迎留言，下面提供该软件包的官方参考文档链接如下：[https://docs.bitnami.com/installer/apps/wordpress-pro/get-started/] ，有不解之处也可以参考官方文档进行解决，网站已经解决但是接下来是时候来布局美化自己的网站了，这个过程也是蛮耗精力的，推荐两个教程：
 
