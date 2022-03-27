@@ -29,7 +29,9 @@ navigation:
   - name: 归档
     url: /archive
 # Pagination
-paginate: 8
+plugins: [jekyll-paginate]
+paginate: 8 # 每页文章数
+paginate_path: "essay/page:num" # 可选，分页链接
 
 excerpt_separator: <!-- more -->
 
