@@ -1,11 +1,3 @@
-# jenkins 使用 docker 部署镜像，空间不足的问题
-
-日期: August 5, 2021 4:02 PM
-状态: 已解决
-类型: 编程
-
-问题描述：
-
 ```
 [29330] Failed to execute script docker-compose
 Traceback (most recent call last):

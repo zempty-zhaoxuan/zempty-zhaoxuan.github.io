@@ -1,9 +1,3 @@
-# spring cloud 无法加载 bootstrap.properties(bootstrap.yml）配置文件
-
-日期: October 25, 2021 11:12 AM
-状态: 已解决
-类型: 编程
-
 spring cloud 项目无法加载 [bootstrap.properties](http://bootstrap.properties) (bootstrap.yml) 文件，添加如下的相关依赖即可：
 
 ```bash

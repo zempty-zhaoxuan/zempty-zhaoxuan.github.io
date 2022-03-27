@@ -1,9 +1,3 @@
-# spring cloud 报错超时，错误如下
-
-日期: July 13, 2021 5:45 PM
-状态: 已解决
-类型: 编程
-
 ```java
 {
   "msg": "Service Unavailable. Please try after sometime.",
