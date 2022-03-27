@@ -80,7 +80,7 @@ layout: default
       </a>
     </span>
   {% endif %}
-  span class="page_num pagination__page-number">{{ paginator.page }} / {{ paginator.total_pages }}</span>
+  <span class="page_num pagination__page-number">{{ paginator.page }} / {{ paginator.total_pages }}</span>
   {% if paginator.next_page %}
     <span class="next">
       <a href="{{ site.baseurl}}{{ paginator.next_page_path }}" class="next">
