@@ -15,7 +15,6 @@ author: zempty
 
 在 java 中有一个特殊的字符，那就是使用 \ (反斜线）后面再添加一个字符，我们叫转义字符（escape character），比如 \n 表示的是换号符号，并不是单纯的一个 n 字符了。
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/escape\_character.png)
 
 那 \  (反斜线）用来做转义字符了，那么程序就是要输出一个 \ (反斜线）怎么处理呢？
 
