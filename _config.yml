@@ -62,7 +62,7 @@ gitalk:
   clientSecret: b78e238865e60f5897fc6a604ab4cd1622df3261
   repo: blog_comments
   owner: zempty-zhaoxuan
-  id: md5(window.location.pathname)
+  id: decodeURI('{{ page.url }}')
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
 google_analytics: G-FXHE2HXDMM
