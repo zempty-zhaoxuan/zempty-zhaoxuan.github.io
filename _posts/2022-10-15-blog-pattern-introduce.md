@@ -22,4 +22,11 @@ author: zempty
 
 最后三个下划线结束。
 
+## 博客评论报错
+
+博客的文件名字如果太长，会出现 gittalk 评论报错，控制 blog 文章的长度，尽量的短，太长不可以进行评论，评论将会报错：
+
+![][image-2]
+
 [image-1]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/blog-pattern.png
+[image-2]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/gittalk_issue.png
