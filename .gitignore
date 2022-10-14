@@ -4,8 +4,7 @@
 .DS_Store
 .jekyll*
 _site
-
-.Archive/
+.plist
 .markeditor/
 !.metion/
 .metion/*
