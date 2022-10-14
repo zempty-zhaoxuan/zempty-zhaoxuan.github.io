@@ -17,7 +17,7 @@ author: zempty
 在 java 中有一个特殊的字符，那就是使用 \ (反斜线）后面再添加一个字符，我们叫转义字符（escape character），比如 \n 表示的是换号符号，并不是单纯的一个 n 字符了。
 
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/escape\_character.png)
+![][image-1]
 
 
 那 \  (反斜线）用来做转义字符了，那么程序就是要输出一个 \ (反斜线）怎么处理呢？
@@ -78,7 +78,7 @@ author: zempty
 
 你能回到以上 8 个示例的输出结果吗？如果可以，那么你对 java 当中转义字符 \ 和反转义 \\ 应该很清楚了，结果如下：
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/result.png)
+![][image-2]
 
 在 java 语言当中 ‘ (单引号）用来表示字符，“ (双引号）用来表示字符串，所以如何输出一个单引号字符和一个双引号呢？所以在 java 当中就有了转义字符 \ 来帮忙了。
 
@@ -169,7 +169,7 @@ Pattern 类文档中列举了许多正则表达式的规则，正则表达式忘
 
 结果如下：
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/patternresult.png][image-3)
+![][image-3]
 
 以上方法中 compile 方法用来编译正则表达式（创建 Pattern 示例），compile 方法提供了两个方法，带有两个参数的 int flag 可以实现不同需求，比如上面示例中的Pattern.CASE\_INSENSITIVE 就是表示正则表达式匹配字符串的时候不用区分大小写；flags()用来输出 Pattern 的 flag 。
 
@@ -351,7 +351,7 @@ group(int) 方法中的参数是组号，上面示例中正则表达式有三组
 
 依据综上分析，可知上述示例的输出结果：
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/matcher\_result.png)
+![][image-4]
 
 Matcher 类中 reset() 相关方法
 
@@ -404,7 +404,7 @@ reset 中文意思是重置，在这里是重置匹配的位置，从头开始�
 3. 在示例 m2.reset("123testdemo345")  当中，m2 重置了要匹配的字符串对象，结果也会从头开始进行结果的匹配。
 4. lookingAt() 方法的效果就是从头开始匹配，因此最后一个 lookingAt() 的示例，两次输出的结果是相同的。
 
-![](https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/reset\_result.png)
+![][image-5]
 
 Matcher 类的 matches() 方法分析：
 
@@ -583,4 +583,9 @@ https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 上面的示例中的正则表达式 "(?\<!zempty|boys)handsome" 表示的是在获取 handsome 这个结果，但是 handsome 前面不能有 zempty 或者 boys 。
 
 通常 (?\<=X) 和 (?\<!X) 的正则表达式写法是 (?\<=X)xxxx 获取头部是 X 的 xxxx，比如示例中的  "(?\<=zempty|boys)handsome" 就是获取 handsome 这个子字符串，但是条件是只能获取 handsome 前面是 zempty 或者 boys 的 handsome 。
-                                          
+
+[image-1]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/escape%5C_character.png
+[image-2]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/result.png
+[image-3]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/patternresult.png][image-3
+[image-4]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/matcher%5C_result.png
+[image-5]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/reset%5C_result.png

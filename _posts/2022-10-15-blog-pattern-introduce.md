@@ -4,7 +4,7 @@ title: “博客的模版介绍”
 date: 2022-10-14
 toc: true
 excerpt: 该博客的文章格式有严格的要求，遵守该规则才可以有好的排版
-tags: [backend,java]
+tags: [生活,随笔]
 comments: true
 author: zempty
 ---
