@@ -8,6 +8,7 @@ tags: [backend,java]
 comments: true
 author: zempty
 ---
+
 ### 一次奔溃的经历
 
 事情是这样的：第三方提供了一个接口需要对接，我就对接了，测试环节的时候怎么都调不通，各种排查，各方人员都动员了起来，就是没有找到问题，下面把问题报错的原因呈上：
@@ -63,8 +64,6 @@ User\_Agent 是什么？
 我尼玛，这个问题至此解决了，经过扯皮问题还是出现在第三方，第三方服务器进行了设置对该请求接口的头部信息进行了验证。
 
 bug 解决的不容易，太耗精力了，折磨的想打人，还想哭。。。
-
-
 
 [image-1]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/508test.png
 [image-2]:	https://raw.githubusercontent.com/zempty-zhaoxuan/pics/master/B07CA78A-A255-4CF4-A29C-A406496C4785.png
