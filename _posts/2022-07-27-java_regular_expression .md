@@ -580,6 +580,4 @@ https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 上面的示例中的正则表达式 "(?\<!zempty|boys)handsome" 表示的是在获取 handsome 这个结果，但是 handsome 前面不能有 zempty 或者 boys 。
 
 通常 (?\<=X) 和 (?\<!X) 的正则表达式写法是 (?\<=X)xxxx 获取头部是 X 的 xxxx，比如示例中的  "(?\<=zempty|boys)handsome" 就是获取 handsome 这个子字符串，但是条件是只能获取 handsome 前面是 zempty 或者 boys 的 handsome 。
-
                                           
-                                         
