@@ -63,9 +63,9 @@ layout: default
       </div>
 
       <div class="entry">
-        {{ post.excerpt | truncate: 50 }}
+        {{ post.content | truncate: 100 }}
       </div>
-
+       <br>
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
     </article>
   {% endunless %}
