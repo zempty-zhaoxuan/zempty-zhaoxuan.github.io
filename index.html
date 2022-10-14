@@ -62,12 +62,11 @@ layout: default
         </ul>
       </div>
 
+      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
       <div class="entry">
-        {{ post.content | truncate: 200 }}
+        {{ post.excerpt | truncate: 100 }}
       </div>
     </article>
-      <br>
-     <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
   {% endunless %}
   {% endfor %}
 </div>
