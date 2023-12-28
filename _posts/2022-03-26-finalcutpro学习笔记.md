@@ -1,5 +1,13 @@
-
-
+---
+layout: post
+title: 视屏剪辑软件学习笔记
+date: 2023-03-26
+toc: true
+excerpt: 总结了Final Cut Pro 学习笔记的过程
+tags: [生活,软件,思考总结,问题]
+comments: true
+author: zempty
+---
 ### 创建自己舒适的工作区：
 
 - 自定义工作区的显示
