@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 视屏剪辑软件学习笔记
+title: Final Cut Pro 学习笔记
 date: 2023-03-26
 toc: true
 excerpt: 总结了Final Cut Pro 学习笔记的过程
