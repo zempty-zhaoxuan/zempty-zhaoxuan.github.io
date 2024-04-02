@@ -25,13 +25,14 @@ author: zempty
 
 打开搜索链接 
 
-[vscode配置java test不能正常使用记录_vscode弹出java test report-CSDN博客]()(https://blog.csdn.net/tianlangstudio/article/details/111872119)
+[ vscode配置java test不能正常使用记录 ][1]
 
 该文章解决了相关问题。
 
 ## 解决尝试
 
 1. 项目 pom.xml 中引入了如下配置：
+
 ```java
 <build>
     <!-- 这里是重点，需要添加测试的路径 -->
@@ -39,7 +40,7 @@ author: zempty
 </build>
 ```
 
-1. 执行命令 mvn clean install 命令以后问题解决，单元测试可以执行了
+2. 执行命令 mvn clean install 命令以后问题解决，单元测试可以执行了
 
 ## 思考总结
 
@@ -50,3 +51,5 @@ author: zempty
 1. 先使用 AI 去解决相关问题，尝试解决
 2. 使用 google 查找相关解决方案
 
+
+[1]:	https://blog.csdn.net/tianlangstudio/article/details/111872119
