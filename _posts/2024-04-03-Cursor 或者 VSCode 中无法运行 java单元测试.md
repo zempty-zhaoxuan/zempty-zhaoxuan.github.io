@@ -40,6 +40,7 @@ author: zempty
 </build>
 ```
 
+
 2. 执行命令 mvn clean install 命令以后问题解决，单元测试可以执行了
 
 ## 思考总结
