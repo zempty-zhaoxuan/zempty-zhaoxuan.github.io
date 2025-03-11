@@ -1,4 +1,5 @@
 ---
+layout: null
 ---
 
 //
@@ -8,6 +9,7 @@
 @import "reset";
 @import "open-color";
 @import "variables";
+@import "themes"; // 导入主题文件
 
 // Syntax highlighting @import is at the bottom of this file
 
@@ -21,8 +23,19 @@ html {
 
 body {
   font-family: $base-font;
-  color: $base-color;
+  color: var(--text-color);
+  background-color: var(--background-color);
   line-height: 1.7em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// 深色主题文本渲染优化
+.dark-theme {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .container {
@@ -71,7 +84,7 @@ h6 {
 }
 
 p {
-  color: $text-color;
+  color: var(--text-color);
   margin: 1em 0;
 }
 
@@ -110,7 +123,7 @@ sup {
 
 hr {
   border: 0;
-  border-top: 1px solid $divider-color;
+  border-top: 1px solid var(--divider-color);
   margin: 1.5em auto;
 }
 
@@ -322,20 +335,20 @@ img {
   width: 20%;
 	-webkit-background-size: cover;
 	background-size: cover;
-	background-color: $background-color;
+	background-color: var(--background-color);
 	height: 100%;
 	top: 0;
 	left:0;
 	position: fixed;
 	z-index: 4;
-  border-right: 1px solid $divider-color;
+  border-right: 1px solid var(--divider-color);
 
   @include mobile {
     width: 100%;
     height: auto;
     padding-bottom: 24px;
     position: relative;
-    border-bottom: 1px solid $divider-color;
+    border-bottom: 1px solid var(--divider-color);
     border-right: 0;
   }
 }
@@ -378,7 +391,7 @@ img {
 
 .site-name {
   margin: 0 auto;
-  color: $base-color;
+  color: var(--text-color);
   cursor: pointer;
   font-family: $base-font;
   font-weight: 700;
@@ -388,7 +401,8 @@ img {
 
 .site-description {
   margin: 15px auto;
-  color: $base-lighten-color;
+  color: var(--text-color);
+  opacity: 0.8;
   font-size: 16px;
 
   @include mobile {
@@ -402,7 +416,7 @@ img {
 
 nav {
   display: block;
-  margin-top: 23px; // @TODO: Vertically middle align
+  margin-top: 23px;
   font-family: $base-font;
   font-weight: 500;
   font-size: 18px;
@@ -410,6 +424,9 @@ nav {
   @include mobile {
     margin-top: 9px;
     font-size: 16px;
+    background-color: var(--background-color);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--divider-color);
   }
 
   a {
@@ -417,10 +434,23 @@ nav {
     text-align: right;
     font-weight: 300;
     letter-spacing: 1px;
+    color: var(--link-color);
+
+    &:hover, &:active {
+      color: var(--link-lighten-color);
+    }
 
     @include mobile {
       margin: 0 10px;
-      color: $link-color;
+      color: var(--link-color);
+      display: inline-block;
+      padding: 6px 8px;
+      border-radius: 3px;
+      
+      &:hover, &:active {
+        color: var(--link-lighten-color);
+        background-color: var(--background-lighten-color);
+      }
     }
   }
 }
@@ -457,13 +487,13 @@ nav {
       > a {
         margin: 3px 3px 3px 0;
         padding: .5px 4px;
-        color: $base-color;
-        background-color: $tag-index-label-background-color;
+        color: var(--text-color);
+        background-color: var(--tag-index-label-background-color);
         border-radius: 3px;
 
         &:hover {
-          color: $link-color;
-          background-color:$link-bghv-color;
+          color: var(--link-color);
+          background-color: var(--link-bghv-color);
         }
       }
     }
@@ -472,7 +502,7 @@ nav {
 
 .posts > .post {
   padding-bottom: 2em;
-  border-bottom: 1px solid $divider-color;
+  border-bottom: 1px solid var(--divider-color);
 }
 
 .posts > .post:last-child {
@@ -483,10 +513,10 @@ nav {
 .date {
   font-weight: 300;
   font-size: $small-font-size;
-  color: $base-lighten-color;
+  color: var(--text-color);
+  opacity: 0.7;
   margin-right: 4px;
 }
-
 
 .post {
 
@@ -531,7 +561,8 @@ nav {
     font-size: 1.2em;
     display: block;
     padding-bottom: 0.6em;
-    border-bottom: 3px double $divider-color;
+    border-bottom: 3px double var(--divider-color);
+    color: var(--text-color);
   }
 
   li:before{
@@ -551,7 +582,7 @@ nav {
 }
 
 .pagination {
-  border-top: 1px solid $divider-color;
+  border-top: 1px solid var(--divider-color);
   font-weight: 300;
   padding: 40px 0;
   width: 100%;
@@ -566,15 +597,16 @@ nav {
     float: left;
     width: 50%;
     a {
-      color: $base-lighten-color;
-      border: 1px solid $divider-color;
+      color: var(--text-color);
+      opacity: 0.8;
+      border: 1px solid var(--divider-color);
       padding: 10px 20px;
-      background: $background-color;
+      background: var(--background-color);
 
       &:hover, &:focus {
-        color: $link-lighten-color;
-        border: 1px solid $link-lighten-color;
-        background-color: $link-bghv-color;
+        color: var(--link-lighten-color);
+        border: 1px solid var(--link-lighten-color);
+        background-color: var(--link-bghv-color);
       }
     }
   }
@@ -584,15 +616,16 @@ nav {
     text-align: right;
     width: 50%;
     a {
-      color: $base-lighten-color;
-      border: 1px solid $divider-color;
+      color: var(--text-color);
+      opacity: 0.8;
+      border: 1px solid var(--divider-color);
       padding: 10px 20px;
-      background: $background-color;
+      background: var(--background-color);
 
       &:hover, &:focus {
-        color: $link-lighten-color;
-        border: 1px solid $link-lighten-color;
-        background-color: $link-bghv-color;
+        color: var(--link-lighten-color);
+        border: 1px solid var(--link-lighten-color);
+        background-color: var(--link-bghv-color);
       }
     }
   }
@@ -601,10 +634,11 @@ nav {
 // Archive
 .archive {
   a {
-    color: $base-color;
+    color: var(--text-color);
   }
   time {
-    color: $base-lighten-color;
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: $small-font-size;
     font-weight: 300;
     margin-left: 3px;
@@ -626,12 +660,12 @@ nav {
     > a {
       display: inline-block;
       margin: 1px;
-      color: $base-color;
-      background-color: $tag-index-label-background-color;
+      color: var(--text-color);
+      background-color: var(--tag-index-label-background-color);
       border-radius: 3px;
 
       &:hover {
-        background-color: $link-bghv-color;
+        background-color: var(--link-bghv-color);
       }
 
       span {
@@ -639,9 +673,8 @@ nav {
         padding: .5px 5px;
 
         &.count {
-          background-color: $tag-index-count-background-color;
+          background-color: var(--tag-index-count-background-color);
           border-radius: 0 3px 3px 0;
-
         }
       }
     }
@@ -650,10 +683,11 @@ nav {
 
 .tags > .tag {
   a {
-    color: $base-color;
+    color: var(--text-color);
   }
   time {
-    color: $base-lighten-color;
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: $small-font-size;
     font-weight: 300;
     margin-left: 3px;
@@ -665,8 +699,8 @@ nav {
 // Footer
 .wrapper-footer-desktop {
   margin-top: 50px;
-  border-top: 1px solid $footer-border-color;
-  background-color: $footer-background-color;
+  border-top: 1px solid var(--footer-border-color);
+  background-color: var(--footer-background-color);
   position: absolute;
   clear:both;
   width:100%;
@@ -684,8 +718,10 @@ nav {
   @include mobile {
     display: block;
     width: 100%;
-    border-top: 1px solid $footer-border-color;
-    background-color: $footer-background-color;
+    border-top: 1px solid var(--divider-color);
+    background-color: var(--background-color);
+    padding: 15px 0;
+    margin-top: 30px;
   }
 }
 
@@ -693,9 +729,18 @@ footer {
   padding: 20px 0;
   text-align: center;
 
+  @include mobile {
+    padding: 10px 0;
+  }
+
   p {
     font-size: $small-font-size;
-    color: $base-lighten-color;
+    color: var(--text-color);
+    opacity: 0.7;
+
+    @include mobile {
+      margin: 0.5em 0;
+    }
   }
 
   .svg-icon {
@@ -705,33 +750,71 @@ footer {
     margin: 0;
     text-align: center;
 
+    @include mobile {
+      margin: 10px 0;
+    }
+
     li {
       display: inline-block;
       margin: 10px;
+
+      @include mobile {
+        margin: 5px;
+      }
     }
 
     svg {
       height: 20px;
       width: 20px;
-      fill: $base-lighten-color;
+      fill: var(--text-color);
+      opacity: 0.7;
       
       &:hover {
-        fill: $link-lighten-color;
+        fill: var(--link-lighten-color);
+        opacity: 1;
+      }
+
+      @include mobile {
+        height: 18px;
+        width: 18px;
       }
     }
-
-    em {
-      font-size: 18px;
-      line-height: 1.5;
-      margin-top: -.75em;
-      position: absolute;
-      text-align: center;
-      top: 50%;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
   }
+}
+
+// 主题切换按钮样式
+#theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  @include mobile {
+    bottom: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+#theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS

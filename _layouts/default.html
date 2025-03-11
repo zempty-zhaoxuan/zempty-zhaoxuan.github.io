@@ -16,7 +16,13 @@
       </div>
     </div>
 
+    <!-- 主题切换按钮 -->
+    <button id="theme-toggle" aria-label="切换深色/浅色主题">🌙</button>
+
     {% include analytics.html %}
+    
+    <!-- 引入主题切换脚本 -->
+    <script src="{{ site.baseurl }}/js/theme-switcher.js"></script>
   </body>
 
   {% if page.toc==true %}
@@ -29,6 +35,5 @@
     <footer class="footer">
       {% include footer.html %}
     </footer>
-
-
+  </div>
 </html>
