@@ -33,7 +33,7 @@ plugins: [jekyll-paginate]
 paginate: 8 # 每页文章数
 paginate_path: "essay/page:num" # 可选，分页链接
 
-excerpt_separator: <!-- more -->
+excerpt_separator: <!-- more -->auts
 
 # Includes an icon in the footer for each username you enter
 footer-links:
@@ -74,7 +74,7 @@ url: https://blog.zempty.sg
 # (http://yourusername.github.io/repository-name)
 # and NOT your User repository (http://yourusername.github.io)
 # then add in the baseurl here, like this: "/repository-name"
-baseurl: /zempty-zhaoxuan.github.io
+baseurl: "/zempty-zhaoxuan.github.io"
 
 #
 # !! You don't need to change any of the configuration flags below !!
