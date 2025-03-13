@@ -18,11 +18,25 @@
 
     <!-- 主题切换按钮 -->
     <button id="theme-toggle" aria-label="切换深色/浅色主题">🌙</button>
+    
+    <!-- 侧边栏折叠按钮 -->
+    <button id="sidebar-toggle" aria-label="折叠/展开侧边栏">≡</button>
+    
+    <!-- 返回首页按钮 -->
+    <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页">🏠</a>
 
     {% include analytics.html %}
     
     <!-- 引入主题切换脚本 -->
     <script src="{{ site.baseurl }}/js/theme-switcher.js"></script>
+    <!-- 引入侧边栏折叠脚本 -->
+    <script src="{{ site.baseurl }}/js/sidebar.js"></script>
+    <!-- 引入拖动调整大小脚本 -->
+    <script src="{{ site.baseurl }}/js/resize-handlers.js"></script>
+    <!-- 引入布局修复脚本 -->
+    <script src="{{ site.baseurl }}/js/layout-fixes.js"></script>
+    <!-- 引入改进的拖动体验脚本 -->
+    <script src="{{ site.baseurl }}/js/improved-drag.js"></script>
   </body>
 
   {% if page.toc==true %}

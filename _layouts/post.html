@@ -33,16 +33,16 @@ layout: default
 </article>
 
 <div class="pagination">
-  {% if page.previous.url %}
+  {% if page.next.url %}
     <span class="prev" >
-      <a href="{{ site.url }}{{ site.baseurl }}{{ page.previous.url }}">
+      <a href="{{ site.url }}{{ site.baseurl }}{{ page.next.url }}">
         ← 上一篇
       </a>
     </span>
   {% endif %}
-  {% if page.next.url %}
+  {% if page.previous.url %}
     <span class="next" >
-      <a href="{{ site.url }}{{ site.baseurl }}{{ page.next.url }}">
+      <a href="{{ site.url }}{{ site.baseurl }}{{ page.previous.url }}">
         下一篇 →
       </a>
     </span>

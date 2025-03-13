@@ -4,6 +4,7 @@
   --background-lighten-color: #{$oc-gray-1};
   --text-color: #{$base-color};
   --link-color: #{$oc-blue-8};
+  --link-color-rgb: 47, 112, 193; /* RGB版本的蓝色 (#2F70C1) */
   --link-lighten-color: #{$oc-blue-6};
   --link-bghv-color: #{$oc-blue-0};
   --divider-color: #{$oc-gray-1};
@@ -16,6 +17,13 @@
   --selection-background-color: #{$oc-gray-3};
   --tag-index-label-background-color: #{$oc-gray-2};
   --tag-index-count-background-color: #{$oc-gray-1};
+  
+  /* 代码块相关变量 */
+  --code-background: #{$oc-gray-0};
+  --code-text-color: #{$base-color};
+  --code-border-color: #{$oc-gray-3};
+  --inline-code-color: #{$oc-indigo-9};
+  --inline-code-background: #{$oc-gray-1};
 }
 
 // 深色主题
@@ -24,6 +32,7 @@
   --background-lighten-color: #{$oc-gray-8};
   --text-color: #{$oc-gray-0};
   --link-color: #{$oc-blue-2};
+  --link-color-rgb: 128, 178, 235; /* RGB版本的浅蓝色 (#80B2EB) */
   --link-lighten-color: #{$oc-blue-3};
   --link-bghv-color: #{$oc-blue-9};
   --divider-color: #{$oc-gray-8};
@@ -36,6 +45,13 @@
   --selection-background-color: #{$oc-gray-6};
   --tag-index-label-background-color: #{$oc-gray-7};
   --tag-index-count-background-color: #{$oc-gray-8};
+  
+  /* 代码块相关变量 */
+  --code-background: #282c34;
+  --code-text-color: #abb2bf;
+  --code-border-color: #3e4451;
+  --inline-code-color: #e5c07b;
+  --inline-code-background: #2c313a;
 }
 
 // 浅色主题（当用户显式切换时使用）
@@ -44,6 +60,7 @@
   --background-lighten-color: #{$oc-gray-1};
   --text-color: #{$base-color};
   --link-color: #{$oc-blue-8};
+  --link-color-rgb: 47, 112, 193; /* RGB版本的蓝色 (#2F70C1) */
   --link-lighten-color: #{$oc-blue-6};
   --link-bghv-color: #{$oc-blue-0};
   --divider-color: #{$oc-gray-1};
@@ -56,4 +73,11 @@
   --selection-background-color: #{$oc-gray-3};
   --tag-index-label-background-color: #{$oc-gray-2};
   --tag-index-count-background-color: #{$oc-gray-1};
+  
+  /* 代码块相关变量 */
+  --code-background: #{$oc-gray-0};
+  --code-text-color: #{$base-color};
+  --code-border-color: #{$oc-gray-3};
+  --inline-code-color: #{$oc-indigo-9};
+  --inline-code-background: #{$oc-gray-1};
 } 

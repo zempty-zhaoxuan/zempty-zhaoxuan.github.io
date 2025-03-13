@@ -1,4 +1,3 @@
-
 //
 // VARIABLES
 //
@@ -84,7 +83,27 @@ $dd-position: $dt-width+$dt-dd-space;
 
 // Mobile breakpoints
 @mixin mobile {
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 900px) {
     @content;
   }
 }
+
+// 添加平板电脑断点
+@mixin tablet {
+  @media screen and (min-width: 901px) and (max-width: 1200px) {
+    @content;
+  }
+}
+
+// 添加大屏幕断点
+@mixin large-display {
+  @media screen and (min-width: 1800px) {
+    @content;
+  }
+}
+
+// Performance optimization variables
+$transition-speed-fast: 0.15s;
+$transition-speed-normal: 0.3s;
+$transition-speed-slow: 0.5s;
+$transition-timing: cubic-bezier(0.215, 0.610, 0.355, 1.000); // 优化过的缓动函数

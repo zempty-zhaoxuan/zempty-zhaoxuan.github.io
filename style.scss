@@ -36,11 +36,64 @@ body {
   text-rendering: optimizeLegibility;
   font-weight: 400;
   letter-spacing: 0.02em;
+  
+  // 正则表达式图表在深色主题下的显示优化
+  .post img, article img {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    
+    &[src*="regex"], &[src*="正则"] {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px auto;
+    }
+  }
+  
+  // 正则表达式符号高亮
+  .regex-syntax {
+    color: #e5c07b;
+    background-color: #2c313a;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: $code-font;
+    font-weight: bold;
+  }
+  
+  // 正则表达式示例文本
+  .regex-example {
+    background-color: #2c313a;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #3e4451;
+    margin: 15px 0;
+    
+    pre, code {
+      color: #abb2bf;
+      background-color: transparent;
+      border: none;
+    }
+  }
+  
+  // 正则表达式表格样式优化
+  table {
+    border-color: #3e4451;
+    
+    th, td {
+      border-color: #3e4451;
+    }
+    
+    tbody tr:nth-child(odd) td,
+    tbody tr:nth-child(odd) th {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
 }
 
 .container {
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 900px;
   padding: 0 20px;
   width: 100%;
 }
@@ -332,24 +385,58 @@ img {
 //
 
 .wrapper-sidebar {
-  width: 20%;
-	-webkit-background-size: cover;
-	background-size: cover;
-	background-color: var(--background-color);
-	height: 100%;
-	top: 0;
-	left:0;
-	position: fixed;
-	z-index: 4;
+  width: clamp(220px, 16vw, 280px);
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: var(--background-color);
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 4;
   border-right: 1px solid var(--divider-color);
+  transition: transform 0.3s ease, width 0.3s ease;
+  resize: horizontal;
+  overflow-x: auto;
+  min-width: 180px;
+  max-width: 400px;
+  box-sizing: border-box;
+  will-change: transform, width; /* 性能优化，提前告知浏览器准备这些属性的变化 */
+
+  &.collapsed {
+    transform: translateX(-100%);
+    resize: none;
+    width: 60px !important; /* 确保折叠时固定宽度 */
+    overflow: hidden;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+    background: var(--divider-color);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover:after {
+    opacity: 0.5;
+  }
 
   @include mobile {
     width: 100%;
     height: auto;
-    padding-bottom: 24px;
+    padding-bottom: 15px;
     position: relative;
     border-bottom: 1px solid var(--divider-color);
     border-right: 0;
+    transform: none;
+    overflow: hidden;
+    resize: none;
   }
 }
 
@@ -358,17 +445,19 @@ img {
 
   @include mobile {
     text-align: center;
+    padding: 10px 0;
   }
 }
 
 .site-info {
-  text-align:center;
-  margin: 100px auto 0;
+  text-align: center;
+  margin: 60px auto 0;
 
   @include mobile {
     float: none;
     display: block;
     margin: 0 auto;
+    padding: 10px 0;
   }
 
   .site-avatar {
@@ -378,8 +467,9 @@ img {
     max-height: 200px;
 
     @include mobile {
-      max-width: 120px;
-      max-height: 120px;
+      max-width: 80px;
+      max-height: 80px;
+      margin-bottom: 10px;
     }
 
     img {
@@ -397,6 +487,10 @@ img {
   font-weight: 700;
   font-size: 28px;
   letter-spacing: 1px;
+  
+  @include mobile {
+    font-size: 22px;
+  }
 }
 
 .site-description {
@@ -406,7 +500,8 @@ img {
   font-size: 16px;
 
   @include mobile {
-    margin: 10px auto;
+    margin: 5px auto;
+    font-size: 14px;
   }
 }
 
@@ -422,11 +517,10 @@ nav {
   font-size: 18px;
 
   @include mobile {
-    margin-top: 9px;
-    font-size: 16px;
+    margin-top: 5px;
+    font-size: 15px;
     background-color: var(--background-color);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--divider-color);
+    padding: 5px 0;
   }
 
   a {
@@ -441,10 +535,10 @@ nav {
     }
 
     @include mobile {
-      margin: 0 10px;
+      margin: 0 8px;
       color: var(--link-color);
       display: inline-block;
-      padding: 6px 8px;
+      padding: 4px 6px;
       border-radius: 3px;
       
       &:hover, &:active {
@@ -458,18 +552,49 @@ nav {
 // content
 
 .wrapper-content {
-  float: right;
-  width: 80%;
+  float: none;
+  width: calc(100% - clamp(220px, 16vw, 280px));
+  margin-left: clamp(220px, 16vw, 280px);
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
+  box-sizing: border-box;
+  position: relative;
+  will-change: width, margin-left; /* 性能优化 */
+  z-index: 1; /* 确保内容区域在适当的层级 */
+
+  &.sidebar-collapsed {
+    width: 100%;
+    margin-left: 0;
+  }
 
   @include mobile {
     float: none;
     width: 100%;
+    margin-left: 0;
+    padding: 0 15px;
+    margin-top: 10px;
+  }
+
+  .container {
+    max-width: 1000px;
+    width: 100%;
+    padding: 0;
+    position: relative;
+    transition: max-width 0.3s ease; /* 平滑过渡 */
   }
 }
 
 // Posts
 
-.posts{
+.posts {
+  max-width: 100%;
+  margin: 0 auto;
+  
+  @include large-display {
+    max-width: 900px;
+  }
 
   .tag {
     display: inline;
@@ -519,11 +644,23 @@ nav {
 }
 
 .post {
-
+  max-width: 100%;
+  margin: 0 auto;
+  
   h1 {
     margin-bottom: .1em;
   }
 
+  .entry {
+    line-height: 1.8;
+  }
+
+  img {
+    display: block;
+    margin: 1em auto;
+    max-width: 90%;
+    height: auto;
+  }
 
   .comments {
     margin-top: 10px;
@@ -547,37 +684,134 @@ nav {
 // TOC
 
 .toc {
-  width: 240px;
+  width: clamp(250px, 18vw, 320px);
   height: 100%;
-  right: 2%;
+  right: 0;
   position: fixed;
   z-index: 4;
-  padding: 60px 20px 0 20px;
+  padding: 60px 25px 0 25px;
+  background-color: var(--background-color);
+  border-left: 1px solid var(--divider-color);
+  overflow-y: auto;
+  resize: horizontal;
+  overflow-x: auto;
+  min-width: 200px;
+  max-width: 450px;
+  box-sizing: border-box;
+  will-change: width; /* 性能优化 */
+  transition: width 0.3s ease; /* 平滑过渡 */
   
-  &:before{
+  &:before {
     content:"目录";
-    margin: 0 0 1em 1em;
+    margin: 0 0 1em 0;
     font-weight: 700;
     font-size: 1.2em;
-    display: block;
-    padding-bottom: 0.6em;
-    border-bottom: 3px double var(--divider-color);
-    color: var(--text-color);
   }
 
-  li:before{
-    content:"";
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+    background: var(--divider-color);
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
 
-  @include mobile{
-    display:none;
+  &:hover:after {
+    opacity: 0.5;
+  }
+
+  li {
+    padding: 4px 0;
+    line-height: 1.4;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    
+    &:before {
+      content:"";
+    }
+    
+    &:hover {
+      background-color: var(--background-lighten-color);
+      transform: translateX(5px);
+    }
+    
+    a {
+      color: var(--link-color);
+      opacity: 0.85;
+      font-size: 15px;
+      display: block;
+      padding: 4px 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        color: var(--link-lighten-color);
+        opacity: 1;
+      }
+    }
+  }
+
+  @include mobile {
+    display: none;
   }
 }
 
-@media screen and (max-width:2200px) and (min-width:1200px){
-  .withtoc{
-    padding-right: 260px;
-    padding-left: 0;
+// 目录多级缩进调整
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+  
+  ul {
+    padding-left: 1em;
+    
+    li {
+      font-size: 14px;
+      
+      a {
+        padding: 3px 5px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    padding: 0 40px;
+    max-width: min(800px, 70%);
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .wrapper-content {
+    padding: 0 40px;
+    
+    .container {
+      max-width: min(1200px, 75%);
+    }
+  }
+  
+  .wrapper-sidebar {
+    width: clamp(250px, 18vw, 320px);
+  }
+  
+  .wrapper-content {
+    width: calc(100% - clamp(250px, 18vw, 320px));
+    margin-left: clamp(250px, 18vw, 320px);
+  }
+  
+  .toc {
+    width: clamp(280px, 20vw, 360px);
+  }
+}
+
+@media screen and (max-width:2200px) and (min-width:1200px) {
+  .withtoc {
+    padding-right: clamp(280px, 20vw, 360px);
   }
 }
 
@@ -720,8 +954,8 @@ nav {
     width: 100%;
     border-top: 1px solid var(--divider-color);
     background-color: var(--background-color);
-    padding: 15px 0;
-    margin-top: 30px;
+    padding: 10px 0;
+    margin-top: 20px;
   }
 }
 
@@ -786,7 +1020,7 @@ footer {
 #theme-toggle {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: 120px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -803,11 +1037,11 @@ footer {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
   @include mobile {
-    bottom: 15px;
-    right: 15px;
+    bottom: 10px;
+    right: 110px;
     width: 35px;
     height: 35px;
-    font-size: 18px;
+    font-size: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   }
 }
@@ -817,9 +1051,203 @@ footer {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+// 侧边栏折叠按钮样式
+#sidebar-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  @include mobile {
+    bottom: 10px;
+    right: 60px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+#sidebar-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+// 首页按钮样式
+#home-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+
+  @include mobile {
+    bottom: 10px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+#home-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
 @import "gitalk";
+
+// 添加平板电脑视图下的侧边栏样式
+@include tablet {
+  .wrapper-sidebar {
+    width: clamp(200px, 15vw, 240px);
+  }
+  
+  .wrapper-content {
+    width: calc(100% - clamp(200px, 15vw, 240px));
+    margin-left: clamp(200px, 15vw, 240px);
+  }
+  
+  .site-info {
+    margin: 40px auto 0;
+  }
+  
+  .toc {
+    width: clamp(230px, 17vw, 280px);
+  }
+}
+
+// 添加折叠按钮样式
+.sidebar-toggle {
+  display: none;
+}
+
+// 正则表达式通用样式
+.regex-container {
+  margin: 1.5em 0;
+  overflow: auto;
+}
+
+.regex-pattern {
+  font-family: $code-font;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 1em;
+  display: inline-block;
+  margin: 5px 0;
+  color: var(--text-color);
+  background-color: var(--inline-code-background);
+}
+
+.regex-char {
+  color: var(--link-color);
+  font-weight: bold;
+}
+
+.regex-meta {
+  color: var(--link-lighten-color);
+  font-style: italic;
+}
+
+.regex-group {
+  border: 1px solid var(--divider-color);
+  border-radius: 3px;
+  padding: 0 3px;
+  margin: 0 1px;
+}
+
+// 正则表达式匹配示例
+.regex-match {
+  font-family: $code-font;
+  background-color: var(--background-lighten-color);
+  padding: 10px;
+  border-radius: 5px;
+  border-left: 4px solid var(--link-color);
+  margin: 1em 0;
+  
+  .match-highlight {
+    background-color: rgba(var(--link-color-rgb), 0.2);
+    padding: 2px;
+    border-radius: 3px;
+  }
+}
+
+// 拖动调整大小的元素样式
+.resizer {
+  position: absolute;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+  opacity: 0;
+  
+  &:hover {
+    opacity: 0.5;
+  }
+  
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.resizer-sidebar {
+  width: 6px;
+  top: 0;
+  right: 0;
+  height: 100%;
+  cursor: ew-resize;
+  
+  &:hover, &:active {
+    background-color: var(--link-lighten-color);
+  }
+}
+
+.resizer-toc {
+  width: 6px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: ew-resize;
+  
+  &:hover, &:active {
+    background-color: var(--link-lighten-color);
+  }
+}
+
+// 修复withtoc样式
+.withtoc {
+  padding-right: clamp(250px, 18vw, 320px);
+  transition: padding-right 0.3s ease;
+  box-sizing: border-box;
+}
 
 

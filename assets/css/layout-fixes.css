@@ -1,0 +1,282 @@
+/* 布局修复样式 */
+
+/* 确保所有元素使用正确的盒模型 */
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+/* 修复侧边栏布局 */
+.wrapper-sidebar {
+  box-sizing: border-box !important;
+  position: fixed !important;
+  overflow-y: auto;
+  z-index: 10;
+  transition: width 0.3s ease, transform 0.3s ease !important;
+}
+
+/* 侧边栏折叠状态 */
+.wrapper-sidebar.collapsed {
+  width: 60px !important; /* 确保折叠后宽度一致 */
+  transform: translateX(-100%) !important;
+  overflow: hidden !important;
+}
+
+/* 修复内容区域布局 */
+.wrapper-content {
+  box-sizing: border-box !important;
+  position: relative !important;
+  min-height: 100vh;
+  transition: width 0.3s ease, margin-left 0.3s ease !important;
+  z-index: 1 !important; /* 确保内容区域在适当的层级 */
+}
+
+/* 侧边栏折叠时的内容区域 */
+.wrapper-sidebar.collapsed + .wrapper-content {
+  width: calc(100% - 60px) !important;
+  margin-left: 60px !important;
+}
+
+/* 修复目录布局 */
+.toc {
+  box-sizing: border-box !important;
+  position: fixed !important;
+  overflow-y: auto;
+  z-index: 9;
+  transition: width 0.3s ease !important;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  will-change: width !important;
+}
+
+/* 修复文章内容与目录的关系 */
+.withtoc {
+  box-sizing: border-box !important;
+  transition: padding-right 0.3s ease;
+}
+
+/* 增强目录与文章关系 */
+#main.withtoc {
+  width: 100%;
+  box-sizing: border-box !important;
+}
+
+/* 确保内容区域响应目录宽度变化 */
+.post {
+  width: 100%;
+  max-width: 100%;
+  transition: max-width 0.3s ease;
+}
+
+/* 增强拖动条可见性 - 改进的拖动条样式 */
+.resizer {
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 0.2; /* 默认轻微可见 */
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+  width: 12px !important; /* 更宽的拖动柄 */
+  z-index: 100 !important;
+}
+
+/* 侧边栏折叠时隐藏拖动条 */
+.wrapper-sidebar.collapsed .resizer-sidebar,
+.wrapper-sidebar.collapsed .sidebar-drag-hit-area {
+  display: none !important;
+}
+
+.resizer:hover, .resizer:active {
+  opacity: 0.8 !important;
+  background-color: var(--link-lighten-color, #4183c4) !important;
+}
+
+.resizer-sidebar {
+  right: -6px !important; /* 延伸到边界外 */
+}
+
+.resizer-toc {
+  left: -6px !important; /* 延伸到边界外 */
+}
+
+/* 为最大宽度指示器添加脉冲动画 */
+.max-width-indicator {
+  background-color: var(--link-lighten-color) !important;
+  z-index: 1000 !important;
+}
+
+/* 拖动时的视觉提示 */
+.dragging-sidebar .resizer-sidebar,
+.dragging-toc .resizer-toc {
+  opacity: 0.9 !important;
+  background-color: var(--link-lighten-color, #4183c4) !important;
+}
+
+.dragging-sidebar {
+  cursor: ew-resize !important;
+}
+
+.dragging-toc {
+  cursor: ew-resize !important;
+}
+
+/* 拖动辅助区域样式 */
+.sidebar-drag-hit-area,
+.toc-drag-hit-area {
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-drag-hit-area:hover,
+.toc-drag-hit-area:hover {
+  background-color: rgba(var(--link-color-rgb, 65, 131, 196), 0.1);
+}
+
+/* 拖动时的全局样式 */
+body.dragging-sidebar *,
+body.dragging-toc * {
+  cursor: ew-resize !important;
+  user-select: none !important;
+}
+
+/* 提高拖动体验的全局设置 */
+body.resize-enabled .wrapper-sidebar,
+body.resize-enabled .toc {
+  transition: width 0.05s ease-out;
+}
+
+body.resize-enabled .wrapper-content {
+  transition: width 0.05s ease-out, margin-left 0.05s ease-out;
+}
+
+body.resize-enabled #main.withtoc {
+  transition: padding-right 0.05s ease-out;
+}
+
+/* 优化内容区域布局 - 默认状态 */
+body:not(.resize-enabled) .container,
+body.resize-enabled .wrapper-content .container {
+  max-width: min(1000px, 70%) !important;
+  margin: 0 auto !important;
+  transition: max-width 0.3s ease !important;
+}
+
+/* 优化折叠后的内容布局 - 大幅增加宽度 */
+body.resize-enabled .wrapper-sidebar.collapsed + .wrapper-content .container {
+  max-width: min(1400px, 95%) !important; /* 折叠侧边栏时允许内容区域很宽 */
+  margin-left: 16px !important; /* 左侧留出一点间距 */
+  margin-right: auto !important;
+}
+
+/* 当目录宽度较小时优化内容区域 */
+body.resize-enabled .toc.narrow + #main,
+body.resize-enabled #main.withtoc.toc-narrow {
+  padding-right: 220px !important; /* 较窄的目录填充 */
+}
+
+body.resize-enabled .toc.very-narrow + #main,
+body.resize-enabled #main.withtoc.toc-very-narrow {
+  padding-right: 150px !important; /* 非常窄的目录填充 */
+}
+
+/* 调整有目录情况下的内容宽度 */
+body.resize-enabled .wrapper-sidebar.collapsed + .wrapper-content #main.withtoc {
+  max-width: 100% !important;
+}
+
+/* 确保内容区域适应性变化 */
+@media screen and (min-width: 1200px) {
+  body.resize-enabled .wrapper-content .container {
+    transition: max-width 0.2s ease;
+    max-width: min(1000px, 70%) !important;
+  }
+  
+  /* 侧边栏折叠时增加文章内容宽度 */
+  .wrapper-sidebar.collapsed + .wrapper-content #main {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+  
+  /* 侧边栏折叠状态下显著增加内容宽度 */
+  .wrapper-sidebar.collapsed + .wrapper-content .container {
+    max-width: min(1400px, 95%) !important;
+    margin-left: 16px !important;
+    margin-right: auto !important;
+  }
+  
+  /* 优化目录较窄时的内容区域 - 大屏幕 */
+  .toc.narrow ~ .wrapper-content #main.withtoc .post,
+  #main.withtoc.toc-narrow .post {
+    max-width: calc(100% - 100px) !important;
+  }
+  
+  .toc.very-narrow ~ .wrapper-content #main.withtoc .post,
+  #main.withtoc.toc-very-narrow .post {
+    max-width: calc(100% - 50px) !important;
+  }
+}
+
+/* 适应不同屏幕尺寸 */
+@media screen and (max-width: 768px) {
+  .wrapper-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  .wrapper-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 10px !important;
+  }
+  
+  .toc {
+    display: none !important;
+  }
+}
+
+/* 确保内容不会太窄 - 修改默认宽度 */
+@media screen and (min-width: 1200px) {
+  .container {
+    max-width: min(1000px, 70%) !important; 
+  }
+  
+  .withtoc {
+    max-width: calc(100% - 250px) !important;
+  }
+  
+  /* 侧边栏折叠状态下显著增加内容宽度 */
+  .wrapper-sidebar.collapsed + .wrapper-content .container {
+    max-width: min(1400px, 95%) !important;
+  }
+} 
+
+/* 优化侧边栏折叠状态下的布局比例 - 中等屏幕 */
+@media screen and (min-width: 769px) and (max-width: 1199px) {
+  .wrapper-sidebar.collapsed + .wrapper-content .container {
+    max-width: 90% !important;
+    margin-left: 16px !important;
+    margin-right: auto !important;
+  }
+  
+  .container {
+    max-width: 80% !important;
+    margin: 0 auto !important;
+  }
+  
+  /* 优化目录较窄时的内容区域 - 中等屏幕 */
+  .toc.narrow ~ .wrapper-content #main.withtoc,
+  #main.withtoc.toc-narrow {
+    padding-right: 180px !important;
+  }
+  
+  .toc.very-narrow ~ .wrapper-content #main.withtoc,
+  #main.withtoc.toc-very-narrow {
+    padding-right: 120px !important;
+  }
+} 
+
+/* 为悬浮元素添加硬件加速 */
+.toc, .wrapper-sidebar, .wrapper-content {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+} 
