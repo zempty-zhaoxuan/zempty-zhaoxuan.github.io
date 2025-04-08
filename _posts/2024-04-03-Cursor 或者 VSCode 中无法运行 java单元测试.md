@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Cursor 或者 VSCode 中无法运行 java单元测试
-date: 2024-04-02
+title: "Cursor 或者 VSCode 中无法运行 java单元测试"
+date: 2024-04-03
 toc: true
-excerpt: AI, Cursor, VSCode,编辑器
+excerpt: "解决Cursor和VSCode中Java单元测试无法运行的问题，涉及配置和构建过程"
 tags: [backend,java,IDE]
-comments: true
+comment: true
 author: zempty
 ---
 
@@ -25,7 +25,7 @@ author: zempty
 
 打开搜索链接 
 
-[ vscode配置java test不能正常使用记录 ][1]
+[ vscode配置java test不能正常使用记录 ][1]
 
 该文章解决了相关问题。
 
