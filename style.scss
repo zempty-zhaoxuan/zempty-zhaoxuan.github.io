@@ -217,18 +217,51 @@ dd {
 table {
   margin-bottom: 1rem;
   width: 100%;
-  border: 1px solid $table-border-color;
+  border: 1px solid var(--table-border-color);
   border-collapse: collapse;
 }
 
 td, th {
   padding: .25rem .5rem;
-  border: 1px solid $table-border-color;
+  border: 1px solid var(--table-border-color);
 }
 
 tbody tr:nth-child(odd) td,
 tbody tr:nth-child(odd) th {
-  background-color: $table-background-color;
+  background-color: var(--table-background-color);
+}
+
+// Dark theme specific table improvements
+.dark-theme table {
+  border-color: var(--table-border-color);
+  
+  th {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    font-weight: bold;
+  }
+  
+  td {
+    color: var(--text-color);
+  }
+  
+  // Improve visibility of alternating rows
+  tbody tr:nth-child(odd) td,
+  tbody tr:nth-child(odd) th {
+    background-color: #323232;
+  }
+  
+  tbody tr:nth-child(even) td,
+  tbody tr:nth-child(even) th {
+    background-color: #262626;
+  }
+  
+  code {
+    padding: 2px 5px;
+    color: #56c8ff;
+    background-color: #333;
+    border-radius: 3px;
+  }
 }
 
 // Blockquote
