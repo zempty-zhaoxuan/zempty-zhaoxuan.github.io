@@ -1,4 +1,17 @@
+---
 
+layout: post
+title: docker 问题排查
+date: 2025-04-16
+toc: true
+excerpt:  docker 遇到的问题
+tags: [java,棘手问题]
+comments: true
+author: zempty
+
+---
+
+# docker 问题排查
 
 	[29330] Failed to execute script docker-compose
 	Traceback (most recent call last):
@@ -41,4 +54,6 @@
 	Finished: FAILURE
 
 解决方法：
+```
 docker system prune --volumes
+```

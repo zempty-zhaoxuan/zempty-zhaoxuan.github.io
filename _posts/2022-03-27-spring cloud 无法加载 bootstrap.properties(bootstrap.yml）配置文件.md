@@ -1,3 +1,15 @@
+---
+layout: post
+title: sping cloud 无法加载bootstrap.properties
+date: 2025-04-16
+toc: true
+excerpt: 问题排查方案解决
+tags: \[java,棘手问题]
+comments: true
+author: zempty
+---
+
+# sping cloud 无法加载bootstrap.properties
 spring cloud 项目无法加载 [bootstrap.properties](http://bootstrap.properties) (bootstrap.yml) 文件，添加如下的相关依赖即可：
 
 ```bash
