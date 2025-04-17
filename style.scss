@@ -586,26 +586,122 @@ nav {
 // TOC
 
 .toc {
-  width: 240px;
+  width: 320px;
   height: 100%;
   right: 2%;
   position: fixed;
   z-index: 4;
-  padding: 60px 20px 0 20px;
+  padding: 60px 25px 0 25px;
+  overflow-y: auto;
+  max-height: 90vh;
+  scrollbar-width: thin;
+  border-left: 1px solid var(--divider-color);
+  background-color: var(--background-color);
+  transition: width 0.3s ease;
+  font-family: 'Roboto', 'Noto Sans SC', sans-serif;
   
   &:before{
     content:"目录";
-    margin: 0 0 1em 1em;
+    margin: 0 0 1em 0;
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.4em;
     display: block;
-    padding-bottom: 0.6em;
+    padding-bottom: 0.8em;
     border-bottom: 3px double var(--divider-color);
-    color: var(--text-color);
+    color: #1a73e8;
+    text-align: center;
   }
 
   li:before{
     content:"";
+  }
+  
+  ul {
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  
+  li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  
+  // 一级目录项
+  > ul > li > a {
+    color: #4285f4;
+    font-weight: 500;
+  }
+  
+  // 二级目录项
+  > ul > li > ul > li > a {
+    color: #5c9ce6;
+    font-weight: 400;
+  }
+  
+  // 三级及以下目录项
+  > ul > li > ul > li > ul li a {
+    color: #7baaf7;
+    font-weight: 400;
+  }
+  
+  a {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    color: #4285f4;
+    font-weight: 400;
+    
+    &:hover {
+      background-color: rgba(66, 133, 244, 0.1);
+      color: #039be5;
+      text-decoration: none;
+      transform: translateX(3px);
+    }
+  }
+  
+  code {
+    background-color: rgba(0, 0, 0, 0.07);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: $code-font;
+    font-size: 90%;
+    margin: 0 2px;
+    color: #039be5;
+  }
+  
+  .dark-theme & {
+    a {
+      color: #5c9ce6;
+      
+      &:hover {
+        background-color: rgba(92, 156, 230, 0.2);
+        color: #7baaf7;
+      }
+    }
+    
+    &:before {
+      color: #4285f4;
+    }
+    
+    code {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #7baaf7;
+    }
+    
+    // 深色主题下的目录层级颜色
+    > ul > li > a {
+      color: #4285f4;
+    }
+    
+    > ul > li > ul > li > a {
+      color: #5c9ce6;
+    }
+    
+    > ul > li > ul > li > ul li a {
+      color: #7baaf7;
+    }
   }
 
   @include mobile{
@@ -613,10 +709,54 @@ nav {
   }
 }
 
-@media screen and (max-width:2200px) and (min-width:1200px){
-  .withtoc{
-    padding-right: 260px;
-    padding-left: 0;
+// 动态适配不同屏幕宽度下的目录宽度和内容区域宽度
+@media screen and (min-width: 2200px) {
+  .toc {
+    width: 380px;
+  }
+  
+  .withtoc {
+    padding-right: 400px;
+  }
+}
+
+@media screen and (max-width: 2199px) and (min-width: 1800px) {
+  .toc {
+    width: 350px;
+  }
+  
+  .withtoc {
+    padding-right: 370px;
+  }
+}
+
+@media screen and (max-width: 1799px) and (min-width: 1400px) {
+  .toc {
+    width: 320px;
+  }
+  
+  .withtoc {
+    padding-right: 340px;
+  }
+}
+
+@media screen and (max-width: 1399px) and (min-width: 1200px) {
+  .toc {
+    width: 280px;
+  }
+  
+  .withtoc {
+    padding-right: 300px;
+  }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 1000px) {
+  .toc {
+    width: 250px;
+  }
+  
+  .withtoc {
+    padding-right: 270px;
   }
 }
 

@@ -35,6 +35,46 @@
     
     <!-- 引入侧边栏折叠脚本 -->
     <script src="{{ site.baseurl }}/js/sidebar-toggle.js"></script>
+    
+    <!-- 动态调整目录区域脚本 -->
+    {% if page.toc==true %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // 获取相关元素
+        const toc = document.querySelector('.toc');
+        const mainContent = document.querySelector('.wrapper-content');
+        const container = document.querySelector('.container');
+        
+        // 自适应目录区域大小的函数
+        function adjustTocSize() {
+          // 获取内容区域的宽度
+          const contentWidth = mainContent.offsetWidth;
+          // 获取容器宽度
+          const containerWidth = container.offsetWidth;
+          // 计算内容区域的空白部分
+          const availableSpace = contentWidth - containerWidth;
+          
+          // 如果有足够的空白，增加目录区域的宽度
+          if (availableSpace > 100) {
+            // 计算可用的额外空间，最多增加100px
+            const extraSpace = Math.min(availableSpace * 0.7, 100);
+            toc.style.width = (320 + extraSpace) + 'px';
+          } else {
+            // 否则使用默认宽度
+            toc.style.width = '';
+          }
+        }
+        
+        // 页面加载和窗口大小改变时调整
+        adjustTocSize();
+        window.addEventListener('resize', adjustTocSize);
+        
+        // 监听内容变化（如图片加载完成等）
+        const observer = new MutationObserver(adjustTocSize);
+        observer.observe(mainContent, { childList: true, subtree: true });
+      });
+    </script>
+    {% endif %}
   </body>
 
   {% if page.toc==true %}
