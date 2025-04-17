@@ -1026,4 +1026,82 @@ footer {
 @import "highlights";
 @import "gitalk";
 
+/* 标签云样式 */
+.sidebar-tags {
+  padding: 0 20px;
+  margin: 30px 0;
+}
+
+.sidebar-tags h3 {
+  color: var(--text-color);
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+}
+
+.tag-cloud-item {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 15px;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.tag-cloud-item:hover {
+  background-color: var(--link-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tag-count {
+  font-size: 0.7em;
+  vertical-align: super;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
+/* 适配深色主题的标签云 */
+.dark-theme .tag-cloud-item {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.dark-theme .tag-cloud-item:hover {
+  background-color: var(--link-color);
+  color: white;
+}
+
+/* 移动端适配 */
+@include mobile {
+  .sidebar-tags {
+    padding: 0 15px;
+    margin: 20px 0;
+  }
+  
+  .tag-cloud {
+    gap: 6px;
+  }
+  
+  .tag-cloud-item {
+    padding: 3px 8px;
+    font-size: 14px !important;
+  }
+}
+
 
