@@ -1,0 +1,85 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## 博客文章创建指南 (Blog Post Creation Guide)
+
+请遵循以下步骤创建和格式化新的 Markdown 博客文章文件。
+
+### 1. 文件命名 (File Naming)
+
+请严格按照以下格式命名您的 Markdown 文件：
+
+**格式:** `YYYY-MM-DD-your-title-here.md`
+
+*   `YYYY-MM-DD`: 使用文章**创建或发布**的当前日期 (Use the current date of post creation/publication)。
+*   `your-title-here`:
+    *   使用**小写英文字母** (Use lowercase English letters)。
+    *   用**连字符 (`-`)** 分隔单词 (Separate words with hyphens)。
+    *   简要概括文章标题或核心内容 (Briefly summarize the post title or core content)。
+    *   **注意：** 即使文章的正式标题（见下方 `title` 字段）包含中文，**文件名中的这部分也强烈建议仅使用小写英文和连字符**，以确保在不同系统和 URL 中的兼容性。 (Note: Even if the formal post title contains Chinese, it's highly recommended to use only lowercase English letters and hyphens in this part of the *filename* for compatibility across systems and URLs.)
+
+**示例 (Example):**
+`2025-04-16-leetcode-32-solution.md`
+`2025-04-17-java-high-concurrency-tips.md`
+`2025-04-18-investment-strategies-summary.md`
+
+### 2. Front Matter 内容 (Front Matter Content)
+
+请在文件的**最顶部**添加以下 `YAML` Front Matter 块，并根据说明填充相应字段：
+
+```yaml
+---
+layout: post
+title: "[在此处填写标题]" # 支持中文
+date: "[YYYY-MM-DD]" # 使用当前日期
+toc: true
+excerpt: "[在此处填写摘要]"
+tags: [] # 从下方列表中选择标签
+comments: true
+author: zempty
+---
+```
+
+### 3. Front Matter 字段说明 (Field Descriptions)
+
+*   **`layout`**:
+    *   **固定值 (Fixed Value):** `post` (无需修改 Keep as `post`).
+*   **`title`**:
+    *   **内容 (Content):** 根据文章内容总结，准确表达主旨 (Summarize the post content accurately)。**标题支持中文和英文字符** (The title supports both Chinese and English characters)。
+    *   **要求 (Requirement):** 必须填写，且**不超过 100 个字符** (Required, max 100 characters)。
+    *   **示例 (Example):** `"Java高并发编程实战技巧"`, `"关于棘手问题的思考与总结"`, `"LeetCode 32 Solution Analysis"`
+*   **`date`**:
+    *   **内容 (Content):** 文章创建或发布的**当前日期** (Current date of creation/publication)。
+    *   **格式 (Format):** 严格遵守 `YYYY-MM-DD` (Strictly follow `YYYY-MM-DD`).
+    *   **示例 (Example):** `2025-04-17`
+*   **`toc`** (Table of Contents):
+    *   **默认值 (Default):** `true` (表示自动生成文章目录 Keep as `true` to generate a table of contents).
+*   **`excerpt`**:
+    *   **内容 (Content):** 简要总结文章的核心内容或主旨，用于列表页预览 (Briefly summarize the core content or main point for list previews)。
+    *   **要求 (Requirement):** 必须填写 (Required)。
+    *   **示例 (Example):** `"本文探讨了在Java中实现高并发的几种常见模式和最佳实践。"`, `"记录一次解决棘手技术问题的过程和反思。"`
+*   **`tags`**:
+    *   **内容 (Content):** 从下方的**可用标签列表**中选择一个或多个**最相关**的标签 (Choose one or more **most relevant** tags from the **Available Tags List** below)。
+    *   **格式 (Format):** 使用方括号 `[]` 包裹，标签用逗号 `,` 分隔，标签前后**不需要**空格。如果只有一个标签也要使用方括号 (Use square brackets `[]`, separate tags with commas `,` without spaces around the comma. Use brackets even for a single tag)。
+    *   **示例 (Example):** `[Java,高并发]`, `[Algorithm,DataStructure,问题]`, `[投资,理财]`
+*   **`comments`**:
+    *   **默认值 (Default):** `true` (表示允许读者评论 Keep as `true` to allow comments).
+*   **`author`**:
+    *   **固定值 (Fixed Value):** `zempty` (无需修改 Keep as `zempty`).
+
+### 4. 可用标签列表 (Available Tags List)
+
+请**仅**从以下列表中选择标签填入 `tags` 字段：
+
+```
+java, 棘手问题, 投资, 股票, 理财, git, 软件, backend, 生活, 随笔, 思考总结, 问题, IDE, 高并发, Java, Algorithm, BinarySearch, DataStructure
+```
+*(注意：请直接复制粘贴所需标签，保持大小写与列表一致。例如，使用 `Java` 而不是 `java`，或按列表选择 `Algorithm` 等。)*
+
+### 5. 撰写正文 (Writing the Content)
+
+在 Front Matter 块下方，开始撰写您的 Markdown 文章正文内容。
+(Begin writing your Markdown post content below the Front Matter block.)
+
