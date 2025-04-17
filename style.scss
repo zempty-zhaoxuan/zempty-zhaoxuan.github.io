@@ -881,6 +881,33 @@ footer {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* 返回首页按钮 */
+#home-button {
+  position: fixed;
+  bottom: 20px;
+  right: 120px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+#home-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* 移动端侧边栏折叠按钮 */
 #mobile-sidebar-toggle {
   display: none;
@@ -915,6 +942,15 @@ footer {
   #mobile-sidebar-toggle {
     bottom: 15px;
     right: 65px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  #home-button {
+    bottom: 15px;
+    right: 115px;
     width: 35px;
     height: 35px;
     font-size: 18px;

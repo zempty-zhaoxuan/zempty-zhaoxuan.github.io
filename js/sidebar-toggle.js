@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const wrapper = document.querySelector('.wrapper-content');
   const sidebar = document.querySelector('.wrapper-sidebar');
   const themeToggle = document.getElementById('theme-toggle');
+  const homeButton = document.getElementById('home-button');
   const currentState = localStorage.getItem('sidebar-state');
   const mobileSidebarState = localStorage.getItem('mobile-sidebar-state');
   
@@ -61,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
+  // 设置返回首页按钮的提示文字
+  homeButton.setAttribute('title', '返回首页');
+  
   // 主题变化监听，同步更新按钮样式
   const updateButtonsByTheme = function() {
     // 复用主题切换按钮的样式逻辑
@@ -68,10 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
       // 深色主题
       sidebarToggle.classList.add('dark-theme');
       mobileSidebarToggle.classList.add('dark-theme');
+      homeButton.classList.add('dark-theme');
     } else {
       // 浅色主题
       sidebarToggle.classList.remove('dark-theme');
       mobileSidebarToggle.classList.remove('dark-theme');
+      homeButton.classList.remove('dark-theme');
     }
   };
   
