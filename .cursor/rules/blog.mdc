@@ -6,6 +6,7 @@ alwaysApply: false
 ## 博客文章创建指南 (Blog Post Creation Guide)
 
 请遵循以下步骤创建和格式化新的 Markdown 博客文章文件。
+请在 _posts文件夹下面创建文件遵循下面的规则：
 
 ### 1. 文件命名 (File Naming)
 
@@ -13,7 +14,7 @@ alwaysApply: false
 
 **格式:** `YYYY-MM-DD-your-title-here.md`
 
-*   `YYYY-MM-DD`: 使用文章**创建或发布**的当前日期 (Use the current date of post creation/publication)。
+*   `YYYY-MM-DD`: 使用文章**创建或发布**的当前日期，计算机当前日期(Use the current date of post creation/publication)。
 *   `your-title-here`:
     *   使用**小写英文字母** (Use lowercase English letters)。
     *   用**连字符 (`-`)** 分隔单词 (Separate words with hyphens)。

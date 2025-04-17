@@ -11,10 +11,6 @@ author: zempty
 
 spring cloud 项目无法加载 [bootstrap.properties](http://bootstrap.properties) (bootstrap.yml) 文件，添加如下的相关依赖即可：
 
-
-
-
-
 ```bash
 
 <dependency>
