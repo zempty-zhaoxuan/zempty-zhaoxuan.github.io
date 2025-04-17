@@ -366,23 +366,25 @@ img {
 
 .wrapper-sidebar {
   width: 20%;
-	-webkit-background-size: cover;
-	background-size: cover;
-	background-color: var(--background-color);
-	height: 100%;
-	top: 0;
-	left:0;
-	position: fixed;
-	z-index: 4;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: var(--background-color);
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 4;
   border-right: 1px solid var(--divider-color);
 
   @include mobile {
     width: 100%;
     height: auto;
-    padding-bottom: 24px;
+    padding-bottom: 0;
     position: relative;
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: none;
     border-right: 0;
+    transform: none !important; // 确保移动端不会被折叠
+    background-color: var(--background-color);
   }
 }
 
@@ -455,11 +457,13 @@ nav {
   font-size: 18px;
 
   @include mobile {
-    margin-top: 9px;
+    margin-top: 0;
     font-size: 16px;
     background-color: var(--background-color);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--divider-color);
+    padding: 10px 0;
+    border-bottom: none;
+    border-top: none;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
   }
 
   a {
@@ -493,10 +497,12 @@ nav {
 .wrapper-content {
   float: right;
   width: 80%;
+  margin-left: 20%;
 
   @include mobile {
     float: none;
     width: 100%;
+    margin-left: 0;
   }
 }
 
@@ -751,10 +757,9 @@ nav {
   @include mobile {
     display: block;
     width: 100%;
-    border-top: 1px solid var(--divider-color);
+    border-top: none;
+    margin-top: 20px;
     background-color: var(--background-color);
-    padding: 15px 0;
-    margin-top: 30px;
   }
 }
 
@@ -848,6 +853,136 @@ footer {
 #theme-toggle:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 侧边栏折叠按钮 */
+#sidebar-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 移动端侧边栏折叠按钮 */
+#mobile-sidebar-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#mobile-sidebar-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@include mobile {
+  #theme-toggle {
+    right: 15px;
+  }
+  
+  #mobile-sidebar-toggle {
+    bottom: 15px;
+    right: 65px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* 侧边栏切换状态 */
+.wrapper-sidebar.collapsed {
+  transform: translateX(-100%);
+  border-right: none;
+}
+
+/* 移动端侧边栏折叠状态 */
+.wrapper-sidebar.mobile-collapsed {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  margin: 0;
+  box-shadow: none;
+}
+
+/* 移动端UI优化 */
+@include mobile {
+  .navlist {
+    margin-top: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .wrapper-sidebar {
+    box-shadow: none;
+  }
+  
+  .wrapper-footer-mobile {
+    border-top: none;
+    margin-top: 20px;
+    background-color: var(--background-color);
+  }
+  
+  .mobile-sidebar-collapsed .wrapper-content {
+    margin-top: 10px;
+  }
+}
+
+.wrapper-content.sidebar-collapsed {
+  width: 95%;
+  margin-left: 0;
+}
+
+/* 响应式处理 */
+@media (max-width: 768px) {
+  #sidebar-toggle {
+    display: none;
+  }
+  
+  .mobile-sidebar-collapsed .wrapper-sidebar {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+/* 过渡效果 */
+.wrapper-sidebar, 
+.wrapper-content {
+  transition: all 0.3s ease;
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
