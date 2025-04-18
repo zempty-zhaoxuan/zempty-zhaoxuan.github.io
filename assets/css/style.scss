@@ -20,7 +20,7 @@
   width: 70%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .wrapper-sidebar {
     width: 100%;
     height: auto;
@@ -29,9 +29,46 @@
     border-bottom: 1px solid #eee;
     border-right: 0;
   }
-  
+
   .wrapper-content {
-    float: none;
-    width: 100%;
+    float: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    box-sizing: border-box;
   }
-} 
+
+  .container {
+    max-width: 100% !important; // Ensure full width on iPad Pro portrait
+    padding: 0 20px !important; // Match mobile padding
+    box-sizing: border-box !important; // Ensure padding is included in width
+  }
+
+  .withtoc {
+    padding-right: 0 !important; // Remove padding when TOC is hidden
+  }
+
+  /* Hide sidebar and TOC to free full width */
+  .wrapper-sidebar,
+  .toc {
+    display: none !important;
+  }
+
+  /* Force content area full-width and remove extra margins/padding */
+  .wrapper-content,
+  .wrapper-content.withtoc {
+    float: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ensure container spans full width with symmetric padding */
+  .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 20px !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+  }
+}
