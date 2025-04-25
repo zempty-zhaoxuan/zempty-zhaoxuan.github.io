@@ -14,7 +14,7 @@ alwaysApply: false
 
 **格式:** `YYYY-MM-DD-your-title-here.md`
 
-*   `YYYY-MM-DD`: 使用文章**创建或发布**的当前日期，计算机当前日期(Use the current date of post creation/publication)。
+*   `YYYY-MM-DD`: **获取并使用执行此文件创建指令时的实际公历日期**，并严格按照 `YYYY-MM-DD` 格式填写。(Obtain and use the **actual Gregorian calendar date when this file creation command is executed**, and fill it in strict `YYYY-MM-DD` format.)
 *   `your-title-here`:
     *   使用**小写英文字母** (Use lowercase English letters)。
     *   用**连字符 (`-`)** 分隔单词 (Separate words with hyphens)。
