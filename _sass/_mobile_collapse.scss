@@ -1,0 +1,849 @@
+// _sass/_mobile_collapse.scss
+
+// Add transitions for mobile collapse animation
+.wrapper-sidebar {
+  @include mobile {
+    // Ensure sidebar is visible by default on mobile
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+    transform: translateY(0); // Start in the visible position
+    // Keep other styles
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease;
+    overflow: hidden;
+    z-index: 10;
+    position: relative;
+    width: 100%;
+    display: block;
+    background-color: var(--background-color);
+  }
+  
+  // Handle max width behavior
+  &.at-max-width {
+    resize: none !important;
+    cursor: default !important;
+    
+    &:after {
+      opacity: 0 !important;
+    }
+    
+    & + .wrapper-content {
+      pointer-events: all !important;
+    }
+  }
+}
+
+.wrapper-content {
+   @include mobile {
+     // Keep existing transition for content margin
+     transition: margin-top 0.3s ease, padding-top 0.3s ease;
+     position: relative; // Ensure position is set
+     z-index: 1; // Lower than sidebar
+     width: 100%; // Full width on mobile
+     max-width: 100%; // Prevent exceeding viewport
+     box-sizing: border-box; // Include padding in width calculation
+     display: block;
+     // Symmetrical horizontal padding, adjust vertical as needed
+     padding: 15px 10px 30px 10px !important; // Symmetrical L/R padding
+     margin: 0 !important; // Remove auto margin, let it fill width naturally
+     overflow-wrap: break-word;
+     min-height: 80vh;
+   }
+}
+
+
+// Styles applied when the mobile header is collapsed
+body.mobile-header-collapsed {
+  .wrapper-sidebar {
+    @include mobile {
+      // Slide up and fade out
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none; // Prevent interaction when hidden
+      margin-bottom: 0; // Remove margin when collapsed
+      height: 0; // Set height to 0 when collapsed
+      // Ensure border is not visible when collapsed
+      border: none;
+    }
+  }
+
+  .wrapper-content {
+    @include mobile {
+      margin-top: 0 !important;
+      // Ensure padding consistency, vertical only
+      padding-top: 20px !important; // Keep top padding when header is gone
+      padding-bottom: 30px !important;
+      padding-left: 10px !important; // Match default mobile padding
+      padding-right: 10px !important; // Match default mobile padding
+    }
+  }
+
+  // Optional styling for the button when collapsed
+  #sidebar-toggle {
+    @include mobile {
+       // Example: Change icon color or background
+    }
+  }
+}
+
+// Make sure content is always readable
+.post, .entry {
+  @include mobile {
+    // --- General container reset for mobile ---
+    display: block !important; // Force block display
+    width: 100% !important; // Use full width available
+    max-width: 100% !important; // Prevent exceeding screen width
+    box-sizing: border-box !important; // Include padding/border in width
+    padding: 0 !important; // Reset padding, apply to inner elements instead
+    margin: 0 !important; // No horizontal margin on the post itself
+    overflow: visible !important; // Prevent content clipping
+    word-wrap: break-word; // Allow long words to break globally
+
+    // --- Headers ---
+    h1, h2, h3, h4, h5, h6 {
+      display: block !important; // Ensure block display
+      width: 100% !important; // Full width
+      box-sizing: border-box; // Include padding
+      word-break: break-word; // Ensure headers don't overflow
+      text-align: left !important; // Force left alignment
+      margin: 1.8em 0 1em 0; // Vertical spacing
+      padding: 0 10px; // Symmetrical horizontal padding
+      line-height: 1.4em; // Adjusted line height for mobile
+    }
+
+    // --- Paragraphs ---
+    p {
+      display: block !important; // Ensure block display
+      width: 100% !important; // Full width
+      box-sizing: border-box; // Include padding
+      text-align: left !important; // Force left alignment
+      line-height: 1.7em; // Good readability
+      overflow-wrap: break-word;
+      margin: 0 0 1.2em 0; // Bottom margin only
+      padding: 0 10px; // Symmetrical horizontal padding
+      code {
+        word-break: break-all; // Break long code within paragraphs
+        white-space: pre-wrap; // Allow wrapping
+        font-size: 0.9em;
+        background-color: var(--inline-code-background);
+        padding: 2px 4px;
+        border-radius: 3px;
+        // Ensure inline code also respects wrapping
+        overflow-wrap: break-word;
+        display: inline; // Keep inline behaviour
+      }
+    }
+
+    // --- Lists ---
+    ul, ol {
+      display: block !important; // Ensure block display
+      width: 100% !important; // Full width
+      box-sizing: border-box !important; // Include padding
+      // Symmetrical padding/indentation
+      padding: 0 10px; // Add base horizontal padding
+      margin: 0 0 1.2em 20px; // Use margin-left for indentation, remove direct padding-left
+
+      li {
+        display: list-item !important; // Force list-item display
+        width: 100% !important; // Full width
+        box-sizing: border-box;
+        text-align: left !important; // Force left alignment
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        padding-left: 0; // Reset padding here, handled by ul/ol
+        margin: 0.6em 0; // Vertical spacing between items
+        line-height: 1.6em;
+        // text-orientation: mixed !important; // Remove unless needed
+        // writing-mode: horizontal-tb !important; // Remove unless needed
+        // white-space: normal !important; // Ensure wrapping
+        // text-indent: 0 !important; // Remove potential indent issues
+
+        // Fix for wrapped lines in list items
+        p {
+          margin: 0.5em 0 !important; // Vertical spacing for paragraphs within lists
+          padding: 0 !important; // No extra padding
+          // text-indent: 0 !important; // No indentation
+        }
+
+        // Prevent long URLs or code snippets from breaking layout
+        code, a {
+          word-break: break-all;
+          overflow-wrap: break-word;
+          max-width: 100%;
+        }
+      }
+    }
+
+    // --- Images ---
+    img {
+      display: block; // Ensure block display for centering
+      max-width: 100%; // Prevent overflow
+      height: auto; // Maintain aspect ratio
+      margin: 1.5em auto; // Center images
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 4px;
+      box-sizing: border-box;
+      padding: 0; // Remove padding from image tag itself
+    }
+
+    // --- Blockquotes ---
+    blockquote {
+      display: block;
+      width: auto; // Allow blockquote to size naturally within padding
+      box-sizing: border-box;
+      margin: 1.5em 10px 1.5em 10px; // Symmetrical horizontal margins
+      padding: 12px 15px;
+      border-left: 4px solid var(--link-color);
+      background-color: var(--background-lighten-color);
+      border-radius: 0 4px 4px 0;
+      p {
+        margin-bottom: 0.5em;
+        padding: 0;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    // --- Tables --- Fix `mixed-decls` warnings and improve responsiveness ---
+    // Wrap table container for scrolling
+    .table-wrapper {
+        display: block;
+        width: 100%;
+        overflow-x: auto; // Enable horizontal scrolling for the table
+        margin-bottom: 1.5em;
+        padding: 0; // Remove padding from wrapper
+        margin-left: 10px; // Add margin to align with text
+        margin-right: 10px; // Add margin to align with text
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+    }
+    table {
+      // Remove display:block from table itself, let wrapper handle it
+      width: 100%; // Table should try to fill wrapper initially
+      min-width: 400px; // Set a minimum width before scrolling activates
+      border-collapse: collapse;
+      border-spacing: 0; // Remove spacing
+      margin: 0; // Reset margin, handled by wrapper
+      overflow-wrap: normal; // Prevent wrapping inside table cells
+
+      th, td {
+        padding: 8px 10px;
+        border: 1px solid var(--divider-color);
+        white-space: nowrap; // Prevent wrapping inside cells
+        text-align: left; // Align text left by default
+        vertical-align: top; // Align content top
+      }
+      th {
+        background-color: var(--background-lighten-color);
+        font-weight: bold;
+      }
+    }
+
+    // --- Code Blocks --- Fix `mixed-decls` warnings ---
+    pre, pre.highlight {
+      & { // Wrap in & {} to fix mixed-decls
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: pre !important;
+        word-wrap: normal !important;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 1.5em 10px !important; // Symmetrical horizontal margin
+        padding: 0.8em 1em !important; // Adjust padding
+        background-color: var(--code-background); // Ensure background color
+        border-radius: 4px; // Add rounding
+        font-size: 0.9em; // Slightly smaller font for mobile code
+        // Optional: Add a subtle horizontal scroll indicator if desired
+        // scrollbar-width: thin;
+        // scrollbar-color: var(--link-color) var(--background-lighten-color);
+        -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+      }
+    }
+  }
+
+  // --- Styles OUTSIDE @include mobile (for desktop) ---
+  // Fix potential mixed-decls issues by wrapping these too
+  & {
+    overflow: visible;
+    box-sizing: border-box;
+    padding: 0 15px; // Desktop padding
+    max-width: 100%; // Desktop max-width
+    // text-orientation: mixed; // Remove unless needed
+    // writing-mode: horizontal-tb; // Remove unless needed
+  }
+
+  // Ensure images are contained on desktop too
+  img {
+    max-width: 90%;
+    height: auto;
+    margin: 1.5em auto;
+    display: block;
+    
+    @include mobile {
+      max-width: 100%; // Full width on mobile
+    }
+  }
+}
+
+// Add styles for desktop sidebar toggle
+.wrapper-content.sidebar-collapsed {
+  margin-left: 60px !important;
+  width: calc(100% - 60px) !important;
+  
+  @include mobile {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+// Now fix article content for mobile view - simplified to avoid conflicts
+/* // Commenting out this rule as it might be too generic and handled by .post/.entry below
+article.post, .posts article.post, .posts .post, .entry {
+  @include mobile {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    padding: 15px !important;
+  }
+}
+*/
+
+// Fix homepage tags to display in a single row - simplified
+// --- Let's REMOVE most mobile-specific overrides for post lists to match desktop ---
+.posts, #main article.posts {
+  @include mobile {
+    // Keep basic container adjustments if needed, but remove style overrides
+    width: 100% !important; // Keep full width container
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 5px !important; // Keep minimal padding for the container
+    margin: 0 auto !important;
+
+    .post, article {
+      // REMOVE overrides that change appearance from desktop
+      // width: 100% !important;
+      // max-width: 100% !important;
+      // margin: 0 0 20px 0 !important;
+      // padding: 0 !important;
+      // background-color: transparent !important;
+      // box-shadow: none !important;
+      // border-radius: 0 !important;
+      // border: none !important;
+
+      // Keep basic word break for title
+      h1 a {
+        word-break: break-word !important;
+      }
+
+      // Allow meta section and tags to inherit desktop styles or wrap naturally
+      .meta, div[class="meta"] {
+        // display: flex !important;
+        // flex-direction: row !important;
+        // align-items: center !important;
+        // flex-wrap: wrap !important; // Allow wrapping if needed
+        // width: 100% !important;
+        // margin-bottom: 5px !important;
+        // padding: 0 !important;
+
+        .date {
+          // margin-right: 5px !important;
+          // white-space: nowrap;
+        }
+
+        .tag, ul.tag {
+          // display: inline-flex !important;
+          // flex-wrap: nowrap !important; // Let tags wrap if needed
+          // margin: 0 !important;
+          // padding: 0 !important;
+
+          li {
+            // display: inline-block !important;
+            // margin: 0 2px 0 0 !important;
+            // padding: 0 !important;
+
+            a {
+              // display: inline-block !important;
+              // padding: 1px 4px !important;
+              // font-size: 0.8em !important;
+              // border-radius: 3px !important;
+              // background-color: rgba(0,0,0,0.03) !important;
+            }
+          }
+        }
+      }
+
+      h1 {
+        // margin: 5px 0 5px 0 !important;
+        // font-size: 18px !important;
+        // padding: 0 !important;
+        // text-align: left !important;
+        // width: 100% !important;
+        word-break: break-word !important; // Keep this
+
+        a {
+          // font-size: 18px !important;
+          // text-decoration: none !important;
+          word-break: break-word !important; // Keep this
+          // display: inline !important;
+        }
+      }
+    }
+  }
+}
+
+// FIX FOR HOMEPAGE POSTS - REMOVE BLOCK STRUCTURE AND CENTER
+// --- Let's REMOVE most mobile-specific overrides for HOMEPAGE posts to match desktop ---
+.homepage-posts {
+  @include mobile {
+    // Keep basic container adjustments
+    display: block !important; // Keep block container
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 5px !important; // Minimal horizontal padding
+    margin: 0 auto !important; // Center container
+    box-sizing: border-box !important;
+
+    .post {
+      // REMOVE overrides that change appearance from desktop
+      // width: 100% !important;
+      // max-width: 100% !important;
+      // margin: 0 0 15px 0 !important;
+      // padding: 0 !important;
+      // background-color: transparent !important;
+      // box-shadow: none !important;
+      // border-radius: 0 !important;
+      // border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+
+      // Keep basic word break for title
+      h1 a {
+        word-break: break-word !important;
+      }
+
+      h1 {
+        // margin: 10px 0 8px 0 !important;
+        // font-size: 18px !important;
+        // padding: 0 !important;
+        // text-align: left !important;
+
+        a {
+          // font-size: 18px !important;
+          // text-decoration: none !important;
+          word-break: break-word !important; // Keep this
+          // display: inline !important;
+        }
+      }
+
+      .meta {
+        // display: flex !important;
+        // flex-direction: row !important;
+        // align-items: center !important;
+        // flex-wrap: wrap !important; // Allow wrapping
+        // width: 100% !important;
+        // margin: 2px 0 8px 0 !important;
+        // padding: 0 !important;
+        // font-size: 0.85em; // Smaller font
+
+        .date {
+          // margin-right: 5px !important;
+          // white-space: nowrap;
+        }
+
+        .tag, ul.tag {
+          // display: inline-flex !important;
+          // flex-wrap: nowrap !important; // Allow wrapping
+          // margin: 0 !important;
+          // padding: 0 !important;
+
+          li {
+            // display: inline-block !important;
+            // margin: 0 2px 0 0 !important;
+            // padding: 0 !important;
+
+            a {
+              // display: inline-block !important;
+              // padding: 1px 4px !important;
+              // font-size: 0.8em !important;
+              // border-radius: 3px !important;
+              // background-color: rgba(0,0,0,0.03) !important;
+            }
+          }
+        }
+      }
+
+      .read-more {
+        // display: inline-block !important;
+        // padding: 4px 10px !important;
+        // margin: 5px 0 10px 0 !important;
+        // border-radius: 3px !important;
+        // background-color: rgba(0,0,0,0.03) !important;
+        // text-decoration: none !important;
+        // font-size: 0.9em !important;
+      }
+    }
+  }
+}
+
+// Remove redundant padding and fix content display
+/* // Commenting out this redundant/potentially conflicting block
+.post, .entry {
+  @include mobile {
+    overflow: visible; // Ensure content isn't cut off
+    word-wrap: break-word; // Allow long words to break
+    // Set max-width for readability, allow flex to center
+    max-width: 100% !important; // Use full width
+    width: 100% !important; // Use full width
+    display: block !important; // Force block display
+    box-sizing: border-box; // Include padding/border in width calculation
+    padding: 10px 5px !important; // REDUCED horizontal padding
+    margin: 0 auto !important; // CENTER the content
+    text-orientation: mixed !important; // Force horizontal text orientation
+    writing-mode: horizontal-tb !important; // Force horizontal writing mode
+    
+    // Headers with slightly better spacing
+    h1, h2, h3, h4, h5, h6 {
+      word-break: break-word; // Ensure headers don't overflow
+      text-align: left !important; // Force left alignment
+      margin-top: 1.5em;
+      margin-bottom: 0.8em;
+      padding: 0 5px; // Add slight padding to headers
+      text-orientation: mixed !important; // Force horizontal text orientation
+      writing-mode: horizontal-tb !important; // Force horizontal writing mode
+      white-space: normal !important; // Ensure text wraps properly
+      width: 100% !important; // Full width headers
+      display: block !important; // Ensure block display
+    }
+    
+    // Paragraphs with better spacing
+    p {
+      text-align: left !important; // Force left alignment
+      line-height: 1.7em; // Slightly increased readability
+      overflow-wrap: break-word;
+      margin-bottom: 1.2em;
+      padding: 0 5px; // Add slight padding to paragraphs
+      max-width: 100%; // Ensure full width within parent
+      text-orientation: mixed !important; // Force horizontal text orientation
+      writing-mode: horizontal-tb !important; // Force horizontal writing mode
+      width: 100% !important; // Full width paragraphs
+      white-space: normal !important; // Ensure text wraps properly
+      display: block !important; // Ensure block display
+      code {
+        word-break: break-all; // Break long code within paragraphs
+        white-space: pre-wrap; // Allow wrapping
+        font-size: 0.9em;
+        background-color: var(--inline-code-background);
+        padding: 2px 4px;
+        border-radius: 3px;
+      }
+    }
+    
+    // Lists with better padding
+    ul, ol {
+      padding-left: 25px; // Increased indent for lists (from 20px)
+      margin-left: 5px; // Slight extra indent for lists
+      margin-bottom: 1.2em;
+      padding-right: 5px; // Add right padding for balance
+      display: block !important; // Ensure block display
+      width: 100% !important; // Full width lists
+      text-orientation: mixed !important; // Force horizontal text orientation
+      writing-mode: horizontal-tb !important; // Force horizontal writing mode
+      box-sizing: border-box !important; // Include padding in width calculation
+      
+      li {
+        margin-bottom: 0.8em; // Adjusted list item spacing
+        margin-top: 0.6em; // Add spacing above list items
+        text-align: left !important; // Force left alignment
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        padding-left: 0; // Ensure no double padding
+        line-height: 1.6em;
+        display: list-item !important; // Force list-item display
+        text-orientation: mixed !important; // Force horizontal text orientation
+        writing-mode: horizontal-tb !important; // Force horizontal writing mode
+        width: 100% !important; // Full width list items
+        white-space: normal !important; // Ensure text wraps properly
+        text-indent: 0 !important; // Prevent additional indentation on wrapped lines
+        
+        // Fix for wrapped lines in list items
+        p {
+          margin: 0 0 0.6em 0 !important; // Reduce margin inside list paragraphs
+          padding: 0 !important; // No padding for paragraphs in lists
+          text-indent: 0 !important; // No indentation for paragraphs in lists
+        }
+        
+        // Prevent long URLs or code snippets from breaking layout
+        code, a {
+          word-break: break-all;
+          overflow-wrap: break-word;
+          max-width: 100%; // Prevent links/code from exceeding container width
+        }
+      }
+    }
+    
+    // Center-aligned images
+    img {
+      max-width: 98%; // Slightly increased from default
+      margin: 1.5em auto;
+      display: block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); // Add subtle shadow
+      border-radius: 4px; // Add slight rounding
+    }
+    
+    // Responsive blockquotes with balanced spacing
+    blockquote {
+      margin: 1.5em 5px 1.5em 15px; // More balanced margins
+      padding: 12px 15px;
+      border-left: 4px solid var(--link-color);
+      background-color: var(--background-lighten-color);
+      border-radius: 0 4px 4px 0; // Round right corners
+      p {
+        margin-bottom: 0.5em; 
+        padding: 0; // Reset paragraph padding inside blockquotes
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    // Responsive tables
+    table {
+      display: block;
+      width: 100%;
+      overflow-wrap: break-word;
+      border-collapse: collapse;
+      margin-bottom: 1.5em;
+      th, td {
+        padding: 8px 10px;
+        border: 1px solid var(--divider-color);
+        white-space: nowrap; // Keep table cell content on one line initially
+      }
+      th {
+        background-color: var(--background-lighten-color);
+      }
+    }
+
+    // Add specific styles for code blocks on mobile
+    pre, pre.highlight {
+      overflow-x: auto !important; // Ensure horizontal scrolling for long code lines
+      white-space: pre !important; // Preserve whitespace and prevent wrapping
+      word-wrap: normal !important; // Prevent word wrapping inside code blocks
+      max-width: 100%; // Ensure it doesn't exceed parent width
+      box-sizing: border-box; // Include padding/border in width calculation
+      margin-left: 0 !important; // Reset potential inherited margins
+      margin-right: 0 !important; // Reset potential inherited margins
+      padding: 0.5em !important; // Consistent padding
+      // Optional: Add a subtle horizontal scroll indicator if desired
+      // scrollbar-width: thin;
+      // scrollbar-color: var(--link-color) var(--background-lighten-color);
+    }
+  }
+}
+*/
+
+// Fix html and body to ensure no unexpected margins
+html, body {
+  @include mobile {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+// Home page specific fixes for post excerpts
+@include mobile {
+  // Fix for post excerpts on the homepage
+  /* // Commenting out this rule as it might conflict with letting desktop styles apply
+  .post-excerpt, 
+  .entry, 
+  .homepage-posts .entry,
+  .posts .entry {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 5px !important;
+    margin: 10px 0 !important;
+    color: var(--text-color) !important;
+    background-color: transparent !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    position: static !important;
+    float: none !important;
+    box-sizing: border-box !important;
+  }
+  */
+  
+  // Fix for homepage posts - This seems redundant with the .homepage-posts block above, commenting out
+  /*
+  .homepage-posts {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    
+    .post {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 0 15px 0 !important;
+      padding: 15px 10px !important;
+      background-color: var(--background-lighten-color) !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+      border-radius: 4px !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      float: none !important;
+      position: static !important;
+      overflow: visible !important;
+      
+      h1 {
+        margin-top: 5px !important;
+        margin-bottom: 10px !important;
+        font-size: 20px !important;
+        padding: 0 5px !important;
+        text-align: left !important;
+        
+        a {
+          font-size: 20px !important;
+          text-decoration: none !important;
+          word-break: break-word !important;
+        }
+      }
+      
+      .meta {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        margin: 5px 0 10px 0 !important;
+        padding: 0 !important;
+        font-size: 0.9em;
+
+        .date {
+          margin-right: 8px !important;
+          white-space: nowrap;
+        }
+
+        .tag, ul.tag {
+          display: inline-flex !important;
+          flex-wrap: nowrap !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin: 0 !important;
+          padding: 0 !important;
+          list-style: none !important;
+          vertical-align: middle;
+
+          li {
+            display: inline-block !important;
+            margin: 0 3px 0 0 !important;
+            padding: 0 !important;
+
+            a {
+              display: inline-block !important;
+              padding: 2px 6px !important;
+              font-size: 0.9em !important;
+              border-radius: 3px !important;
+              background-color: var(--tag-index-label-background-color, rgba(0,0,0,0.05)) !important;
+              color: var(--text-color) !important;
+              text-decoration: none !important;
+              white-space: nowrap !important;
+            }
+          }
+        }
+      }
+      
+      .read-more {
+        display: inline-block !important;
+        padding: 8px 15px !important;
+        margin-top: 10px !important;
+        margin-bottom: 5px !important;
+        margin-left: 5px !important;
+        border-radius: 4px !important;
+        background-color: var(--background-lighten-color, #f0f0f0) !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+      }
+    }
+  }
+  */
+}
+
+// FIX FOR TAGS DISPLAY - SHOW IN SINGLE ROW with TIGHTER SPACING
+// --- Let tags wrap naturally on mobile, remove forced single row --- 
+@include mobile {
+  .post-tags, .entry-tags, .tags, .tag-container, ul.tag {
+    // display: flex !important;
+    // flex-direction: row !important;
+    // flex-wrap: nowrap !important; // REMOVE this to allow wrapping
+    // justify-content: flex-start !important;
+    // align-items: center !important;
+    // width: 100% !important;
+    // margin: 5px 0 !important;
+    // padding: 0 !important;
+    // list-style: none !important;
+    // overflow: hidden; // REMOVE this
+    // white-space: nowrap; // REMOVE this
+  }
+  
+  // Style individual tags to display inline with TIGHTER SPACING
+  .post-tag, .entry-tag, .tag li, .tags li, a[href^="/tags/"], a[href*="tag="] {
+    // display: inline-block !important;
+    // margin: 0 2px 2px 0 !important;
+    // padding: 0 !important;
+    
+    a {
+      // display: inline-block !important;
+      // padding: 1px 4px !important;
+      // background-color: rgba(0,0,0,0.03) !important;
+      // border-radius: 3px !important;
+      // text-decoration: none !important;
+      // font-size: 0.8em !important;
+      // white-space: nowrap !important; // Allow wrapping if needed
+    }
+  }
+}
+
+// FIX FOR TAGS DISPLAY - Apply specific style from image
+@include mobile {
+  .post-tags, .entry-tags, .tags, .tag-container, ul.tag {
+    // Keep basic container structure allowing wrap
+    list-style: none !important;
+    padding: 0 10px !important; // Symmetrical horizontal padding
+    margin: 8px 0 10px 0 !important; // Adjust vertical margin
+    line-height: 1.5; // Improve spacing when wrapped
+    text-align: left !important; // Align tags left
+  }
+
+  // Style individual tags to match the image provided
+  .post-tag, .entry-tag, .tag li, .tags li {
+     display: inline-block !important; // Display tags inline
+     margin: 2px 4px 2px 0 !important; // Consistent margins (top right bottom left)
+     padding: 0 !important; // Reset li padding
+
+    a[href^="/tags/"], a[href*="tag="] {
+       display: inline-block !important;
+       padding: 4px 8px !important; // Padding inside the tag
+       background-color: #4A4E52 !important; // Dark background from image (approx)
+       color: #EAEAEA !important; // Light text color from image (approx)
+       border-radius: 4px !important; // Rounded corners
+       text-decoration: none !important;
+       font-size: 0.9em !important; // Adjust font size as needed
+       white-space: nowrap !important; // Prevent text wrapping inside tag
+       transition: background-color 0.2s ease; // Add hover effect
+
+       &:hover {
+         background-color: #606468 !important; // Slightly lighter on hover
+       }
+     }
+  }
+}
+ 
