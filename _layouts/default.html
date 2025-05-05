@@ -9,7 +9,10 @@
 
     {% if page.toc==true %}
       <aside class="toc">
-        {% include toc.html html=content %}
+        <button id="toc-toggle-button" aria-label="展开/折叠目录">目录 ▼</button>
+        <div id="toc-content">
+          {% include toc.html html=content %}
+        </div>
       </aside>
     {% endif %}
 
@@ -35,6 +38,11 @@
     
     <!-- 引入侧边栏折叠脚本 -->
     <script src="{{ site.baseurl }}/js/sidebar-toggle.js"></script>
+    
+    <!-- 引入TOC折叠脚本 -->
+    {% if page.toc==true %}
+    <script src="{{ site.baseurl }}/js/toc-toggle.js"></script>
+    {% endif %}
     
     <!-- 动态调整目录区域脚本 -->
     {% if page.toc==true %}

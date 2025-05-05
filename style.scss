@@ -622,64 +622,86 @@ nav {
   }
 }
 
-// TOC
+/*********************/
+/* TABLE OF CONTENTS */
+/*********************/
 
 .toc {
-  width: 320px;
-  height: 100%;
-  right: 2%;
+  // General container styles (position, size, background, border etc.)
   position: fixed;
-  z-index: 4;
-  padding: 60px 25px 0 25px;
+  right: 20px; /* Adjusted from 2% */
+  top: 100px; /* Adjust based on header height */
+  width: 320px; /* Default width, can be adjusted by JS */
+  max-height: calc(100vh - 120px); /* Adjust top/bottom margins */
+  padding: 15px;
+  background-color: var(--toc-bg-color, var(--background-color)); /* Use theme variable or fallback */
+  border: 1px solid var(--divider-color); /* Changed from border-left */
+  border-radius: 5px; /* Added */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Added */
   overflow-y: auto;
-  max-height: 90vh;
-  scrollbar-width: thin;
-  border-left: 1px solid var(--divider-color);
-  background-color: var(--background-color);
-  transition: width 0.3s ease;
-  font-family: "Roboto", "Noto Sans SC", sans-serif;
+  scrollbar-width: thin; /* Kept */
+  z-index: 999; /* Kept, updated value */
+  transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease; /* Added padding */
+  font-family: "Roboto", "Noto Sans SC", sans-serif; /* Kept */
 
-  &:before {
-    content: "目录";
-    margin: 0 0 1em 0;
-    font-weight: 700;
-    font-size: 1.4em;
+  /* Styling for the NEW toggle button */
+  #toc-toggle-button {
     display: block;
-    padding-bottom: 0.8em;
-    border-bottom: 3px double var(--divider-color);
-    color: #1a73e8;
-    text-align: center;
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 10px; /* Only shown when expanded */
+    background-color: var(--button-bg, #f0f0f0);
+    color: var(--button-text, #333);
+    border: 1px solid var(--divider-color);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--button-hover-bg, #e0e0e0);
+    }
   }
 
-  li:before {
-    content: "";
+  /* Styles for the NEW content wrapper */
+  #toc-content {
+    // transition: max-height 0.3s ease-out, opacity 0.3s ease-out; // Optional animation
+    overflow: hidden;
   }
 
+  /* Existing list and item styling (slightly adapted) */
   ul {
     padding-left: 10px;
     margin-top: 5px;
-    margin-bottom: 10px;
+    list-style: none; /* Ensure no default bullets */
   }
 
   li {
     margin-bottom: 10px;
     line-height: 1.6;
+    list-style: none; /* Ensure no default bullets */
+     &:before {
+       content: ""; /* Override default list style */
+       padding-right: 0;
+     }
   }
 
   // 一级目录项
-  > ul > li > a {
+  > #toc-content > ul > li > a { /* Target links inside the content div */
     color: #4285f4;
     font-weight: 500;
   }
 
   // 二级目录项
-  > ul > li > ul > li > a {
+  > #toc-content > ul > li > ul > li > a {
     color: #5c9ce6;
     font-weight: 400;
   }
 
   // 三级及以下目录项
-  > ul > li > ul > li > ul li a {
+  > #toc-content > ul > li > ul > li > ul li a {
     color: #7baaf7;
     font-weight: 400;
   }
@@ -689,7 +711,7 @@ nav {
     padding: 5px 8px;
     border-radius: 4px;
     transition: all 0.2s ease;
-    color: #4285f4;
+    /* color: #4285f4; // Color is now handled by hierarchy rules */
     font-weight: 400;
 
     &:hover {
@@ -710,18 +732,29 @@ nav {
     color: #039be5;
   }
 
+  /* Styles for the NEW collapsed state */
+  &.collapsed {
+    width: auto !important; /* Override original width */
+    padding: 5px !important; /* Override original padding */
+    max-height: none !important; /* Allow height to fit button */
+    overflow: visible !important; /* Allow button shadow if any */
+
+    #toc-toggle-button {
+       margin-bottom: 0;
+    }
+     #toc-content {
+       display: none; // Hide content explicitly
+     }
+  }
+
+  /* Dark theme adjustments (kept, adapted selectors) */
   .dark-theme & {
     a {
-      color: #5c9ce6;
-
+      /* color: #5c9ce6; // Handled by hierarchy */
       &:hover {
         background-color: rgba(92, 156, 230, 0.2);
         color: #7baaf7;
       }
-    }
-
-    &:before {
-      color: #4285f4;
     }
 
     code {
@@ -730,21 +763,45 @@ nav {
     }
 
     // 深色主题下的目录层级颜色
-    > ul > li > a {
+    > #toc-content > ul > li > a {
       color: #4285f4;
     }
 
-    > ul > li > ul > li > a {
+    > #toc-content > ul > li > ul > li > a {
       color: #5c9ce6;
     }
 
-    > ul > li > ul > li > ul li a {
+    > #toc-content > ul > li > ul > li > ul li a {
       color: #7baaf7;
+    }
+
+    #toc-toggle-button { // Style button for dark theme if needed
+       background-color: var(--dark-button-bg, #444);
+       color: var(--dark-button-text, #eee);
+       border-color: var(--dark-divider-color, #555);
+       &:hover {
+         background-color: var(--dark-button-hover-bg, #555);
+       }
     }
   }
 
+  /* Mobile adjustments (kept) */
   @include mobile {
     display: none;
+  }
+}
+
+// Adjust main content padding when TOC is present and expanded
+#main.withtoc {
+  padding-right: 370px; /* Adjust this value based on original .toc width + gap */
+  transition: padding-right 0.3s ease;
+
+  &.toc-collapsed { // Class added by JS
+     padding-right: 0 !important; /* Override padding when collapsed */
+  }
+
+  @include mobile {
+     padding-right: 0 !important; // Ensure no padding on mobile
   }
 }
 
@@ -1345,8 +1402,23 @@ footer {
 
 /* Custom iPad Pro portrait fixes: hide sidebar/TOC and enforce full-width article container */
 @media screen and (max-width: 1024px) and (orientation: portrait) {
-  /* Hide sidebar and TOC completely */
-  .wrapper-sidebar,
+  /* Make sidebar hidden by default but allow it to be shown with toggle */
+  .wrapper-sidebar {
+    display: block !important;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+    border: none;
+  }
+  
+  /* When toggled, show the sidebar */
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    height: auto;
+    display: block !important;
+    padding: 20px;
+    border-bottom: 1px solid var(--divider-color);
+  }
+  
   .toc {
     display: none !important;
   }
@@ -1373,10 +1445,27 @@ footer {
 
 // iPad Pro and mobile full-width content override
 @media (max-width: 1024px) {
-  .wrapper-sidebar,
+  /* Make sidebar hidden by default but allow it to be shown with toggle */
+  .wrapper-sidebar {
+    display: block !important;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+    border: none;
+  }
+  
+  /* When toggled, show the sidebar */
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    height: auto;
+    display: block !important;
+    padding: 20px;
+    border-bottom: 1px solid var(--divider-color);
+  }
+  
   .toc {
     display: none !important;
   }
+  
   .wrapper-content,
   .wrapper-content.withtoc {
     float: none !important;
