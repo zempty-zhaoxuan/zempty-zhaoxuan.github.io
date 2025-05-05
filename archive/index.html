@@ -5,30 +5,65 @@ permalink: /archive/
 ---
 
 {% if site.posts.size == 0 %}
-  <h2>No post found</h2>
+  <h2>没有找到文章</h2>
 {% endif %}
 
-<ul class="archive">
-  {% for post in site.posts %}
-    {% unless post.next %}
-      <h2>{{ post.date | date: '%Y' }}</h2>
-    {% else %}
-      {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-      {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-      {% if year != nyear %}
-        <h2>{{ post.date | date: '%Y' }}</h2>
-      {% endif %}
-    {% endunless %}
-
-    <li>
-      {% if post.link %}
-      <a href="{{ post.link }}">
-      {% else %}
-      <a href="{{ site.baseurl }}{{ post.url }}">
-      {% endif %}
-        {{ post.title }}
-      </a>
-      <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-    </li>
+<div class="archive-container">
+  {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
+  {% assign sorted_months = post_months | sort: "name" | reverse %}
+  
+  {% for month_group in sorted_months %}
+    {% assign month_date = month_group.name | split: "-" %}
+    {% assign year = month_date[0] %}
+    {% assign month_num = month_date[1] %}
+    {% case month_num %}
+      {% when '01' %}{% assign month_name = "一月" %}
+      {% when '02' %}{% assign month_name = "二月" %}
+      {% when '03' %}{% assign month_name = "三月" %}
+      {% when '04' %}{% assign month_name = "四月" %}
+      {% when '05' %}{% assign month_name = "五月" %}
+      {% when '06' %}{% assign month_name = "六月" %}
+      {% when '07' %}{% assign month_name = "七月" %}
+      {% when '08' %}{% assign month_name = "八月" %}
+      {% when '09' %}{% assign month_name = "九月" %}
+      {% when '10' %}{% assign month_name = "十月" %}
+      {% when '11' %}{% assign month_name = "十一月" %}
+      {% when '12' %}{% assign month_name = "十二月" %}
+    {% endcase %}
+    
+    <div class="month-group" id="{{ month_group.name }}">
+      <h2 class="month-title">{{ year }}年{{ month_name }}</h2>
+      <ul class="month-posts">
+        {% for post in month_group.items %}
+          <li class="archive-item">
+            {% if post.link %}
+            <a href="{{ post.link }}">
+            {% else %}
+            <a href="{{ site.baseurl }}{{ post.url }}">
+            {% endif %}
+              {{ post.title }}
+            </a>
+            <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   {% endfor %}
-</ul>
+</div>
+
+<script>
+  // Check if we should scroll to a specific month (based on URL hash)
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.hash) {
+      const targetMonth = document.querySelector(window.location.hash);
+      if (targetMonth) {
+        setTimeout(function() {
+          window.scrollTo({
+            top: targetMonth.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }, 200);
+      }
+    }
+  });
+</script>

@@ -4,9 +4,11 @@
   --background-lighten-color: #{$oc-gray-1};
   --text-color: #{$base-color};
   --link-color: #{$oc-blue-8};
+  --link-color-rgb: 24, 100, 171; /* RGB for $oc-blue-8 */
   --link-lighten-color: #{$oc-blue-6};
   --link-bghv-color: #{$oc-blue-0};
   --divider-color: #{$oc-gray-1};
+  --divider-color-light: #{rgba($oc-gray-1, 0.7)};
   --blockquote-color: #{$base-lighten-color};
   --blockquote-border-color: #{$oc-gray-3};
   --table-border-color: #{$oc-gray-2};
@@ -24,9 +26,11 @@
   --background-lighten-color: #{$oc-gray-8};
   --text-color: #{$oc-gray-0};
   --link-color: #{$oc-blue-2};
+  --link-color-rgb: 138, 180, 248; /* RGB for $oc-blue-2 */
   --link-lighten-color: #{$oc-blue-3};
   --link-bghv-color: #{$oc-blue-9};
   --divider-color: #{$oc-gray-8};
+  --divider-color-light: #{rgba($oc-gray-8, 0.7)};
   --blockquote-color: #{$oc-gray-3};
   --blockquote-border-color: #{$oc-gray-7};
   --table-border-color: #{$oc-gray-7};
@@ -44,9 +48,11 @@
   --background-lighten-color: #{$oc-gray-1};
   --text-color: #{$base-color};
   --link-color: #{$oc-blue-8};
+  --link-color-rgb: 24, 100, 171; /* RGB for $oc-blue-8 */
   --link-lighten-color: #{$oc-blue-6};
   --link-bghv-color: #{$oc-blue-0};
   --divider-color: #{$oc-gray-1};
+  --divider-color-light: #{rgba($oc-gray-1, 0.7)};
   --blockquote-color: #{$base-lighten-color};
   --blockquote-border-color: #{$oc-gray-3};
   --table-border-color: #{$oc-gray-2};

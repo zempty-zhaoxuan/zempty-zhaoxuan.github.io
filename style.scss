@@ -1488,3 +1488,313 @@ footer {
     box-sizing: border-box !important;
   }
 }
+
+/* 文章归档日历样式 - 增强版 */
+.sidebar-archive {
+  padding: 0 20px;
+  margin: 30px 0;
+}
+
+.sidebar-archive h3 {
+  color: var(--text-color);
+  font-size: 20px;
+  margin-bottom: 18px;
+  text-align: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--divider-color);
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.sidebar-archive h3:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 3px;
+  background-color: var(--link-color);
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.archive-calendar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.archive-month {
+  text-decoration: none;
+}
+
+.month-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border-radius: 12px;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-align: center;
+  height: 90px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.month-block:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.03) 50%);
+  z-index: 0;
+}
+
+.month-block:hover {
+  background-color: var(--link-color);
+  color: white;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.month-name {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.month-year {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.post-count {
+  font-size: 17px;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 3px 10px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.month-block:hover .post-count {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* 适配深色主题 */
+.dark-theme .month-block {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .month-block:before {
+  background: linear-gradient(to bottom right, transparent 50%, rgba(255, 255, 255, 0.03) 50%);
+}
+
+.dark-theme .month-block:hover {
+  background-color: var(--link-color);
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .post-count {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 移动端适配 */
+@include mobile {
+  .sidebar-archive {
+    padding: 0 15px;
+    margin: 20px 0 30px;
+  }
+
+  .archive-calendar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .month-block {
+    padding: 10px 5px;
+    height: 80px;
+  }
+
+  .month-name {
+    font-size: 13px;
+  }
+
+  .month-year {
+    font-size: 11px;
+  }
+
+  .post-count {
+    font-size: 15px;
+    padding: 2px 8px;
+  }
+}
+
+/* iPad Pro适配 */
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .sidebar-archive {
+    display: none;
+  }
+}
+
+/* 归档页面样式增强 */
+.archive-container {
+  margin-top: 40px;
+}
+
+.month-group {
+  margin-bottom: 50px;
+  padding-bottom: 25px;
+  border-bottom: 1px dashed var(--divider-color);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.month-title {
+  font-size: 26px;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-weight: bold;
+  position: relative;
+  padding-left: 25px;
+  letter-spacing: 0.5px;
+}
+
+.month-title:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--link-color);
+  box-shadow: 0 0 0 4px rgba(var(--link-color-rgb), 0.2);
+}
+
+.month-posts {
+  list-style-type: none;
+  padding-left: 25px;
+  margin-left: 5px;
+  border-left: 1px solid var(--divider-color-light);
+}
+
+.archive-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dotted var(--divider-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.archive-item:before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  border: 1px solid var(--divider-color);
+  transition: all 0.3s ease;
+}
+
+.archive-item:hover:before {
+  background-color: var(--link-color);
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgba(var(--link-color-rgb), 0.2);
+}
+
+.archive-item:last-child {
+  border-bottom: none;
+}
+
+.archive-item a {
+  flex: 1;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.archive-item a:hover {
+  color: var(--link-color);
+  transform: translateX(3px);
+}
+
+.archive-item time {
+  color: var(--text-lighten-color);
+  font-size: 14px;
+  margin-left: 15px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background-color: var(--background-lighten-color);
+  transition: all 0.3s ease;
+}
+
+.archive-item:hover time {
+  background-color: rgba(var(--link-color-rgb), 0.1);
+}
+
+@include mobile {
+  .month-title {
+    font-size: 22px;
+    padding-left: 20px;
+  }
+  
+  .month-title:before {
+    width: 10px;
+    height: 10px;
+    top: 10px;
+  }
+  
+  .month-posts {
+    padding-left: 20px;
+  }
+  
+  .archive-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .archive-item:before {
+    left: -26px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+  }
+  
+  .archive-item time {
+    margin-left: 0;
+    margin-top: 8px;
+    font-size: 12px;
+    align-self: flex-start;
+  }
+}

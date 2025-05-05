@@ -21,18 +21,36 @@
     </nav>
   </div>
   
-  <!-- 标签云组件 -->
-  <div class="sidebar-tags">
-    <h3>标签云</h3>
-    <div class="tag-cloud">
-      {% assign tags = site.tags | sort %}
-      {% for tag in tags %}
-        <a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" 
-           style="font-size: {{ tag[1].size | times: 2 | plus: 12 }}px; 
-                  opacity: {{ tag[1].size | divided_by: site.tags.size | plus: 0.5 | at_most: 1.0 }};"
-           class="tag-cloud-item">
-          {{ tag[0] }}
-          <span class="tag-count">{{ tag[1].size }}</span>
+  <!-- 文章归档日历 -->
+  <div class="sidebar-archive">
+    <h3>文章归档</h3>
+    <div class="archive-calendar">
+      {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
+      {% assign sorted_months = post_months | sort: "name" | reverse %}
+      {% for month in sorted_months limit:12 %}
+        {% assign month_date = month.name | split: "-" %}
+        {% assign year = month_date[0] %}
+        {% assign month_num = month_date[1] %}
+        {% case month_num %}
+          {% when '01' %}{% assign month_name = "一月" %}
+          {% when '02' %}{% assign month_name = "二月" %}
+          {% when '03' %}{% assign month_name = "三月" %}
+          {% when '04' %}{% assign month_name = "四月" %}
+          {% when '05' %}{% assign month_name = "五月" %}
+          {% when '06' %}{% assign month_name = "六月" %}
+          {% when '07' %}{% assign month_name = "七月" %}
+          {% when '08' %}{% assign month_name = "八月" %}
+          {% when '09' %}{% assign month_name = "九月" %}
+          {% when '10' %}{% assign month_name = "十月" %}
+          {% when '11' %}{% assign month_name = "十一月" %}
+          {% when '12' %}{% assign month_name = "十二月" %}
+        {% endcase %}
+        <a href="{{ site.baseurl }}/archive/#{{ month.name }}" class="archive-month">
+          <div class="month-block">
+            <span class="month-name">{{ month_name }}</span>
+            <span class="month-year">{{ year }}</span>
+            <span class="post-count">{{ month.items.size }}</span>
+          </div>
         </a>
       {% endfor %}
     </div>
