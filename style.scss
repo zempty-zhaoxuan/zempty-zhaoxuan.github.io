@@ -1,6 +1,6 @@
----
-layout: null
----
+// ---
+// layout: null
+// ---
 
 //
 // IMPORTS
@@ -1327,6 +1327,7 @@ footer {
   .sidebar-tags {
     padding: 0 15px;
     margin: 20px 0;
+    display: none; /* 在移动设备上隐藏标签云 */
   }
 
   .tag-cloud {
@@ -1396,6 +1397,11 @@ footer {
 
     #home-button {
       right: 124px;
+    }
+    
+    /* 在iPad Pro竖屏模式下隐藏标签云 */
+    .sidebar-tags {
+      display: none;
     }
   }
 }
