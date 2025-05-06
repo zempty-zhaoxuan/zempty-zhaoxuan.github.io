@@ -5,11 +5,11 @@
     {% include nav.html %}
 
     <!-- 移动端侧边栏折叠按钮 -->
-    <button id="mobile-sidebar-toggle" aria-label="折叠/展开移动端侧边栏">▲</button>
+    <button id="mobile-sidebar-toggle" aria-label="折叠/展开移动端侧边栏" title="折叠/展开移动端侧边栏">▲</button>
 
     {% if page.toc==true %}
       <aside class="toc">
-        <button id="toc-toggle-button" aria-label="展开/折叠目录">目录 ▼</button>
+        <button id="toc-toggle-button" aria-label="展开/折叠目录" title="展开/折叠目录">目录 ▼</button>
         <div id="toc-content">
           {% include toc.html html=content %}
         </div>
@@ -23,13 +23,13 @@
     </div>
 
     <!-- 主题切换按钮 -->
-    <button id="theme-toggle" aria-label="切换深色/浅色主题">🌙</button>
+    <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
     
     <!-- 侧边栏折叠按钮 -->
-    <button id="sidebar-toggle" aria-label="折叠/展开侧边栏">«</button>
+    <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">«</button>
     
     <!-- 返回首页按钮 -->
-    <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页">🏠</a>
+    <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
 
     {% include analytics.html %}
     

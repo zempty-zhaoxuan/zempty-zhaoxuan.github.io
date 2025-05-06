@@ -541,19 +541,27 @@ img {
 
 .navlist {
   text-align: center;
+  padding: 0 15px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-bottom: 15px;
 }
 
 nav {
-  display: block;
-  margin-top: 23px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
   font-family: "Noto Serif", "PT Serif", source-han-serif-sc, "Source Han Serif SC", "Source Han Serif CN", "Source Han Serif TC", "Source Han Serif TW", "Source Han Serif", "Songti SC", SimSon, serif;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
 }
 @media screen and (max-width: 1200px) {
   nav {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 15px;
     background-color: var(--background-color);
     padding: 10px 0;
     border-bottom: none;
@@ -562,26 +570,31 @@ nav {
   }
 }
 nav a {
-  margin: 0 10px;
-  text-align: right;
-  font-weight: 300;
-  letter-spacing: 1px;
-  color: var(--link-color);
+  margin: 0;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--text-color);
+  background-color: var(--background-lighten-color);
 }
 nav a:hover, nav a:active {
-  color: var(--link-lighten-color);
+  color: #fff;
+  background-color: var(--link-color);
 }
 @media screen and (max-width: 1200px) {
   nav a {
-    margin: 0 10px;
-    color: var(--link-color);
+    margin: 0 5px;
     display: inline-block;
-    padding: 6px 8px;
-    border-radius: 3px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
   }
   nav a:hover, nav a:active {
-    color: var(--link-lighten-color);
-    background-color: var(--background-lighten-color);
+    color: #fff;
+    background-color: var(--link-color);
   }
 }
 
@@ -1230,6 +1243,16 @@ footer .svg-icon svg:hover {
 .wrapper-sidebar,
 .wrapper-content {
   transition: all 0.3s ease;
+}
+
+/* 移动端优化 */
+body.mobile-sidebar-collapsed .wrapper-content {
+  margin-top: 10px;
+}
+
+/* 确保侧边栏展开/折叠平滑过渡 */
+.wrapper-sidebar.mobile-collapsed {
+  transition: height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
 }
 
 pre, code {
@@ -2609,37 +2632,15 @@ code.highlighter-rouge {
 /* 文章归档日历样式 - 增强版 */
 .sidebar-archive {
   padding: 0 20px;
-  margin: 30px 0;
-}
-
-.sidebar-archive h3 {
-  color: var(--text-color);
-  font-size: 20px;
-  margin-bottom: 18px;
-  text-align: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--divider-color);
-  position: relative;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.sidebar-archive h3:after {
-  content: "";
-  position: absolute;
-  width: 50px;
-  height: 3px;
-  background-color: var(--link-color);
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
+  margin: 20px 0;
+  border-top: 1px solid var(--divider-color);
+  padding-top: 20px;
 }
 
 .archive-calendar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
   margin: 0 auto;
 }
 
@@ -2652,14 +2653,14 @@ code.highlighter-rouge {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 8px;
-  border-radius: 12px;
+  padding: 10px 6px;
+  border-radius: 10px;
   background-color: var(--background-lighten-color);
   color: var(--text-color);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: center;
-  height: 90px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
   position: relative;
   overflow: hidden;
 }
@@ -2671,39 +2672,39 @@ code.highlighter-rouge {
   height: 100%;
   top: 0;
   left: 0;
-  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.03) 50%);
+  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.02) 50%);
   z-index: 0;
 }
 
 .month-block:hover {
   background-color: var(--link-color);
   color: white;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .month-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   position: relative;
   z-index: 1;
 }
 
 .month-year {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.8;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   position: relative;
   z-index: 1;
 }
 
 .post-count {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  padding: 3px 10px;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 2px 8px;
   position: relative;
   z-index: 1;
   transition: all 0.3s ease;
@@ -2717,21 +2718,7 @@ code.highlighter-rouge {
 .dark-theme .month-block {
   background-color: #2d2d2d;
   color: #e0e0e0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.dark-theme .month-block:before {
-  background: linear-gradient(to bottom right, transparent 50%, rgba(255, 255, 255, 0.03) 50%);
-}
-
-.dark-theme .month-block:hover {
-  background-color: var(--link-color);
-  color: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.dark-theme .post-count {
-  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* 移动端适配 */
@@ -2770,6 +2757,65 @@ code.highlighter-rouge {
   margin-top: 40px;
 }
 
+/* Media query for medium-sized screens (tablet landscape and smaller laptops) */
+@media screen and (max-width: 1200px) {
+  .archive-container {
+    margin-top: 30px;
+  }
+  .month-group {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+  /* 调整中等尺寸屏幕的侧边栏按钮 */
+  #sidebar-toggle {
+    display: none !important;
+  }
+  #mobile-sidebar-toggle {
+    display: flex !important;
+    bottom: 15px;
+    right: 65px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+  #home-button {
+    bottom: 15px;
+    right: 115px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+  /* 确保侧边栏在中等尺寸屏幕上也有移动端的折叠行为 */
+  .wrapper-sidebar {
+    width: 100%;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--divider-color);
+    height: auto;
+    transition: height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .wrapper-sidebar.mobile-collapsed {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
+    margin: 0;
+  }
+  .wrapper-content {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+/* Hide archive calendar on mobile devices */
+@media screen and (max-width: 767px) {
+  .sidebar-archive,
+  .archive-calendar {
+    display: none !important;
+  }
+}
 .month-group {
   margin-bottom: 50px;
   padding-bottom: 25px;
@@ -2906,6 +2952,125 @@ code.highlighter-rouge {
     margin-top: 8px;
     font-size: 12px;
     align-self: flex-start;
+  }
+}
+/* Additional mobile adjustments for archive page */
+@media screen and (max-width: 767px) {
+  .archive-container {
+    margin-top: 20px;
+  }
+}
+/* 响应式工具类 */
+@media screen and (max-width: 767px) {
+  .responsive-hide {
+    display: none !important;
+  }
+}
+
+/* Hide specific elements on medium screens (like our problem case around 1144px × 1010px) */
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .sidebar-archive.responsive-hide {
+    display: none !important;
+  }
+}
+/* 归档页面样式增强 */
+.archive-container {
+  margin-top: 40px;
+}
+
+/* 所有屏幕尺寸的响应式按钮调整 */
+@media screen and (max-width: 1200px) {
+  /* 确保移动折叠按钮显示 */
+  #mobile-sidebar-toggle {
+    display: flex;
+    bottom: 15px;
+    right: 65px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  /* 隐藏桌面侧边栏折叠按钮 */
+  #sidebar-toggle {
+    display: none;
+  }
+  /* 调整返回首页按钮位置 */
+  #home-button {
+    bottom: 15px;
+    right: 115px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  /* 调整主题切换按钮位置 */
+  #theme-toggle {
+    bottom: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+  }
+}
+/* 中等尺寸屏幕的特定调整（约1144px × 1010px） */
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  #mobile-sidebar-toggle {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  #mobile-sidebar-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  /* 优化按钮间距，防止重叠 */
+  #home-button {
+    right: 110px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #theme-toggle {
+    right: 15px;
+  }
+  #mobile-sidebar-toggle {
+    bottom: 15px;
+    right: 65px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+  #home-button {
+    bottom: 15px;
+    right: 115px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+/* 自定义按钮的tooltip效果 */
+#theme-toggle:hover::after, #sidebar-toggle:hover::after, #home-button:hover::after, #mobile-sidebar-toggle:hover::after, #toc-toggle-button:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 14px;
+  white-space: nowrap;
+  border: 1px solid var(--divider-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  opacity: 0.9;
+}
+
+/* 为移动端设备调整的tooltip样式 */
+@media screen and (max-width: 1200px) {
+  #theme-toggle:hover::after, #sidebar-toggle:hover::after, #home-button:hover::after, #mobile-sidebar-toggle:hover::after, #toc-toggle-button:hover::after {
+    font-size: 12px;
+    padding: 4px 8px;
+    bottom: 120%;
   }
 }
 

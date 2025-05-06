@@ -362,6 +362,22 @@ img {
   clear: both;
 }
 
+/* 在竖屏模式下禁用clearfix，防止产生水平线 */
+@media screen and (orientation: portrait) {
+  .clearfix:before,
+  .clearfix:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    height: 0 !important;
+  }
+  
+  .sidebar.clearfix {
+    display: block !important;
+    background: var(--background-color) !important;
+  }
+}
+
 // Alignment
 .center {
   text-align: center;
@@ -418,6 +434,8 @@ img {
 
 .sidebar {
   padding: 20px 0;
+  /* 确保背景与主体一致 */
+  background-color: var(--background-color);
 
   @include mobile {
     text-align: center;
@@ -478,7 +496,8 @@ img {
   padding: 0 15px;
   margin-top: 30px;
   margin-bottom: 15px;
-  border-bottom: 1px solid var(--divider-color);
+  /* 移除导航列表底部边框 */
+  border-bottom: none;
   padding-bottom: 15px;
 }
 
@@ -551,10 +570,35 @@ nav {
 
 // iPad Pro portrait mode optimization
 @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .wrapper-sidebar {
+    width: 100%;
+    height: auto;
+    padding-bottom: 0;
+    position: relative;
+    border-bottom: none;
+    border-right: 0;
+    transform: none !important;
+    background-color: var(--background-color);
+  }
+
   .wrapper-content {
     float: none;
     width: 100%;
     margin-left: 0;
+  }
+
+  .sidebar {
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .site-info {
+    margin: 20px auto 0;
+  }
+
+  nav {
+    padding: 10px 0;
+    box-shadow: none;
   }
 }
 
@@ -1439,7 +1483,9 @@ body.mobile-sidebar-collapsed {
     height: 0;
     overflow: hidden;
     transition: height 0.3s ease;
-    border: none;
+    border: none !important;
+    box-shadow: none !important;
+    background: var(--background-color) !important;
   }
   
   /* When toggled, show the sidebar */
@@ -1447,7 +1493,10 @@ body.mobile-sidebar-collapsed {
     height: auto;
     display: block !important;
     padding: 20px;
-    border-bottom: 1px solid var(--divider-color);
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
   }
   
   .toc {
@@ -1462,6 +1511,8 @@ body.mobile-sidebar-collapsed {
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;
+    border-top: none !important;
+    background: var(--background-color) !important;
   }
 
   /* Container with symmetrical mobile-like padding */
@@ -1471,6 +1522,19 @@ body.mobile-sidebar-collapsed {
     padding: 0 20px !important;
     margin: 0 auto !important;
     box-sizing: border-box !important;
+    background: var(--background-color) !important;
+  }
+  
+  /* 移除可能显示的分隔线 */
+  body:before, body:after,
+  .wrapper-sidebar:before, .wrapper-sidebar:after,
+  .wrapper-content:before, .wrapper-content:after,
+  .container:before, .container:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
   }
 }
 
@@ -1482,7 +1546,9 @@ body.mobile-sidebar-collapsed {
     height: 0;
     overflow: hidden;
     transition: height 0.3s ease;
-    border: none;
+    border: none !important;
+    box-shadow: none !important;
+    background: var(--background-color) !important;
   }
   
   /* When toggled, show the sidebar */
@@ -1490,7 +1556,10 @@ body.mobile-sidebar-collapsed {
     height: auto;
     display: block !important;
     padding: 20px;
-    border-bottom: 1px solid var(--divider-color);
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
   }
   
   .toc {
@@ -1504,68 +1573,122 @@ body.mobile-sidebar-collapsed {
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;
+    border-top: none !important;
+    background: var(--background-color) !important;
   }
+  
   .container {
     max-width: 100% !important;
     width: 100% !important;
     padding: 0 20px !important;
     margin: 0 auto !important;
     box-sizing: border-box !important;
+    background: var(--background-color) !important;
+  }
+  
+  /* 统一背景颜色 */
+  html, body {
+    background: var(--background-color) !important;
   }
 }
 
 /* 文章归档日历样式 - 增强版 */
 .sidebar-archive {
   padding: 0 20px;
-  margin: 20px 0;
-  border-top: 1px solid var(--divider-color);
-  padding-top: 20px;
+  margin: 0; /* 减少外边距 */
+  border-top: none;
+  padding-top: 5px; /* 减少上内边距 */
+  padding-bottom: 0; /* 减少下内边距 */
+  border-bottom: none;
+  /* 设置背景与侧边栏一致，确保没有背景色差异 */
+  background-color: var(--background-color);
+  /* 移除所有可能的边框阴影 */
+  box-shadow: none;
 }
 
+.sidebar-archive:before,
+.sidebar-archive:after {
+  display: none;
+}
+
+/* 完全解决侧边栏日历区域的水平线问题 */
+.sidebar,
+.sidebar > div,
+.sidebar > section,
+.sidebar-archive,
+.archive-calendar,
+.navlist,
+.wrapper-footer-desktop,
+.site-info {
+  position: relative;
+  background-color: var(--background-color) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  box-shadow: none !important;
+}
+
+/* 移除侧边栏和日历区域中所有可能的水平线 */
+.sidebar:before, .sidebar:after,
+.sidebar > div:before, .sidebar > div:after,
+.sidebar-archive:before, .sidebar-archive:after,
+.archive-calendar:before, .archive-calendar:after,
+.navlist:before, .navlist:after {
+  display: none !important;
+  border: none !important;
+  content: none !important;
+  background: none !important;
+}
+
+/* 确保日历网格容器样式 */
 .archive-calendar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
   margin: 0 auto;
+  background-color: var(--background-color) !important;
+  border: none !important;
 }
 
+/* 确保月份块之间没有线条 */
 .archive-month {
   text-decoration: none;
+  background: none !important;
+  border: none !important;
 }
 
+/* 重新设置月份块的样式，确保与背景良好分离 */
 .month-block {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 6px;
-  border-radius: 10px;
-  background-color: var(--background-lighten-color);
+  border-radius: 14px;
+  background-color: rgba(128, 128, 128, 0.07) !important;
   color: var(--text-color);
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: center;
   height: 80px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: none !important;
   position: relative;
   overflow: hidden;
-}
-
-.month-block:before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.02) 50%);
-  z-index: 0;
+  border: none !important;
 }
 
 .month-block:hover {
-  background-color: var(--link-color);
+  background-color: var(--link-color) !important;
   color: white;
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 深色主题下月份块的样式 */
+.dark-theme .month-block {
+  background-color: rgba(75, 75, 75, 0.2) !important;
+  color: #e0e0e0;
 }
 
 .month-name {
@@ -1599,49 +1722,36 @@ body.mobile-sidebar-collapsed {
   background-color: rgba(255, 255, 255, 0.25);
 }
 
+/* 移除导航和日历之间的分隔 */
+.navlist {
+  border-bottom: none !important;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.navlist + .sidebar-archive {
+  border-top: none !important;
+  margin-top: 0;
+  padding-top: 0;
+}
+
 /* 适配深色主题 */
 .dark-theme .month-block {
-  background-color: #2d2d2d;
+  background-color: rgba(45, 45, 45, 0.3);
   color: #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* 移动端适配 */
-@include mobile {
-  .sidebar-archive {
-    padding: 0 15px;
-    margin: 20px 0 30px;
-  }
-
-  .archive-calendar {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .month-block {
-    padding: 10px 5px;
-    height: 80px;
-  }
-
-  .month-name {
-    font-size: 13px;
-  }
-
-  .month-year {
-    font-size: 11px;
-  }
-
-  .post-count {
-    font-size: 15px;
-    padding: 2px 8px;
-  }
-}
-
-/* iPad Pro适配 */
-@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-  .sidebar-archive {
-    display: none;
-  }
+.dark-theme .sidebar,
+.dark-theme .sidebar > *,
+.dark-theme .navlist,
+.dark-theme .sidebar-archive,
+.dark-theme .wrapper-footer-desktop {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
 
 /* 归档页面样式增强 */
@@ -1955,5 +2065,134 @@ body.mobile-sidebar-collapsed {
     height: 35px;
     font-size: 18px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* 自定义按钮的tooltip效果 */
+#theme-toggle, #sidebar-toggle, #home-button, #mobile-sidebar-toggle, #toc-toggle-button {
+  &:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 14px;
+    white-space: nowrap;
+    border: 1px solid var(--divider-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+  }
+}
+
+/* 为移动端设备调整的tooltip样式 */
+@include mobile {
+  #theme-toggle, #sidebar-toggle, #home-button, #mobile-sidebar-toggle, #toc-toggle-button {
+    &:hover::after {
+      font-size: 12px;
+      padding: 4px 8px;
+      bottom: 120%;
+    }
+  }
+}
+
+/* 移动端适配 */
+@include mobile {
+  .sidebar-archive {
+    padding: 0 15px;
+    margin: 20px 0 30px;
+  }
+
+  .archive-calendar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .month-block {
+    padding: 10px 5px;
+    height: 80px;
+  }
+
+  .month-name {
+    font-size: 13px;
+  }
+
+  .month-year {
+    font-size: 11px;
+  }
+
+  .post-count {
+    font-size: 15px;
+    padding: 2px 8px;
+  }
+}
+
+/* iPad Pro适配 */
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .sidebar-archive {
+    display: none;
+  }
+}
+
+/* 修复竖屏模式下sidebar和文章内容之间的横线 */
+@media screen and (orientation: portrait) {
+  .wrapper-sidebar {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .wrapper-content {
+    border-top: none !important;
+    box-shadow: none !important;
+    margin-top: 0 !important;
+    background-image: none !important;
+  }
+  
+  /* 移除任何可能出现在两个容器之间的分隔线 */
+  .wrapper-sidebar:after,
+  .wrapper-sidebar:before,
+  .wrapper-content:before,
+  .wrapper-content:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+    height: 0 !important;
+  }
+  
+  /* 确保容器之间没有空隙 */
+  .wrapper-sidebar + .wrapper-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* 特别处理iPad Pro和移动设备上的竖屏模式 */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  /* 确保侧边栏没有底部边框 */
+  .wrapper-sidebar {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  /* 确保内容区域没有顶部边框 */
+  .wrapper-content {
+    border-top: none !important;
+    padding-top: 0 !important;
+  }
+  
+  /* 移除侧边栏展开状态下的边框 */
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    border-bottom: none !important;
+    box-shadow: none !important;
   }
 }
