@@ -5,7 +5,6 @@ date: "2025-05-06"
 toc: true
 excerpt: "详细分析LeetCode 283 Move Zeroes问题的三种解法，对比它们的时间和空间复杂度及算法优劣"
 tags: [Algorithm, DataStructure,快慢指针]
-cover_image: tesla.jpg
 comments: true
 author: zempty
 ---

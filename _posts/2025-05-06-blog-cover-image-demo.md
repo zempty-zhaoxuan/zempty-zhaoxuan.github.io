@@ -3,7 +3,7 @@ layout: post
 title: "博客封面图功能演示"
 date: 2025-05-06
 tags: [博客, 功能更新]
-cover_image: cat.jpeg
+cover_image: tesla.jpg
 toc: true
 ---
 
