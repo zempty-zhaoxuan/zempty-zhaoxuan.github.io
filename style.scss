@@ -475,18 +475,26 @@ img {
 
 .navlist {
   text-align: center;
+  padding: 0 15px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-bottom: 15px;
 }
 
 nav {
-  display: block;
-  margin-top: 23px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
   font-family: $base-font;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
 
   @include mobile {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 15px;
     background-color: var(--background-color);
     padding: 10px 0;
     border-bottom: none;
@@ -495,28 +503,33 @@ nav {
   }
 
   a {
-    margin: 0 10px;
-    text-align: right;
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: var(--link-color);
+    margin: 0;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+    background-color: var(--background-lighten-color);
 
     &:hover,
     &:active {
-      color: var(--link-lighten-color);
+      color: #fff;
+      background-color: var(--link-color);
     }
 
     @include mobile {
-      margin: 0 10px;
-      color: var(--link-color);
+      margin: 0 5px;
       display: inline-block;
-      padding: 6px 8px;
-      border-radius: 3px;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
 
       &:hover,
       &:active {
-        color: var(--link-lighten-color);
-        background-color: var(--background-lighten-color);
+        color: #fff;
+        background-color: var(--link-color);
       }
     }
   }
@@ -1504,37 +1517,15 @@ body.mobile-sidebar-collapsed {
 /* 文章归档日历样式 - 增强版 */
 .sidebar-archive {
   padding: 0 20px;
-  margin: 30px 0;
-}
-
-.sidebar-archive h3 {
-  color: var(--text-color);
-  font-size: 20px;
-  margin-bottom: 18px;
-  text-align: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--divider-color);
-  position: relative;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.sidebar-archive h3:after {
-  content: "";
-  position: absolute;
-  width: 50px;
-  height: 3px;
-  background-color: var(--link-color);
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
+  margin: 20px 0;
+  border-top: 1px solid var(--divider-color);
+  padding-top: 20px;
 }
 
 .archive-calendar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
   margin: 0 auto;
 }
 
@@ -1547,14 +1538,14 @@ body.mobile-sidebar-collapsed {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 8px;
-  border-radius: 12px;
+  padding: 10px 6px;
+  border-radius: 10px;
   background-color: var(--background-lighten-color);
   color: var(--text-color);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: center;
-  height: 90px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
   position: relative;
   overflow: hidden;
 }
@@ -1566,39 +1557,39 @@ body.mobile-sidebar-collapsed {
   height: 100%;
   top: 0;
   left: 0;
-  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.03) 50%);
+  background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.02) 50%);
   z-index: 0;
 }
 
 .month-block:hover {
   background-color: var(--link-color);
   color: white;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .month-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   position: relative;
   z-index: 1;
 }
 
 .month-year {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.8;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   position: relative;
   z-index: 1;
 }
 
 .post-count {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  padding: 3px 10px;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 2px 8px;
   position: relative;
   z-index: 1;
   transition: all 0.3s ease;
@@ -1612,21 +1603,7 @@ body.mobile-sidebar-collapsed {
 .dark-theme .month-block {
   background-color: #2d2d2d;
   color: #e0e0e0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.dark-theme .month-block:before {
-  background: linear-gradient(to bottom right, transparent 50%, rgba(255, 255, 255, 0.03) 50%);
-}
-
-.dark-theme .month-block:hover {
-  background-color: var(--link-color);
-  color: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.dark-theme .post-count {
-  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* 移动端适配 */

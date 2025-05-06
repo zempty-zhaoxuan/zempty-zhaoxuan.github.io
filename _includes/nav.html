@@ -23,7 +23,6 @@
   
   <!-- 文章归档日历 -->
   <div class="sidebar-archive responsive-hide">
-    <h3>文章归档</h3>
     <div class="archive-calendar">
       {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
       {% assign sorted_months = post_months | sort: "name" | reverse %}
