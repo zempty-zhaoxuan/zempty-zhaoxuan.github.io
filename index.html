@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<div class="search-container">
+<div class="search-container animated-search">
   <input type="text" id="search-input" placeholder="search blog posts..." style="width: 90%;
     height: 35px;
     color: #333;
@@ -26,12 +26,26 @@ layout: default
 	searchInput: document.getElementById('search-input'),
 	resultsContainer: document.getElementById('results-container'),
 	json: '{{ site.baseurl }}/search.json',
-	searchResultTemplate: '<li><a href="{url}?query={query}" title="{desc}">{title}</a></li>',
+	searchResultTemplate: '<li class="search-result-item"><a href="{url}?query={query}" title="{desc}">{title}</a></li>',
 	noResultsText: 'No results found',
 	limit: 10,
 	fuzzy: false,
 	exclude: ['Welcome']
   })
+
+  // Add focus/blur effects for search
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const searchContainer = document.querySelector('.animated-search');
+    
+    searchInput.addEventListener('focus', function() {
+      searchContainer.classList.add('search-focused');
+    });
+    
+    searchInput.addEventListener('blur', function() {
+      searchContainer.classList.remove('search-focused');
+    });
+  });
 </script>
  
 {% if site.posts.size == 0 %}
@@ -74,7 +88,7 @@ layout: default
 <div class="pagination">
   {% if paginator.previous_page %}
     <span class="prev">
-      <a href="{{ site.baseurl }}{{ paginator.previous_page_path }}" class="prev">
+      <a href="{{ site.baseurl }}{{ paginator.previous_page_path }}" class="prev page-button">
         ← 上一页
       </a>
     </span>
@@ -82,7 +96,7 @@ layout: default
   <span class="page_num pagination__page-number">{{ paginator.page }} / {{ paginator.total_pages }}</span>
   {% if paginator.next_page %}
     <span class="next">
-      <a href="{{ site.baseurl}}{{ paginator.next_page_path }}" class="next">
+      <a href="{{ site.baseurl}}{{ paginator.next_page_path }}" class="next page-button">
         下一页 →
       </a>
     </span>

@@ -16,8 +16,9 @@
       </aside>
     {% endif %}
 
-    <div id="main" role="main" class="wrapper-content">
+    <div id="main" role="main" class="wrapper-content page-transition">
       <div class="container">
+        <div class="loader"></div>
         {{ content }}
       </div>
     </div>
@@ -38,6 +39,9 @@
     
     <!-- 引入侧边栏折叠脚本 -->
     <script src="{{ site.baseurl }}/js/sidebar-toggle.js"></script>
+    
+    <!-- 引入动画效果脚本 -->
+    <script src="{{ site.baseurl }}/js/animation-loader.js"></script>
     
     <!-- 引入TOC折叠脚本 -->
     {% if page.toc==true %}
