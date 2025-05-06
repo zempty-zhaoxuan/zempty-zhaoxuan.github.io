@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeButton = document.getElementById("home-button");
   const currentState = localStorage.getItem("sidebar-state");
   const mobileSidebarState = localStorage.getItem("mobile-sidebar-state");
+  const sidebarArchive = document.querySelector(".sidebar-archive");
 
   // 桌面版侧边栏状态应用
   if (currentState === "collapsed") {
@@ -92,40 +93,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 响应式处理
   const handleResize = function () {
-    // 检测iPad Pro
-    const isIPadPro = window.innerWidth >= 768 && window.innerWidth <= 1024;
-    const isPortrait = window.innerHeight > window.innerWidth;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    // 检测iPad Pro和中等尺寸屏幕
+    const isIPadPro = windowWidth >= 768 && windowWidth <= 1024;
+    const isMediumScreen = windowWidth > 1024 && windowWidth <= 1200;
+    const isPortrait = windowHeight > windowWidth;
+    
+    // 处理文章归档日历显示
+    if (sidebarArchive) {
+      // 移动设备上完全隐藏文章归档日历
+      if (windowWidth <= 1200) {
+        sidebarArchive.style.display = "none";
+      } 
+      // 大屏幕显示
+      else {
+        sidebarArchive.style.display = "block";
+      }
+    }
 
-    if (window.innerWidth <= 768 || (isIPadPro && isPortrait)) {
-      // 移动设备或iPad Pro竖屏使用垂直折叠功能
+    // 中等尺寸屏幕（1144px × 1010px左右）或移动设备或iPad Pro竖屏使用垂直折叠功能
+    if (windowWidth <= 1200 || (isIPadPro && isPortrait)) {
+      // 重置桌面折叠状态
       wrapper.classList.remove("sidebar-collapsed");
       sidebar.classList.remove("collapsed");
 
-      if (isIPadPro && isPortrait) {
-        // iPad Pro竖屏时显示移动端折叠按钮
-        sidebarToggle.style.display = "none";
-        mobileSidebarToggle.style.display = "flex";
-        // 确保箭头朝上或朝下
-        if (sidebar.classList.contains("mobile-collapsed")) {
-          mobileSidebarToggle.innerHTML = "▼";
-        } else {
-          mobileSidebarToggle.innerHTML = "▲";
-        }
+      // 设置移动端折叠按钮
+      sidebarToggle.style.display = "none";
+      mobileSidebarToggle.style.display = "flex";
+      
+      // 确保箭头朝上或朝下
+      if (sidebar.classList.contains("mobile-collapsed")) {
+        mobileSidebarToggle.innerHTML = "▼";
+      } else {
+        mobileSidebarToggle.innerHTML = "▲";
+      }
 
-        // iPad Pro竖屏时默认折叠侧边栏以最大化内容区域
-        if (!sidebar.classList.contains("mobile-collapsed")) {
-          sidebar.classList.add("mobile-collapsed");
-          document.body.classList.add("mobile-sidebar-collapsed");
-          mobileSidebarToggle.innerHTML = "▼";
-          localStorage.setItem("mobile-sidebar-state", "collapsed");
-        }
-      } else if (window.innerWidth <= 768) {
-        // 常规移动设备
-        sidebarToggle.style.display = "none";
-        mobileSidebarToggle.style.display = "flex";
+      // 默认折叠侧边栏以最大化内容区域
+      if (!sidebar.classList.contains("mobile-collapsed") && 
+          (isMediumScreen || isIPadPro || windowWidth <= 768)) {
+        sidebar.classList.add("mobile-collapsed");
+        document.body.classList.add("mobile-sidebar-collapsed");
+        mobileSidebarToggle.innerHTML = "▼";
+        localStorage.setItem("mobile-sidebar-state", "collapsed");
       }
     } else {
-      // 桌面设备或iPad Pro横屏使用水平折叠功能
+      // 大屏幕桌面设备使用水平折叠功能
       sidebar.classList.remove("mobile-collapsed");
       document.body.classList.remove("mobile-sidebar-collapsed");
       sidebarToggle.style.display = "flex";

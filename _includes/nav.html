@@ -21,9 +21,8 @@
     </nav>
   </div>
   
-<<<<<<< HEAD
   <!-- 文章归档日历 -->
-  <div class="sidebar-archive">
+  <div class="sidebar-archive responsive-hide">
     <h3>文章归档</h3>
     <div class="archive-calendar">
       {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
@@ -52,18 +51,6 @@
             <span class="month-year">{{ year }}</span>
             <span class="post-count">{{ month.items.size }}</span>
           </div>
-=======
-  <!-- 标签云组件 -->
-  <div class="sidebar-tags">
-    <h3>标签云</h3>
-    <div class="tag-cloud">
-      {% assign tags = site.tags | sort %}
-      {% for tag in tags %}
-        <a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" 
-           class="tag-cloud-item tag-size-{{ tag[1].size }}">
-          {{ tag[0] }}
-          <span class="tag-count">{{ tag[1].size }}</span>
->>>>>>> master
         </a>
       {% endfor %}
     </div>

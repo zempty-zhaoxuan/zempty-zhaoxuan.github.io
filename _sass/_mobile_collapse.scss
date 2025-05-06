@@ -846,4 +846,43 @@ html, body {
      }
   }
 }
+
+// Archive calendar responsiveness
+.sidebar-archive {
+  @include medium-screen {
+    margin: 20px 0 30px;
+    padding: 0 10px;
+  }
+  
+  @include small-tablet {
+    display: none !important;
+  }
+  
+  @include phone-only {
+    display: none !important;
+  }
+}
+
+.archive-calendar {
+  @include medium-screen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  @include small-tablet {
+    display: none !important;
+  }
+  
+  @include phone-only {
+    display: none !important;
+  }
+}
+
+.month-block {
+  @include medium-screen {
+    padding: 10px 5px;
+    height: 80px;
+  }
+}
  
