@@ -8,7 +8,6 @@ tags: [博客, 功能更新]
 cover_image: blog1.0.jpeg
 comments: true
 author: zempty
-cover_image: blog-update.jpg
 ---
 
 # 博客 1.0 版本更新功能详解
