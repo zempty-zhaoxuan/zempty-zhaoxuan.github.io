@@ -2,19 +2,20 @@
 layout: default
 ---
 <div class="search-container animated-search">
-  <input type="text" id="search-input" placeholder="search blog posts..." style="width: 90%;
-    height: 35px;
-    color: #333;
-    background-color: rgba(227,231,236,.2);
-    line-height: 35px;
-    padding:0px 16px;
-    border: 1px solid #c0c0c0;
+  <input type="text" id="search-input" placeholder="搜索博客文章..." style="width: 90%;
+    height: 40px;
+    color: var(--text-color);
+    background-color: var(--background-lighten-color);
+    line-height: 40px;
+    padding:0px 16px 0px 40px;
+    border: 1px solid var(--divider-color);
     font-size: 16px;
     font-weight: bold;
-    border-radius: 17px;
+    border-radius: 20px;
     outline: none;
     box-sizing: border-box;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);">
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(var(--link-color-rgb), 0.4);">
+  <div class="search-icon" style="left: 25px; right: auto; color: var(--blockquote-color);">🔍</div>
   <ul id="results-container"></ul>
 </div>
 
@@ -27,13 +28,15 @@ layout: default
 	resultsContainer: document.getElementById('results-container'),
 	json: '{{ site.baseurl }}/search.json',
 	searchResultTemplate: '<li class="search-result-item">' + 
-	                      '{% raw %}{{#cover_image}}<div class="search-result-cover"><img src="{cover_image}" alt="{title}"></div>{{/cover_image}}{% endraw %}' +
-	                      '<a href="{url}?query={query}" title="{desc}">{title}</a>' +
+	                      '<div class="search-result-content">' +
+	                      '<a href="{url}" title="{title}" class="search-result-title">{title}</a>' +
 	                      '<span class="search-result-date">{date}</span>' +
+	                      '<div class="search-result-highlight"><span class="highlight-text">{query}</span></div>' +
+	                      '</div>' +
 	                      '</li>',
-	noResultsText: 'No results found',
+	noResultsText: '<div class="no-results">没有找到匹配结果，请尝试其他关键词</div>',
 	limit: 10,
-	fuzzy: false,
+	fuzzy: true,
 	exclude: ['Welcome']
   })
 
@@ -49,6 +52,40 @@ layout: default
     searchInput.addEventListener('blur', function() {
       searchContainer.classList.remove('search-focused');
     });
+    
+    // Add search highlighting functionality with theme support
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query) {
+        // 检测当前主题是亮色还是暗色
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        if (isDarkTheme) {
+          document.documentElement.style.setProperty('--search-highlight', 'rgba(116, 192, 252, 0.3)');
+        } else {
+          document.documentElement.style.setProperty('--search-highlight', 'rgba(25, 113, 194, 0.2)');
+        }
+      } else {
+        document.documentElement.style.setProperty('--search-highlight', 'transparent');
+      }
+    });
+    
+    // 监听主题变化，相应地更新搜索样式
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const isDarkTheme = document.body.classList.contains('dark-theme');
+          if (searchInput.value.trim()) {
+            if (isDarkTheme) {
+              document.documentElement.style.setProperty('--search-highlight', 'rgba(116, 192, 252, 0.3)');
+            } else {
+              document.documentElement.style.setProperty('--search-highlight', 'rgba(25, 113, 194, 0.2)');
+            }
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, { attributes: true });
   });
 </script>
  
