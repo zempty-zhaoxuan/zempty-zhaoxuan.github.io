@@ -8,7 +8,8 @@ layout: null
       "category" : "{{ post.category }}",
       "tags"     : "{{ post.tags | join: ', ' }}",
       "url"      : "{{ site.baseurl }}{{ post.url }}",
-      "date"     : "{{ post.date }}"
+      "date"     : "{{ post.date }}",
+      "cover_image" : "{% if post.cover_image %}{{ site.baseurl }}/images/{{ post.cover_image }}{% endif %}"
     } {% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]

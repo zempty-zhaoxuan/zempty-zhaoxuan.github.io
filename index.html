@@ -26,7 +26,11 @@ layout: default
 	searchInput: document.getElementById('search-input'),
 	resultsContainer: document.getElementById('results-container'),
 	json: '{{ site.baseurl }}/search.json',
-	searchResultTemplate: '<li class="search-result-item"><a href="{url}?query={query}" title="{desc}">{title}</a></li>',
+	searchResultTemplate: '<li class="search-result-item">' + 
+	                      '{% raw %}{{#cover_image}}<div class="search-result-cover"><img src="{cover_image}" alt="{title}"></div>{{/cover_image}}{% endraw %}' +
+	                      '<a href="{url}?query={query}" title="{desc}">{title}</a>' +
+	                      '<span class="search-result-date">{date}</span>' +
+	                      '</li>',
 	noResultsText: 'No results found',
 	limit: 10,
 	fuzzy: false,
@@ -75,6 +79,14 @@ layout: default
           {% endfor %}
         </ul>
       </div>
+
+      {% if post.cover_image %}
+      <div class="post-preview-cover">
+        <a href="{{ site.baseurl }}{{ post.url }}">
+          <img src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image">
+        </a>
+      </div>
+      {% endif %}
 
       <div class="entry">
         {{ post.excerpt | truncate: 200 }}

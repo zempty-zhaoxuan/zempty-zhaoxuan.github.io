@@ -2,7 +2,16 @@
 layout: default
 ---
 
+<div class="reading-progress-container">
+  <div id="reading-progress" class="reading-progress-bar"></div>
+</div>
+
 <article class="posts">
+  {% if page.cover_image %}
+  <div class="post-cover-image">
+    <img src="{{ site.baseurl }}/images/{{ page.cover_image }}" alt="{{ page.title }} cover image">
+  </div>
+  {% endif %}
   
   <h1>{{ page.title }}</h1>
 
@@ -48,3 +57,27 @@ layout: default
     </span>
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the progress bar
+    const progressBar = document.getElementById('reading-progress');
+    
+    // Calculate and update progress
+    function updateProgressBar() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrollPosition = window.scrollY;
+      const progress = (scrollPosition / documentHeight) * 100;
+      
+      progressBar.style.width = progress + '%';
+    }
+    
+    // Initial calculation
+    updateProgressBar();
+    
+    // Update on scroll
+    window.addEventListener('scroll', updateProgressBar);
+    window.addEventListener('resize', updateProgressBar);
+  });
+</script>
