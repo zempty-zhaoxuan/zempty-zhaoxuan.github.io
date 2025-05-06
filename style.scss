@@ -25,7 +25,8 @@ body {
   font-family: $base-font;
   color: var(--text-color);
   background-color: var(--background-color);
-  line-height: 1.7em;
+  line-height: 1.8em;
+  letter-spacing: 0.02em;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -56,12 +57,16 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 2em;
-  margin: 1em 0 16px;
+  font-family: $base-font;
+  line-height: 1.6;
+  margin-top: 1.8em;
+  margin-bottom: 0.8em;
   padding: 0;
 
   @include mobile {
-    line-height: 1.6em;
+    line-height: 1.4;
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
   }
 }
 
@@ -69,51 +74,61 @@ h1,
 h2,
 h3,
 h5 {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 2.2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--divider-color);
   a {
     color: inherit;
   }
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 1.8em;
+  border-bottom: 1px dashed var(--divider-color-light);
+  padding-bottom: 0.2em;
 }
 
 h3 {
-  font-size: 20px;
+  font-size: 1.5em;
 }
 
 h4 {
-  font-size: 20px;
-  color: $base-lighten-color;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--blockquote-color);
 }
 
 h6 {
-  color: $base-lighten-color;
+  font-size: 1em;
+  font-weight: normal;
+  color: var(--blockquote-color);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
 
 p {
   color: var(--text-color);
-  margin: 1em 0;
+  margin: 1.2em 0;
 }
 
 a {
-  color: $link-color;
+  color: var(--link-color);
   text-decoration: none;
   cursor: pointer;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -ms-transition: all 0.5s;
-  -o-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover,
   &:active {
-    color: $link-lighten-color;
+    color: var(--accent-color);
+    text-decoration: underline;
   }
 }
 
@@ -538,17 +553,42 @@ nav {
       background-color: var(--link-color);
     }
 
+    // Style for the active navigation link
+    &.active {
+      color: #fff;
+      background-color: var(--accent-color); // Use accent color for active link
+      font-weight: 600; // Make it bolder
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); // Subtle inner shadow
+    }
+
     @include mobile {
-      margin: 0 5px;
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 14px;
+      margin: 5px; // Slightly more space
+      display: block; // Make links block level for better spacing
+      padding: 10px 15px; // Increase padding
+      border-radius: 5px; // Less rounding for block links
+      font-size: 16px; // Larger font size on mobile
+      text-align: left; // Align text left
+      background-color: transparent; // Remove default light background
+      border-bottom: 1px solid var(--divider-color-light); // Add separator
+
+      &:last-child {
+        border-bottom: none; // Remove border from last item
+      }
 
       &:hover,
       &:active {
-        color: #fff;
-        background-color: var(--link-color);
+        color: var(--accent-color); // Accent color on hover
+        background-color: rgba(var(--accent-color), 0.1); // Light accent background
+      }
+
+      // Active style specific to mobile
+      &.active {
+        color: var(--accent-color); // Accent color
+        background-color: rgba(var(--accent-color), 0.15); // Slightly darker accent background
+        font-weight: 600;
+        box-shadow: none; // Remove inner shadow on mobile
+        border-left: 3px solid var(--accent-color); // Add left border indicator
+        padding-left: 12px; // Adjust padding for border
       }
     }
   }
@@ -606,7 +646,8 @@ nav {
 
 .posts {
   .tag {
-    display: inline;
+    display: inline-block;
+    margin-left: 10px;
     font-weight: 300;
     font-size: $small-font-size;
 
@@ -615,19 +656,21 @@ nav {
     }
 
     li {
-      display: inline;
-      margin: 0;
+      display: inline-block;
+      margin: 0 5px 0 0;
 
       > a {
-        margin: 3px 3px 3px 0;
-        padding: 0.5px 4px;
-        color: var(--text-color);
-        background-color: var(--tag-index-label-background-color);
-        border-radius: 3px;
+        margin: 0;
+        padding: 3px 8px;
+        color: var(--accent-color);
+        background-color: rgba(var(--accent-color), 0.1);
+        border-radius: 4px;
+        transition: all 0.2s ease;
 
         &:hover {
-          color: var(--link-color);
-          background-color: var(--link-bghv-color);
+          color: white;
+          background-color: var(--accent-color);
+          text-decoration: none;
         }
       }
     }
@@ -635,13 +678,23 @@ nav {
 }
 
 .posts > .post {
-  padding-bottom: 2em;
-  border-bottom: 1px solid var(--divider-color);
+  padding: 1.8em;
+  margin-bottom: 2em;
+  border: 1px solid var(--divider-color);
+  border-radius: 8px;
+  background-color: var(--background-lighten-color);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  }
 }
 
 .posts > .post:last-child {
-  padding-bottom: 1em;
-  border-bottom: none;
+  padding-bottom: 1.8em;
+  border-bottom: 1px solid var(--divider-color);
 }
 
 .date {
@@ -767,15 +820,11 @@ nav {
     display: inline-block;
     padding: 5px 8px;
     border-radius: 4px;
-    transition: all 0.2s ease;
-    /* color: #4285f4; // Color is now handled by hierarchy rules */
+    transition: color 0.2s ease;
     font-weight: 400;
 
     &:hover {
-      background-color: rgba(66, 133, 244, 0.1);
-      color: #039be5;
-      text-decoration: none;
-      transform: translateX(3px);
+      color: var(--accent-color);
     }
   }
 
@@ -986,29 +1035,36 @@ nav {
   }
 
   > li {
-    margin: 0;
+    margin: 0 5px 8px 0;
     font-size: $small-font-size;
     font-weight: 300;
-    display: inline;
+    display: inline-block;
 
     > a {
       display: inline-block;
-      margin: 1px;
+      margin: 0;
       color: var(--text-color);
       background-color: var(--tag-index-label-background-color);
-      border-radius: 3px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
 
       &:hover {
-        background-color: var(--link-bghv-color);
+        background-color: var(--accent-color);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
       }
 
       span {
         float: left;
-        padding: 0.5px 5px;
+        padding: 4px 8px;
 
         &.count {
-          background-color: var(--tag-index-count-background-color);
-          border-radius: 0 3px 3px 0;
+          margin-left: 4px;
+          padding: 4px 6px;
+          background-color: rgba(var(--accent-color), 0.15);
+          border-radius: 0 4px 4px 0;
+          color: var(--accent-color);
         }
       }
     }
@@ -1355,40 +1411,52 @@ body.mobile-sidebar-collapsed {
 
 .tag-cloud-item {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 15px;
+  padding: 6px 12px;
+  border-radius: 18px;
   background-color: var(--background-lighten-color);
   color: var(--text-color);
   text-decoration: none;
   transition: all 0.3s ease;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-align: center;
   position: relative;
+  font-size: 15px;
+  border: 1px solid transparent;
 }
 
 .tag-cloud-item:hover {
-  background-color: var(--link-color);
+  background-color: var(--accent-color);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0,0,0,0.05);
 }
 
 .tag-count {
-  font-size: 0.7em;
+  font-size: 0.75em;
   vertical-align: super;
-  opacity: 0.7;
-  margin-left: 2px;
+  opacity: 0.8;
+  margin-left: 3px;
+  background-color: rgba(var(--accent-color), 0.15);
+  color: var(--accent-color);
+  padding: 1px 4px;
+  border-radius: 8px;
 }
 
 /* 适配深色主题的标签云 */
 .dark-theme .tag-cloud-item {
-  background-color: #2d2d2d;
-  color: #e0e0e0;
+  background-color: #343a40;
+  color: #ced4da;
 }
 
 .dark-theme .tag-cloud-item:hover {
-  background-color: var(--link-color);
+  background-color: var(--accent-color);
   color: white;
+}
+
+.dark-theme .tag-count {
+  background-color: rgba(var(--accent-color), 0.25);
+  color: var(--accent-color);
 }
 
 /* 移动端适配 */
@@ -1396,7 +1464,7 @@ body.mobile-sidebar-collapsed {
   .sidebar-tags {
     padding: 0 15px;
     margin: 20px 0;
-    display: none; /* 在移动设备上隐藏标签云 */
+    display: none;
   }
 
   .tag-cloud {
@@ -1595,14 +1663,12 @@ body.mobile-sidebar-collapsed {
 /* 文章归档日历样式 - 增强版 */
 .sidebar-archive {
   padding: 0 20px;
-  margin: 0; /* 减少外边距 */
+  margin: 0;
   border-top: none;
-  padding-top: 5px; /* 减少上内边距 */
-  padding-bottom: 0; /* 减少下内边距 */
+  padding-top: 5px;
+  padding-bottom: 0;
   border-bottom: none;
-  /* 设置背景与侧边栏一致，确保没有背景色差异 */
   background-color: var(--background-color);
-  /* 移除所有可能的边框阴影 */
   box-shadow: none;
 }
 
@@ -2194,5 +2260,25 @@ body.mobile-sidebar-collapsed {
   .wrapper-sidebar:not(.mobile-collapsed) {
     border-bottom: none !important;
     box-shadow: none !important;
+  }
+}
+
+button,
+input[type="submit"] {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: rgba(var(--text-color), 0.6);
+  background-color: rgba(var(--background-lighten-color), 0.5);
+  border: 1px solid var(--divider-color);
+  border-radius: $base-radius;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--accent-color);
+    background-color: rgba(var(--accent-color), 0.1);
+    border-color: var(--accent-color);
   }
 }

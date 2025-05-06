@@ -12,11 +12,25 @@
   <div class="navlist" style="border: none; border-bottom: none; box-shadow: none; background-color: var(--background-color);">
     <nav>
       {% for nav in site.navigation %}
-      {% if nav.url contains 'http://' or nav.url contains 'https://' %}
-      <a href="{{ nav.url }}">{{ nav.name }}</a>
-      {% else %}
-      <a href="{{ site.baseurl }}{{ nav.url }}">{{ nav.name }}</a>
-      {% endif %}
+        {% assign is_external = false %}
+        {% if nav.url contains 'http://' or nav.url contains 'https://' %}
+          {% assign is_external = true %}
+        {% endif %}
+
+        {% assign item_url = nav.url %}
+        {% unless is_external %}
+          {% assign item_url = nav.url | relative_url %}
+        {% endunless %}
+
+        {% assign is_active = false %}
+        {% if page.url == item_url %}
+          {% assign is_active = true %}
+        {% endif %}
+        {% if item_url == "/" and page.url == "/index.html" %}
+           {% assign is_active = true %} {# Handle index page special case #}
+        {% endif %}
+
+        <a href="{{ item_url }}" {% if is_active %}class="active"{% endif %}>{{ nav.name }}</a>
       {% endfor %}
     </nav>
   </div>
