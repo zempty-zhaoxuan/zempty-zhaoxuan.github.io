@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "博客封面图功能演示"
-date: 2023-01-01
+date: 2025-05-06
 tags: [博客, 功能更新]
-cover_image: blog-cover-demo.jpg
+cover_image: cat.jpeg
 toc: true
 ---
 
@@ -66,5 +66,3 @@ print(calculate_factorial(5))  # 输出: 120
 页面顶部的阅读进度条可以直观地显示您在文章中的阅读位置。随着滚动，进度条会自动更新。
 
 ---
-
-希望这些新功能能够提升您的阅读体验！ 
