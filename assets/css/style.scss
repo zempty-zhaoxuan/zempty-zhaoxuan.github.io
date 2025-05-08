@@ -1,5 +1,6 @@
 @import "{{ site.theme }}";
 @import "../../style.scss";
+@import "main";
 
 // Override any theme styles with custom styles
 .wrapper-sidebar {
@@ -71,4 +72,34 @@
     box-sizing: border-box !important;
     margin: 0 auto !important;
   }
+}
+
+// 额外的自定义CSS，用于隐藏代码块中的行号
+.highlight table td.gutter,
+.highlight table td.rouge-gutter,
+.highlight table pre.lineno,
+.highlight .lineno,
+.gutter,
+.rouge-gutter {
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  max-width: 0 !important;
+}
+
+.highlight table td.code,
+.highlight table td.rouge-code {
+  padding-left: 0 !important;
+  width: 100% !important;
+}
+
+/* 没有表格的代码块去除行号 */
+pre.highlight code span.line-number,
+pre.highlight code span.ln {
+  display: none !important;
 }

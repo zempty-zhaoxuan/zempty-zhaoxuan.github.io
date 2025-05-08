@@ -12,7 +12,11 @@
 
 .reading-progress-bar {
   height: 100%;
-  background: linear-gradient(to right, var(--accent-color), var(--accent-color-light));
+  background: linear-gradient(
+    to right,
+    var(--accent-color),
+    var(--accent-color-light)
+  );
   width: 0%;
   transition: width 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -26,18 +30,18 @@
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   img {
     width: 100%;
     height: auto;
     display: block;
     transition: transform 0.5s ease;
   }
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    
+
     img {
       transform: scale(1.02);
     }
@@ -51,7 +55,7 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   img {
     width: 100%;
     height: auto;
@@ -60,11 +64,11 @@
     display: block;
     transition: transform 0.5s ease;
   }
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    
+
     img {
       transform: scale(1.03);
     }
@@ -81,43 +85,43 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
-  
+
   a {
     font-size: 1.2em;
     font-weight: 600;
     color: var(--heading-color);
     margin-bottom: 5px;
-    
+
     &:hover {
       color: var(--accent-color);
     }
   }
-  
+
   .search-result-date {
     font-size: 0.85em;
     color: var(--muted-text-color);
     margin-top: 5px;
   }
-  
+
   .search-result-cover {
     width: 100%;
     height: 120px;
     margin-bottom: 10px;
     border-radius: 6px;
     overflow: hidden;
-    
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
     }
-    
+
     &:hover img {
       transform: scale(1.05);
     }
@@ -144,12 +148,12 @@
 .dark-theme {
   .search-result-item {
     background-color: rgba(255, 255, 255, 0.05);
-    
+
     a {
       color: var(--text-color-light);
     }
   }
-  
+
   #results-container {
     background-color: var(--background-color-dark);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
@@ -167,7 +171,7 @@ pre.highlight {
   font-size: 0.95em;
   border-left: 4px solid var(--accent-color);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
+
   // Add language label
   &::before {
     content: attr(data-lang);
@@ -181,41 +185,47 @@ pre.highlight {
     border-radius: 0 0 4px 4px;
     opacity: 0.8;
   }
-  
+
   code {
     display: block;
-    font-family: Monaco, Consolas, 'Courier New', monospace;
+    font-family: Monaco, Consolas, "Courier New", monospace;
     line-height: 1.5;
     background: transparent;
     padding: 0;
     border: none;
   }
-  
-  // Add line numbers
+
+  // 强力隐藏行号
   table.rouge-table {
     margin: 0;
     width: 100%;
     border: none;
     background: transparent;
     border-collapse: collapse;
-    
-    td.rouge-gutter {
-      width: 40px;
-      text-align: right;
-      padding-right: 1em;
-      color: var(--muted-text-color);
-      user-select: none;
-      border-right: 1px solid var(--divider-color-light);
+
+    td.rouge-gutter,
+    .gutter,
+    .lineno {
+      display: none !important;
+      width: 0 !important;
+      max-width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      visibility: hidden !important;
+      border: none !important;
+      position: absolute !important;
+      left: -9999px !important;
     }
-    
+
     td.rouge-code {
-      padding-left: 1em;
+      padding-left: 0;
+      width: 100% !important;
     }
-    
+
     tr {
       border: none;
     }
-    
+
     pre {
       margin: 0;
       padding: 0;
@@ -225,58 +235,76 @@ pre.highlight {
   }
 }
 
+// 全局隐藏所有代码行号
+.highlight .lineno,
+.highlight .gutter,
+.rouge-gutter,
+.gutter,
+pre .lineno {
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  visibility: hidden !important;
+  border: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
 // Comment Section Styling
-#gitalk-container, #disqus_thread {
+#gitalk-container,
+#disqus_thread {
   margin-top: 40px;
   padding: 20px;
   background: var(--background-color-light);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  
+
   .gt-container {
     border: none !important;
-    
+
     .gt-header-textarea {
       border-radius: 6px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
       transition: box-shadow 0.3s ease;
-      
+
       &:focus {
         box-shadow: 0 0 0 2px var(--accent-color-light);
       }
     }
-    
+
     .gt-header-controls {
       margin-top: 10px;
     }
-    
+
     .gt-btn {
       border-radius: 4px;
       transition: all 0.3s ease;
-      
-      &-preview, &-public {
+
+      &-preview,
+      &-public {
         background-color: var(--accent-color);
         border-color: var(--accent-color);
         color: white;
-        
+
         &:hover {
           background-color: var(--accent-color-dark);
           border-color: var(--accent-color-dark);
         }
       }
     }
-    
+
     .gt-meta {
       border-bottom: 1px solid var(--divider-color);
       padding-bottom: 15px;
     }
-    
+
     .gt-comment-content {
       background: var(--background-color);
       border-radius: 6px;
       box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s ease;
-      
+
       &:hover {
         transform: translateY(-2px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -287,19 +315,21 @@ pre.highlight {
 
 // Dark theme comment adjustments
 .dark-theme {
-  #gitalk-container, #disqus_thread {
+  #gitalk-container,
+  #disqus_thread {
     background: rgba(255, 255, 255, 0.03);
-    
+
     .gt-container {
       .gt-comment-content {
         background: rgba(255, 255, 255, 0.03);
       }
-      
+
       .gt-btn {
-        &-preview, &-public {
+        &-preview,
+        &-public {
           background-color: var(--accent-color);
           border-color: var(--accent-color);
-          
+
           &:hover {
             background-color: var(--accent-color-light);
             border-color: var(--accent-color-light);
@@ -308,16 +338,16 @@ pre.highlight {
       }
     }
   }
-  
+
   // Darker code blocks for dark theme
   pre.highlight {
     background: #1e1e1e;
     border-left: 4px solid var(--accent-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    
+
     &::before {
       background: var(--accent-color);
       color: #1e1e1e;
     }
   }
-} 
+}

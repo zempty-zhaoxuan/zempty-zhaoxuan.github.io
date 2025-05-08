@@ -1,0 +1,61 @@
+/* 自定义CSS用于隐藏代码块中的行号 */
+
+/* 隐藏所有可能的行号元素 */
+.highlight table td.gutter,
+.highlight table td.rouge-gutter,
+table.rouge-table td.rouge-gutter,
+.highlight .lineno,
+.gutter,
+.rouge-gutter,
+code .lineno,
+.highlight .gl,
+table.rouge-table .lineno {
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 确保代码区域占据整个宽度 */
+.highlight table td.code,
+.highlight table td.rouge-code,
+table.rouge-table td.rouge-code {
+  padding-left: 0 !important;
+  width: 100% !important;
+}
+
+/* 移除所有可能的代码行号 */
+pre.highlight code span.line-number,
+pre.highlight code span.ln,
+pre.highlight code .lineno,
+pre.highlight .line-numbers,
+code .line-numbers {
+  display: none !important;
+}
+
+/* 确保代码容器样式正确 */
+pre.highlight {
+  padding-left: 1em !important;
+  counter-reset: none !important;
+}
+
+/* 禁用计数器 */
+pre.highlight code {
+  counter-reset: none !important;
+}
+
+pre.highlight code .line {
+  counter-increment: none !important;
+}
+
+pre.highlight code .line:before {
+  content: none !important;
+  display: none !important;
+}
