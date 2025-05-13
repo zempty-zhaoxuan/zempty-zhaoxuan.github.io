@@ -19,8 +19,6 @@ author: zempty
 
 **进阶要求：** 能否在 O(1) 的额外空间复杂度内解决这个问题？（输出数组不被视为额外空间）。
 
-*一个小说明：用户最初的请求中提到了 LeetCode 283 题，但所提供的三种解法代码实际上是针对 LeetCode 238 题 "Product of Array Except Self" 的。因此，本文将聚焦于 LeetCode 238 题以及这三种解法的分析。*
-
 本文将详细介绍并分析解决这个问题的三种方法：暴力解法、使用左右乘积列表的解法，以及空间优化解法。
 
 ## 解法一：暴力法 (Brute Force)
@@ -45,7 +43,6 @@ class Solution {
     public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
         int[] ans = new int[n];
-        ans[0] = 1; // User's provided code includes this line
         for(int i = 0; i < n ; i++){
             int before = 1; // 'before' accumulates the product
             for(int j = 0; j < n; j++){
@@ -53,13 +50,11 @@ class Solution {
                 before *= nums[j];
             }
             ans[i] = before; // This assignment will correctly calculate ans[i] for all i,
-                             // including overwriting ans[0] when i=0.
         }
         return ans;
     }
 }
 ```
-*(注意: The line `ans[0] = 1;` in the provided code for Solution 1 is redundant. The subsequent loop correctly calculates `ans[i]` for all `i`, including `ans[0]` when `i=0`, thereby overwriting this initial assignment. The variable `before` is used to accumulate the product.)*
 
 ### 复杂度分析
 
@@ -102,7 +97,7 @@ class Solution {
         // Calculate right products
         right[n-1] = 1;
         for(int j = n - 2; j >=0; j--){
-            right[j] = right[j+1] * nums[j+1]; // Correction: user's original code had nums[i+1], corrected to nums[j+1]
+            right[j] = right[j+1] * nums[j+1]; 
         }
 
         // Calculate the final answer
@@ -113,7 +108,6 @@ class Solution {
     }
 }
 ```
-*(代码更正说明: 在用户提供的原始解法2中，计算 `right` 数组的循环内 `right[j] = right[j+1] * nums[i+1];` 存在一个笔误，应为 `right[j] = right[j+1] * nums[j+1];`。代码块中已展示修正后的版本，下面的示例和分析将基于此正确逻辑。)*
 
 
 ### 步骤详解与示例
@@ -182,7 +176,7 @@ class Solution {
     - 完成后，`ans` 数组实际上存储了之前解法中的 `left` 数组（左侧乘积）。
 
 2.  **第二遍遍历 (计算右侧乘积并合并)：**
-    - 初始化一个变量 `right = 1` (与用户代码一致)，用于记录当前元素右侧所有元素的累积乘积。
+    - 初始化一个变量 `right = 1`，用于记录当前元素右侧所有元素的累积乘积。
     - 从右到左遍历数组（从索引 `N-1` 到 0）。
         - 对于当前索引 `k`，`ans[k]` 当前存储的是其左侧元素的乘积。我们需要将其乘以其右侧元素的乘积。所以，`ans[k] = ans[k] * right`。
         - 更新 `right` 以包含当前元素 `nums[k]`，为下一次迭代（即 `nums[k-1]` 的右侧乘积）做准备：`right = right * nums[k]`。
@@ -219,12 +213,14 @@ class Solution {
 1.  **初始化：** `ans = [0, 0, 0, 0]` (conceptually, it will be filled), `n = 4`
 
 2.  **第一遍遍历 (计算左侧乘积到 `ans`)：**
-    | `i` | `nums[i-1]` (for i>0) | `ans[i-1]` (for i>0) | `ans[i]` calculation         | `ans` state       |
-    |-----|-----------------------|----------------------|-----------------------------|-------------------|
-    | 0   | -                     | -                    | `ans[0] = 1`                | `[1, ?, ?, ?]`    |
-    | 1   | `nums[0]=1`           | `ans[0]=1`           | `ans[1] = ans[0]*nums[0]=1` | `[1, 1, ?, ?]`    |
-    | 2   | `nums[1]=2`           | `ans[1]=1`           | `ans[2] = ans[1]*nums[1]=2` | `[1, 1, 2, ?]`    |
-    | 3   | `nums[2]=3`           | `ans[2]=2`           | `ans[3] = ans[2]*nums[2]=6` | `[1, 1, 2, 6]`    |
+
+    | `i` | `nums[i-1]` (for i>0) | `ans[i-1]` (for i>0) | `ans[i]` calculation | `ans` state |
+    |-----|----------------------|----------------------|---------------------|-------------|
+    | 0   | -                    | -                    | `ans[0] = 1`        | `[1, ?, ?, ?]` |
+    | 1   | `nums[0]=1`          | `ans[0]=1`           | `ans[1] = ans[0]*nums[0]=1` | `[1, 1, ?, ?]` |
+    | 2   | `nums[1]=2`          | `ans[1]=1`           | `ans[2] = ans[1]*nums[1]=2` | `[1, 1, 2, ?]` |
+    | 3   | `nums[2]=3`          | `ans[2]=2`           | `ans[3] = ans[2]*nums[2]=6` | `[1, 1, 2, 6]` |
+
     (此时 `ans` 数组为 `[1, 1, 2, 6]`)
 
 3.  **第二遍遍历 (从右到左，合并右侧乘积)：**
@@ -267,4 +263,3 @@ class Solution {
     - 满足时间要求，并且通过巧妙地复用输出数组，将额外空间复杂度降至 O(1)，是本题的最佳解法。
 
 所有这三种方法都没有使用题目禁止的除法操作。对于面试或实际应用，理解并能实现空间优化法是非常有价值的。
-
