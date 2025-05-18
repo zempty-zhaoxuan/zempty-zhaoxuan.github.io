@@ -45,7 +45,7 @@ author: zempty
 ### 标签列表
 
 可以参考以下预设标签(请保持大小写一致):
-- 根据文章内容提炼总结标签
+- 根据文章内容提炼总结标签；
 - 技术相关参考: `java`, `Java`, `git`, `backend`, `高并发`, `IDE`
 - 算法与数据结构参考: `Algorithm`, `BinarySearch`, `DataStructure`
 - 问题解决参考: `棘手问题`, `问题`
