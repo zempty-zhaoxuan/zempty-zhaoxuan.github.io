@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const SCREEN_SM = 768; // Small screens and below
+  const SCREEN_MD_MIN = 768; // Medium screen (iPad) min-width
+  const SCREEN_MD_MAX = 1024; // Medium screen (iPad) max-width
+  const SCREEN_LG_MAX = 1200; // Large screen max-width for mobile-style sidebar
+
   const sidebarToggle = document.getElementById("sidebar-toggle");
   const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
   const wrapper = document.querySelector(".wrapper-content");
@@ -96,14 +101,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     // 检测iPad Pro和中等尺寸屏幕
-    const isIPadPro = windowWidth >= 768 && windowWidth <= 1024;
-    const isMediumScreen = windowWidth > 1024 && windowWidth <= 1200;
+    const isIPadPro = windowWidth >= SCREEN_MD_MIN && windowWidth <= SCREEN_MD_MAX;
+    const isMediumScreen = windowWidth > SCREEN_MD_MAX && windowWidth <= SCREEN_LG_MAX; // Use SCREEN_MD_MAX as lower bound
     const isPortrait = windowHeight > windowWidth;
     
     // 处理文章归档日历显示
     if (sidebarArchive) {
       // 移动设备上完全隐藏文章归档日历
-      if (windowWidth <= 1200) {
+      if (windowWidth <= SCREEN_LG_MAX) {
         sidebarArchive.style.display = "none";
       } 
       // 大屏幕显示
@@ -113,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 中等尺寸屏幕（1144px × 1010px左右）或移动设备或iPad Pro竖屏使用垂直折叠功能
-    if (windowWidth <= 1200 || (isIPadPro && isPortrait)) {
+    if (windowWidth <= SCREEN_LG_MAX || (isIPadPro && isPortrait)) {
       // 重置桌面折叠状态
       wrapper.classList.remove("sidebar-collapsed");
       sidebar.classList.remove("collapsed");
@@ -131,11 +136,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // 默认折叠侧边栏以最大化内容区域
       if (!sidebar.classList.contains("mobile-collapsed") && 
-          (isMediumScreen || isIPadPro || windowWidth <= 768)) {
+          (isMediumScreen || isIPadPro || windowWidth <= SCREEN_SM)) { // Use SCREEN_SM here
+        
+        // Only update localStorage if the state actually changes to "collapsed"
+        const currentMobileSidebarState = localStorage.getItem("mobile-sidebar-state");
+        if (currentMobileSidebarState !== "collapsed") {
+          localStorage.setItem("mobile-sidebar-state", "collapsed");
+        }
+        
         sidebar.classList.add("mobile-collapsed");
         document.body.classList.add("mobile-sidebar-collapsed");
         mobileSidebarToggle.innerHTML = "▼";
-        localStorage.setItem("mobile-sidebar-state", "collapsed");
+        // No need to set localStorage again here if already set above based on state change
       }
     } else {
       // 大屏幕桌面设备使用水平折叠功能

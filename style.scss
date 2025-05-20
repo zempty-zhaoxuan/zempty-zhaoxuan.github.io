@@ -11,6 +11,7 @@
 @import "variables";
 @import "themes"; // 导入主题文件
 @import "enhancements"; // 导入新的增强功能样式
+@import "mobile-enhancements"; // 导入移动端增强样式
 
 // Syntax highlighting @import is at the bottom of this file
 
@@ -130,6 +131,13 @@ a {
   &:active {
     color: var(--accent-color);
     text-decoration: underline;
+  }
+
+  // Adding focus style for better accessibility
+  &:focus {
+    outline: 2px solid var(--accent-color, #007bff); // Use accent color or a fallback blue
+    outline-offset: 2px;
+    text-decoration: underline; // Consistent with hover/active
   }
 }
 
@@ -2281,5 +2289,43 @@ input[type="submit"] {
     color: var(--accent-color);
     background-color: rgba(var(--accent-color), 0.1);
     border-color: var(--accent-color);
+  }
+}
+
+// General focus styles for other interactive elements
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex^="-"]) {
+  &:focus {
+    outline: 2px solid var(--accent-color, #007bff); // Use accent color or a fallback blue
+    outline-offset: 2px;
+    // You might want to add other focus styling here, e.g., a subtle box-shadow
+    // box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); // Example shadow
+  }
+}
+
+// 返回顶部按钮在桌面强制隐藏
+@media screen and (min-width: 1201px) {
+  .back-to-top {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+// 返回顶部按钮在移动端强制显示
+@media screen and (max-width: 1200px) {
+  .back-to-top {
+    display: flex !important;
+  }
+  .back-to-top.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 }
