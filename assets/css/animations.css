@@ -294,7 +294,13 @@
 .posts article {
   opacity: 0;
   transform: translateY(20px);
-  animation: slideUp 0.5s ease forwards;
+  animation: slideUp 0.5s ease-out forwards;
+  margin-bottom: 2.5em;
+  padding: 1.5em;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 @keyframes slideUp {
@@ -310,6 +316,12 @@
 .posts article:nth-child(3) { animation-delay: 0.3s; }
 .posts article:nth-child(4) { animation-delay: 0.4s; }
 .posts article:nth-child(5) { animation-delay: 0.5s; }
+
+/* Add hover effect for the entire post article */
+.posts article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
 
 /* New search result styles */
 .search-result-content {

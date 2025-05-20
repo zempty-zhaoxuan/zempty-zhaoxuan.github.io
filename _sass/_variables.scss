@@ -87,42 +87,49 @@ $dd-position: $dt-width + $dt-dd-space;
 
 // Mobile breakpoints
 @mixin mobile {
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: $medium-screen-max) {
     @content;
   }
 }
 
 // iPad Pro specific mixin
 @mixin ipad-pro-portrait {
-  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) and (orientation: portrait) {
     @content;
   }
 }
 
-// Medium-sized screen mixin (approximately 1144px × 1010px)
+// Medium-sized screen mixin
 @mixin medium-screen {
-  @media screen and (min-width: 1025px) and (max-width: 1200px) {
+  @media screen and (min-width: $medium-screen-min) and (max-width: $medium-screen-max) {
     @content;
   }
 }
 
-// Medium and small screen combined mixin (covers both tablet and medium screens)
+// Medium and small screen combined mixin
 @mixin medium-and-small {
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: $medium-screen-max) {
     @content;
   }
 }
 
 // Small tablet and large phone mixin
 @mixin small-tablet {
-  @media screen and (min-width: 481px) and (max-width: 767px) {
+  @media screen and (min-width: $small-tablet-min) and (max-width: $small-tablet-max) {
     @content;
   }
 }
 
 // Phone-only mixin
 @mixin phone-only {
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: $phone-max) {
+    @content;
+  }
+}
+
+// Touch-friendly design mixin
+@mixin touch-device {
+  @media (hover: none) and (pointer: coarse) {
     @content;
   }
 }
