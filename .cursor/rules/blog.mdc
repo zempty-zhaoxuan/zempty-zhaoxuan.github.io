@@ -36,7 +36,7 @@ title: "文章标题" # 支持中英文，最大100字符
 date: "YYYY-MM-DD" # 创建日期
 toc: true # 自动生成目录
 excerpt: "文章摘要" # 必填，简要介绍文章内容
-tags: [标签1, 标签2] # 从标签列表中选择
+tags: [标签1, 标签2] # 根据文章内容总结标签
 comments: true
 author: zempty
 ---
