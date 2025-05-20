@@ -60,8 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.setItem("mobile-sidebar-state", "expanded");
       mobileSidebarToggle.innerHTML = "▲";
       mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
-      // 当移动版侧边栏展开时，滚动到页面顶部
-      window.scrollTo(0, 0);
     }
   });
 
