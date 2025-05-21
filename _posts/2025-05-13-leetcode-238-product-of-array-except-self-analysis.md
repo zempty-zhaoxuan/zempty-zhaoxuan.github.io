@@ -3,7 +3,7 @@ layout: post
 title: "LeetCode 238: Product of Array Except Self - 三种解法详细分析"
 date: "2025-05-13" # Date set by the script
 toc: true
-excerpt: "详细分析了 LeetCode 238 'Product of Array Except Self' 问题的三种解法，包括暴力法、左右乘积列表法以及空间优化法，并对比了它们的时间和空间复杂度。"
+excerpt: 详细分析了 LeetCode 238 'Product of Array Except Self' 问题的三种解法，包括暴力法、左右乘积列表法以及空间优化法，并对比了它们的时间和空间复杂度。
 tags: [Algorithm, Java, DataStructure, LeetCode]
 comments: true
 author: zempty

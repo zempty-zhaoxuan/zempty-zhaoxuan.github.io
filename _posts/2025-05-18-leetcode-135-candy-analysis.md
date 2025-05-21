@@ -1,3 +1,15 @@
+---
+layout: post
+title: "LeetCode 135. Candy 分析"
+date: "2025-05-18"
+toc: true
+excerpt:  本文详细分析了 LeetCode 第 135 题"分糖果"的三种常用解法：两次遍历、两个数组和优先队列。每种解法都提供了详细的思路、代码实现和复杂度分析。
+tags: [Algorithm, LeetCode, Array, Greedy, PriorityQueue]
+comments: true
+author: zempty
+---
+
+
 ## LeetCode 135 题目介绍
 
 [LeetCode 135. Candy](https://leetcode.com/problems/candy/) 是一道困难级别的数组问题：

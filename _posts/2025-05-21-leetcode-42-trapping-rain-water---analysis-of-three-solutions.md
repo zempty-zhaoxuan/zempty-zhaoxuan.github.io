@@ -3,7 +3,7 @@ layout: post
 title: "LeetCode 42 题接雨水 - 三种解法详细分析"
 date: "2025-05-21"
 toc: true
-excerpt: "本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。"
+excerpt:  本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。
 tags: [Algorithm, LeetCode, Array, DynamicProgramming, TwoPointers, Stack]
 comments: true
 author: zempty
@@ -89,35 +89,45 @@ class Solution {
 
 #### 思路
 
-动态规划解法中，我们发现对于位置 `i`，其能接的雨水由 `leftMax[i]` 和 `rightMax[i]` 中的较小者决定。
-`leftMax[i]` 是 `height[0...i]` 的最大值，`rightMax[i]` 是 `height[i...n-1]` 的最大值。
+动态规划解法中，我们使用了额外的空间来存储每个位置的左右最大高度。双指针法可以优化这一空间复杂度。
 
-双指针法的核心思想是优化空间复杂度。我们使用两个指针 `left` 和 `right` 分别指向数组的左右两端，同时维护 `leftMaxHeight`（`height[0...left]` 的最大值）和 `rightMaxHeight`（`height[right...n-1]` 的最大值）。
+双指针法的核心思想是：我们可以使用两个指针 `left` 和 `right` 分别从数组的两端向中间移动，同时维护两个变量记录已遍历部分的最大高度。这种方法有两种实现变体，它们的核心原理相同但实现细节略有不同。
 
-在每一步迭代中，我们比较 `height[left]` 和 `height[right]`：
+#### 第一种实现：先比较高度，再更新最大值
 
-1.  **如果 `height[left] < height[right]`**:
-    此时，我们知道 `leftMaxHeight` 肯定小于或等于 `rightMaxHeight`（因为 `rightMaxHeight` 是基于 `height[right]` 以及其右边的柱子确定的，而 `height[right]` 本身就比 `height[left]` 大）。
-    所以，对于 `left` 指针指向的柱子，其右边的墙（由 `rightMaxHeight` 至少是 `height[right]` 保证）是足够高的。它能接的雨水主要取决于其左边的墙，即 `leftMaxHeight`。
-    -   如果 `height[left] < leftMaxHeight`，则 `left` 位置可以接 `leftMaxHeight - height[left]` 的雨水。
-    -   更新 `leftMaxHeight = max(leftMaxHeight, height[left])`。
-    -   然后将 `left` 指针右移。
+在这种实现中：
+1. `leftMaxHeight` 表示 `height[0...left]` 中的最大值
+2. `rightMaxHeight` 表示 `height[right...n-1]` 中的最大值
 
-2.  **如果 `height[left] >= height[right]`**:
-    此时，我们知道 `rightMaxHeight` 肯定小于或等于 `leftMaxHeight`。
-    对于 `right` 指针指向的柱子，其左边的墙（由 `leftMaxHeight` 至少是 `height[left]` 保证）是足够高的。它能接的雨水主要取决于其右边的墙，即 `rightMaxHeight`。
-    -   如果 `height[right] < rightMaxHeight`，则 `right` 位置可以接 `rightMaxHeight - height[right]` 的雨水。
-    -   更新 `rightMaxHeight = max(rightMaxHeight, height[right])`。
-    -   然后将 `right` 指针左移。
+关键洞察：在任意时刻，如果 `height[left] < height[right]`，那么对于当前的 `left` 位置，我们可以确定它能接的雨水量就是 `leftMaxHeight - height[left]`（如果为正）。这是因为：
 
-当 `left` 和 `right` 指针相遇时，遍历结束。
+1. 右边一定存在一个高度至少为 `height[right]` 的柱子
+2. 如果 `height[left] < height[right]`，那么左侧的 `leftMaxHeight` 就是瓶颈
+3. 因此，`left` 位置能接的雨水量取决于 `leftMaxHeight`
 
-更精炼的逻辑是：
-在每一步，我们确保处理的是 `leftMaxHeight` 和 `rightMaxHeight` 中较小的那一侧。
-- 如果 `leftMaxHeight < rightMaxHeight`，那么对于 `left` 位置，它能储水的高度由 `leftMaxHeight` 决定。因为即使 `rightMaxHeight` 很高，水也不会超过 `leftMaxHeight`。所以，`total += leftMaxHeight - height[left]`，然后 `left++`。
-- 如果 `leftMaxHeight >= rightMaxHeight`，那么对于 `right` 位置，它能储水的高度由 `rightMaxHeight` 决定。`total += rightMaxHeight - height[right]`，然后 `right--`。
+同理，如果 `height[left] >= height[right]`，那么对于当前的 `right` 位置，它能接的雨水量就是 `rightMaxHeight - height[right]`（如果为正）。
 
-在移动指针之前，要先更新 `leftMaxHeight = max(leftMaxHeight, height[left])` 和 `rightMaxHeight = max(rightMaxHeight, height[right])`。
+#### 第二种实现：先更新最大值，再比较最大值
+
+在这种实现中：
+1. `leftMax` 记录的是 `[0, left]` 的最大值
+2. `rightMax` 记录的是 `[right, n-1]` 的最大值
+
+这种方法的关键洞察是：如果 `leftMax < rightMax`，那么对于当前的 `left` 位置，我们可以确定它能接的雨水量就是 `leftMax - height[left]`。这是因为：
+
+1. 右边一定存在一个高度至少为 `rightMax` 的柱子
+2. 既然 `leftMax < rightMax`，那么左侧的 `leftMax` 就是瓶颈
+3. 因此，`left` 位置能接的雨水量取决于 `leftMax`
+
+#### 两种实现的比较
+
+两种实现的本质是相同的，都是基于"木桶原理"——水位由较短的那块木板决定。区别在于：
+- 第一种实现先比较当前柱子高度，再更新最大值
+- 第二种实现先更新最大值，再比较最大值
+
+两种方法都能正确计算雨水量，只是处理顺序不同。第二种实现的代码可能更简洁，因为不需要额外的条件判断来更新最大值。
+
+无论哪种实现，双指针法的巧妙之处在于，我们总是处理较矮的那一侧，这样可以确保水位由较矮的一侧决定，从而正确计算雨水量，同时将空间复杂度从 O(n) 优化到 O(1)。
 
 #### 代码实现
 
@@ -175,26 +185,8 @@ class Solution {
         int rightMax = 0; // 代表 height[right+1...n-1] 的最大值
         int total = 0;
         while(left < right){
-            // leftMax 和 rightMax 实际上代表的是 *不包括* 当前 left 和 right 指针处柱子高度的
-            // 左侧最大和右侧最大。或者说，是上一轮迭代的 leftMax 和 rightMax。
-            // 对于当前 height[left] 和 height[height] 而言，
-            // leftMax 是其左侧所有柱子的最大高度
-            // rightMax 是其右侧所有柱子的最大高度
-
-            // 核心思想：如果一边的墙（比如左墙leftMax）比另一边的当前柱子（height[right]）矮，
-            // 那么我们就处理矮墙那边。
-            // 反之，如果 height[left] <= height[right]，
-            // 那么我们看 leftMax。如果 height[left] < leftMax, 那么 height[left] 就能存水。
-            // 存多少呢？leftMax - height[left]。因为右边有 height[right] 挡着，
-            // 而 height[right] >= height[left]，且 height[right] >= leftMax (如果leftMax < height[right])
-            // 或者说，我们只关注较矮的那一边。
-
-            // 这个版本的逻辑：
-            // leftMax 记录的是 [0, left] 的最大值
-            // rightMax 记录的是 [right, n-1] 的最大值
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
-
             // 如果 leftMax < rightMax，此时瓶颈在于 leftMax。
             // 意味着 height[left] 左边的最高墙是 leftMax，
             // 而 height[right] 右边的最高墙是 rightMax，且 rightMax 更高。
@@ -251,54 +243,33 @@ class Solution {
 遍历完成后，`total` 即为所求的雨水量。
 
 #### 举例说明
-`height = [0,1,0,2,1,0,1,3,2,1,2,1]`
+`height = [3,2,1,5,2,2,6]`
 
-| current | height[current] | stack (bottom->top) | Action                                                                 | top | height[top] | leftBoundIndex | height[leftBoundIndex] | h                                       | w             | total |
-|---------|-----------------|-----------------------|------------------------------------------------------------------------|-----|-------------|----------------|------------------------|-----------------------------------------|---------------|-------|
-| 0       | 0               | []                    | stack is empty, push 0                                                 | -   | -           | -              | -                      | -                                       | -             | 0     |
-|         |                 | [0]                   |                                                                        |     |             |                |                        |                                         |               |       |
-| 1       | 1               | [0]                   | `h[1]>h[0]` (1>0). Pop 0. stack becomes empty. Break. Push 1.         | 0   | 0           | - (empty)      | -                      | -                                       | -             | 0     |
-|         |                 | [1]                   |                                                                        |     |             |                |                        |                                         |               |       |
-| 2       | 0               | [1]                   | `h[2]<h[1]` (0<1). Push 2.                                              | -   | -           | -              | -                      | -                                       | -             | 0     |
-|         |                 | [1, 2]                |                                                                        |     |             |                |                        |                                         |               |       |
-| 3       | 2               | [1, 2]                | `h[3]>h[2]` (2>0). Pop 2. stack=[1]. `leftBoundIndex=1`. `h = min(h[3],h[1])-h[2] = min(2,1)-0 = 1`. `w = 3-1-1 = 1`. `total += 1*1 = 1`. | 2   | 0           | 1              | 1                      | 1                                       | 1             | 1     |
-|         |                 | [1]                   | `h[3]>h[1]` (2>1). Pop 1. stack=[]. Break. Push 3.                     | 1   | 1           | - (empty)      | -                      | -                                       | -             | 1     |
-|         |                 | [3]                   |                                                                        |     |             |                |                        |                                         |               |       |
-| 4       | 1               | [3]                   | `h[4]<h[3]` (1<2). Push 4.                                              | -   | -           | -              | -                      | -                                       | -             | 1     |
-|         |                 | [3, 4]                |                                                                        |     |             |                |                        |                                         |               |       |
-| 5       | 0               | [3, 4]                | `h[5]<h[4]` (0<1). Push 5.                                              | -   | -           | -              | -                      | -                                       | -             | 1     |
-|         |                 | [3, 4, 5]             |                                                                        |     |             |                |                        |                                         |               |       |
-| 6       | 1               | [3, 4, 5]             | `h[6]>h[5]` (1>0). Pop 5. stack=[3,4]. `leftBoundIndex=4`. `h = min(h[6],h[4])-h[5] = min(1,1)-0 = 1`. `w = 6-4-1 = 1`. `total += 1*1 = 2`. | 5   | 0           | 4              | 1                      | 1                                       | 1             | 2     |
-|         |                 | [3, 4]                | `h[6]==h[4]` (1==1). `while` condition `h[curr]>h[stack.peek()]` false. Push 6. (Stack allows equal heights for this variant, effectively replacing) |     |             |                |                        |                                         |               |       |
-|         |                 | [3, 6]                | (Actually, the condition `height[current] > height[stack.peek()]` means it will process `h[4]` as well since `h[6](1) > h[4](1)` is false. The user code is `height[current] > height[stack.peek()]`. Let's re-evaluate.  If `h[6](1)` and `h[stack.peek()](h[4]=1)`, `while` is false. Push 6. Stack becomes [3,4,6])  No, if `h[current] > h[stack.peek()]`. Let's assume stack top is `height[stack.peek()]`.
-If `height[current] (1) > height[stack.peek()=height[5]=0]`. Pop 5. New top is 4. `min(h[6]=1, h[4]=1) - h[5]=0` -> `1*1=1`. total = 2.
-Now stack is `[3,4]`. `current=6, h[6]=1`. `stack.peek()=4, h[4]=1`. `h[6] > h[4]` is false. So, push 6. Stack: `[3,4,6]`)
-Corrected trace for step 6:
-Initially stack: `[3,4,5]`. `current=6, h[current]=1`.
-1. `h[6](1) > h[stack.peek()=h[5]=0]`. Pop 5. `top=5, h[top]=0`. `stack=[3,4]`. `leftBoundIndex=4, h[leftBoundIndex]=1`.
-   `h_water = min(h[6]=1, h[4]=1) - h[5]=0 = 1`. `w = 6 - 4 - 1 = 1`. `total += 1*1 = 1+1=2`.
-2. Stack is `[3,4]`. `h[6](1) > h[stack.peek()=h[4]=1]` is false.
-Push 6. Stack: `[3,4,6]`.
-|         |                 | [3,4,6]               |                                                                        |     |             |                |                        |                                         |               | 2     |
-| 7       | 3               | [3,4,6]               | `h[7](3) > h[6](1)`. Pop 6. `top=6, h[top]=1`. `stack=[3,4]`. `leftBoundIndex=4, h[leftBoundIndex]=1`.
-   `h_water = min(h[7]=3, h[4]=1) - h[6]=1 = 0`. `w = 7-4-1 = 2`. `total += 2*0 = 2`.
-|         |                 | [3,4]                 | `h[7](3) > h[4](1)`. Pop 4. `top=4, h[top]=1`. `stack=[3]`. `leftBoundIndex=3, h[leftBoundIndex]=2`.
-   `h_water = min(h[7]=3, h[3]=2) - h[4]=1 = 1`. `w = 7-3-1 = 3`. `total += 3*1 = 2+3=5`.
-|         |                 | [3]                   | `h[7](3) > h[3](2)`. Pop 3. `top=3, h[top]=2`. `stack=[]`. Break.
-Push 7. Stack: `[7]`.
-|         |                 | [7]                   |                                                                        |     |             |                |                        |                                         |               | 5     |
-| 8       | 2               | [7]                   | `h[8](2) < h[7](3)`. Push 8. Stack: `[7,8]`.                             | -   | -           | -              | -                      | -                                       | -             | 5     |
-|         |                 | [7,8]                 |                                                                        |     |             |                |                        |                                         |               |       |
-| 9       | 1               | [7,8]                 | `h[9](1) < h[8](2)`. Push 9. Stack: `[7,8,9]`.                           | -   | -           | -              | -                      | -                                       | -             | 5     |
-|         |                 | [7,8,9]               |                                                                        |     |             |                |                        |                                         |               |       |
-| 10      | 2               | [7,8,9]               | `h[10](2) > h[9](1)`. Pop 9. `top=9, h[top]=1`. `stack=[7,8]`. `leftBoundIndex=8, h[leftBoundIndex]=2`.
-   `h_water = min(h[10]=2, h[8]=2) - h[9]=1 = 1`. `w = 10-8-1 = 1`. `total += 1*1 = 5+1=6`.
-|         |                 | [7,8]                 | `h[10](2) == h[8](2)`. `while` is false. Push 10. Stack: `[7,8,10]`.      |     |             |                |                        |                                         |               | 6     |
-|         |                 | [7,8,10]              |                                                                        |     |             |                |                        |                                         |               |       |
-| 11      | 1               | [7,8,10]              | `h[11](1) < h[10](2)`. Push 11. Stack: `[7,8,10,11]`.                    | -   | -           | -              | -                      | -                                       | -             | 6     |
-|         |                 | [7,8,10,11]           | End of array.                                                          |     |             |                |                        |                                         |               |       |
+---
+下面是单调栈解法的执行过程：
 
-Final `total = 6`. The example trace helps visualize the process.
+| 当前位置 | 当前高度 | 栈内容 | 操作 | 弹出元素 | 弹出高度 | 左边界 | 左边界高度 | 水高 | 宽度 | 总水量 |
+|---------|---------|--------|------|---------|---------|-------|-----------|------|------|-------|
+| 0 | 3 | [] | 栈为空，压入0 | - | - | - | - | - | - | 0 |
+|  |  | [0] |  |  |  |  |  |  |  |  |
+| 1 | 2 | [0] | 2<3，压入1 | - | - | - | - | - | - | 0 |
+|  |  | [0,1] |  |  |  |  |  |  |  |  |
+| 2 | 1 | [0,1] | 1<2，压入2 | - | - | - | - | - | - | 0 |
+|  |  | [0,1,2] |  |  |  |  |  |  |  |  |
+| 3 | 5 | [0,1,2] | 5>1，弹出2 | 2 | 1 | 1 | 2 | 1 | 1 | 1 |
+|  |  | [0,1] | 5>2，弹出1 | 1 | 2 | 0 | 3 | 1 | 2 | 3 |
+|  |  | [0] | 5>3，弹出0 | 0 | 3 | - | - | - | - | 3 |
+|  |  | [3] | 压入3 |  |  |  |  |  |  |  |
+| 4 | 2 | [3] | 2<5，压入4 | - | - | - | - | - | - | 3 |
+|  |  | [3,4] |  |  |  |  |  |  |  |  |
+| 5 | 2 | [3,4] | 2=2，压入5 | - | - | - | - | - | - | 3 |
+|  |  | [3,4,5] |  |  |  |  |  |  |  |  |
+| 6 | 6 | [3,4,5] | 6>2，弹出5 | 5 | 2 | 4 | 2 | 0 | 1 | 3 |
+|  |  | [3,4] | 6>2，弹出4 | 4 | 2 | 3 | 5 | 3 | 2 | 9 |
+|  |  | [3] | 6>5，弹出3 | 3 | 5 | - | - | - | - | 9 |
+|  |  | [6] | 压入6 |  |  |  |  |  |  |  |
+
+最终接水量为9。通过这个例子，我们可以清晰地看到单调栈如何处理每个位置并计算积水。
 
 #### 代码实现
 (Requires `java.util.Deque` and `java.util.ArrayDeque`)

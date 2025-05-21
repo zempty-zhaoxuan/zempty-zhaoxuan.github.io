@@ -17,6 +17,7 @@ pre.highlight {
   border-radius: 3px;
   margin: 1em 0;
   overflow: scroll;
+  position: relative;
 }
 
 .highlight  { background: $oc-gray-0; }
@@ -162,4 +163,53 @@ code.highlighter-rouge {
   color: #4ec9b0;
   background-color: rgba(70, 70, 70, 0.6);
   border: 1px solid rgba(100, 100, 100, 0.4);
+}
+
+/* Styles for the copy code button */
+.copy-code-button {
+  position: absolute;
+  top: 0.5em;    /* Adjust as needed */
+  right: 0.5em;   /* Adjust as needed */
+  background: #f5f5f5; /* Light background for the button */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.3em 0.5em;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10; /* Ensure it's above the code block's content */
+}
+
+.copy-code-button:hover {
+  opacity: 1;
+  background: #eee;
+}
+
+.copy-code-button svg {
+  vertical-align: middle;
+  width: 1em; /* Adjust size if needed */
+  height: 1em; /* Adjust size if needed */
+  fill: #333; /* Icon color */
+}
+
+.copy-code-button.copied svg {
+  fill: green; /* Color for the checkmark */
+}
+
+/* Dark theme adjustments for the copy button */
+.dark-theme pre.highlight .copy-code-button {
+  background: #3a3a3a; /* Darker background for dark theme */
+  border-color: #555;
+}
+
+.dark-theme pre.highlight .copy-code-button svg {
+  fill: #ccc; /* Lighter icon color for dark theme */
+}
+
+.dark-theme pre.highlight .copy-code-button.copied svg {
+  fill: lightgreen; /* Lighter green for checkmark in dark theme */
+}
+
+.dark-theme pre.highlight .copy-code-button:hover {
+  background: #4a4a4a;
 }
