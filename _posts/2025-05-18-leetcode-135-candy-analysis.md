@@ -1,5 +1,5 @@
 ---
-layout: postx
+layout: post
 title: "LeetCode 135. Candy 分析"
 date: "2025-05-18"
 toc: true

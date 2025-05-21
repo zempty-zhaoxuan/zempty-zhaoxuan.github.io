@@ -2,9 +2,8 @@
 layout: post
 title: "LeetCode 42 题接雨水 - 三种解法详细分析"
 date: "2025-05-21"
-excerpt: |
-  本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。
-tags: [Algorithm, LeETCode, Array, DynamicProgramming, TwoPointers, Stack]
+excerpt: 本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。
+tags: [Algorithm, LeETCode,ArrayDynamicProgramming, TwoPointers, Stack]
 comments: true
 author: zempty
 ---
