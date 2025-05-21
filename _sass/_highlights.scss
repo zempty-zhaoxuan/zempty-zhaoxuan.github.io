@@ -167,22 +167,29 @@ code.highlighter-rouge {
 
 /* Styles for the copy code button */
 .copy-code-button {
-  position: absolute;
-  top: 0.5em;    /* Adjust as needed */
-  right: 0.5em;   /* Adjust as needed */
-  background: #f5f5f5; /* Light background for the button */
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important; /* 确保不使用left定位 */
+  background: rgba(245, 245, 245, 0.7) !important; /* 半透明背景 */
+  border: none;
+  border-bottom-left-radius: 4px;
   padding: 0.3em 0.5em;
   cursor: pointer;
   opacity: 0.8;
-  transition: opacity 0.2s ease-in-out;
-  z-index: 10; /* Ensure it's above the code block's content */
+  transition: all 0.2s ease;
+  z-index: 100 !important; /* 大幅提高z-index以确保在最上层 */
+  display: block; /* Always visible */
+  margin: 0 !important; /* Remove any margin that might affect positioning */
+  float: right !important; /* 添加浮动确保按钮靠右 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px); /* 添加模糊效果 */
 }
 
 .copy-code-button:hover {
   opacity: 1;
-  background: #eee;
+  background: rgba(230, 230, 230, 0.9) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .copy-code-button svg {
@@ -190,26 +197,36 @@ code.highlighter-rouge {
   width: 1em; /* Adjust size if needed */
   height: 1em; /* Adjust size if needed */
   fill: #333; /* Icon color */
+  transition: all 0.2s ease;
+}
+
+.copy-code-button.copied {
+  background: rgba(220, 240, 220, 0.9) !important; /* 浅绿色背景表示成功 */
 }
 
 .copy-code-button.copied svg {
-  fill: green; /* Color for the checkmark */
+  fill: #37a853; /* Google绿色 - 更现代的成功颜色 */
 }
 
 /* Dark theme adjustments for the copy button */
 .dark-theme pre.highlight .copy-code-button {
-  background: #3a3a3a; /* Darker background for dark theme */
-  border-color: #555;
-}
-
-.dark-theme pre.highlight .copy-code-button svg {
-  fill: #ccc; /* Lighter icon color for dark theme */
-}
-
-.dark-theme pre.highlight .copy-code-button.copied svg {
-  fill: lightgreen; /* Lighter green for checkmark in dark theme */
+  background: rgba(60, 60, 60, 0.8) !important; /* 深色但半透明背景 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .dark-theme pre.highlight .copy-code-button:hover {
-  background: #4a4a4a;
+  background: rgba(80, 80, 80, 0.9) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme pre.highlight .copy-code-button svg {
+  fill: #ddd; /* 浅色图标 */
+}
+
+.dark-theme pre.highlight .copy-code-button.copied {
+  background: rgba(40, 70, 40, 0.9) !important; /* 深色主题下的成功状态 */
+}
+
+.dark-theme pre.highlight .copy-code-button.copied svg {
+  fill: #8ded8d; /* 浅绿色图标 */
 }

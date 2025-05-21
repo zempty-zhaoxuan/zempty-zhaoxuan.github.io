@@ -176,13 +176,20 @@ pre.highlight {
     content: attr(data-lang);
     position: absolute;
     top: 0;
-    right: 10px;
+    right: 50px;
     font-size: 0.7em;
     padding: 2px 8px;
     background: var(--accent-color-light);
     color: var(--background-color);
     border-radius: 0 0 4px 4px;
     opacity: 0.8;
+    z-index: 90; /* 确保在代码块上方但在复制按钮下方 */
+    transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
+  }
+
+  &:hover::before {
+    opacity: 0.9;
   }
 
   code {

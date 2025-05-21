@@ -24,27 +24,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Part 2: Create and add Copy button
     const codeElement = pre.querySelector('code');
     if (codeElement) { // Ensure there's a <code> element
+      // Remove any existing copy buttons to avoid duplicates
+      const existingButtons = pre.querySelectorAll('.copy-code-button');
+      existingButtons.forEach(button => button.remove());
+      
       const copyButton = document.createElement('button');
       copyButton.className = 'copy-code-button';
       copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+      copyButton.setAttribute('title', 'Copy code');
       // Use only SVG icon, remove text
       copyButton.innerHTML = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>';
-      copyButton.style.display = 'none'; // Initially hidden
-
+      
+      // 设置样式以确保正确位置
+      copyButton.style.position = 'absolute';
+      copyButton.style.top = '0';
+      copyButton.style.right = '0';
+      copyButton.style.left = 'auto';
+      copyButton.style.zIndex = '100';
+      
       // Ensure pre is a positioned container for the button
-      // Check if position is static, if so, set to relative
       if (window.getComputedStyle(pre).position === 'static') {
         pre.style.position = 'relative';
       }
+      
+      // Append the button to the pre element
       pre.appendChild(copyButton);
-
-      pre.addEventListener('mouseenter', () => {
-        copyButton.style.display = 'block';
-      });
-
-      pre.addEventListener('mouseleave', () => {
-        copyButton.style.display = 'none';
-      });
 
       copyButton.addEventListener('click', function() {
         const codeToCopy = codeElement.innerText;
