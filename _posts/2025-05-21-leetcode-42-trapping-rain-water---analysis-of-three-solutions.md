@@ -3,7 +3,11 @@ layout: post
 title: "LeetCode 42 题接雨水 - 三种解法详细分析"
 date: "2025-05-21"
 toc: true
+<<<<<<< HEAD
 excerpt: "本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。"
+=======
+excerpt:  本文详细分析了 LeetCode 第 42 题"接雨水"的三种常用解法：动态规划、双指针和单调栈。每种解法都提供了详细的思路、代码实现和复杂度分析。
+>>>>>>> new
 tags: [Algorithm, LeetCode, Array, DynamicProgramming, TwoPointers, Stack]
 comments: true
 author: zempty
@@ -89,6 +93,7 @@ class Solution {
 
 #### 思路
 
+<<<<<<< HEAD
 动态规划解法中，我们发现对于位置 `i`，其能接的雨水由 `leftMax[i]` 和 `rightMax[i]` 中的较小者决定。
 `leftMax[i]` 是 `height[0...i]` 的最大值，`rightMax[i]` 是 `height[i...n-1]` 的最大值。
 
@@ -118,6 +123,47 @@ class Solution {
 - 如果 `leftMaxHeight >= rightMaxHeight`，那么对于 `right` 位置，它能储水的高度由 `rightMaxHeight` 决定。`total += rightMaxHeight - height[right]`，然后 `right--`。
 
 在移动指针之前，要先更新 `leftMaxHeight = max(leftMaxHeight, height[left])` 和 `rightMaxHeight = max(rightMaxHeight, height[right])`。
+=======
+动态规划解法中，我们使用了额外的空间来存储每个位置的左右最大高度。双指针法可以优化这一空间复杂度。
+
+双指针法的核心思想是：我们可以使用两个指针 `left` 和 `right` 分别从数组的两端向中间移动，同时维护两个变量记录已遍历部分的最大高度。这种方法有两种实现变体，它们的核心原理相同但实现细节略有不同。
+
+#### 第一种实现：先比较高度，再更新最大值
+
+在这种实现中：
+1. `leftMaxHeight` 表示 `height[0...left]` 中的最大值
+2. `rightMaxHeight` 表示 `height[right...n-1]` 中的最大值
+
+关键洞察：在任意时刻，如果 `height[left] < height[right]`，那么对于当前的 `left` 位置，我们可以确定它能接的雨水量就是 `leftMaxHeight - height[left]`（如果为正）。这是因为：
+
+1. 右边一定存在一个高度至少为 `height[right]` 的柱子
+2. 如果 `height[left] < height[right]`，那么左侧的 `leftMaxHeight` 就是瓶颈
+3. 因此，`left` 位置能接的雨水量取决于 `leftMaxHeight`
+
+同理，如果 `height[left] >= height[right]`，那么对于当前的 `right` 位置，它能接的雨水量就是 `rightMaxHeight - height[right]`（如果为正）。
+
+#### 第二种实现：先更新最大值，再比较最大值
+
+在这种实现中：
+1. `leftMax` 记录的是 `[0, left]` 的最大值
+2. `rightMax` 记录的是 `[right, n-1]` 的最大值
+
+这种方法的关键洞察是：如果 `leftMax < rightMax`，那么对于当前的 `left` 位置，我们可以确定它能接的雨水量就是 `leftMax - height[left]`。这是因为：
+
+1. 右边一定存在一个高度至少为 `rightMax` 的柱子
+2. 既然 `leftMax < rightMax`，那么左侧的 `leftMax` 就是瓶颈
+3. 因此，`left` 位置能接的雨水量取决于 `leftMax`
+
+#### 两种实现的比较
+
+两种实现的本质是相同的，都是基于"木桶原理"——水位由较短的那块木板决定。区别在于：
+- 第一种实现先比较当前柱子高度，再更新最大值
+- 第二种实现先更新最大值，再比较最大值
+
+两种方法都能正确计算雨水量，只是处理顺序不同。第二种实现的代码可能更简洁，因为不需要额外的条件判断来更新最大值。
+
+无论哪种实现，双指针法的巧妙之处在于，我们总是处理较矮的那一侧，这样可以确保水位由较矮的一侧决定，从而正确计算雨水量，同时将空间复杂度从 O(n) 优化到 O(1)。
+>>>>>>> new
 
 #### 代码实现
 
@@ -175,6 +221,7 @@ class Solution {
         int rightMax = 0; // 代表 height[right+1...n-1] 的最大值
         int total = 0;
         while(left < right){
+<<<<<<< HEAD
             // leftMax 和 rightMax 实际上代表的是 *不包括* 当前 left 和 right 指针处柱子高度的
             // 左侧最大和右侧最大。或者说，是上一轮迭代的 leftMax 和 rightMax。
             // 对于当前 height[left] 和 height[height] 而言，
@@ -195,6 +242,10 @@ class Solution {
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
 
+=======
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+>>>>>>> new
             // 如果 leftMax < rightMax，此时瓶颈在于 leftMax。
             // 意味着 height[left] 左边的最高墙是 leftMax，
             // 而 height[right] 右边的最高墙是 rightMax，且 rightMax 更高。
@@ -251,6 +302,7 @@ class Solution {
 遍历完成后，`total` 即为所求的雨水量。
 
 #### 举例说明
+<<<<<<< HEAD
 `height = [0,1,0,2,1,0,1,3,2,1,2,1]`
 
 | current | height[current] | stack (bottom->top) | Action                                                                 | top | height[top] | leftBoundIndex | height[leftBoundIndex] | h                                       | w             | total |
@@ -299,6 +351,35 @@ Push 7. Stack: `[7]`.
 |         |                 | [7,8,10,11]           | End of array.                                                          |     |             |                |                        |                                         |               |       |
 
 Final `total = 6`. The example trace helps visualize the process.
+=======
+`height = [3,2,1,5,2,2,6]`
+
+---
+下面是单调栈解法的执行过程：
+
+| 当前位置 | 当前高度 | 栈内容 | 操作 | 弹出元素 | 弹出高度 | 左边界 | 左边界高度 | 水高 | 宽度 | 总水量 |
+|---------|---------|--------|------|---------|---------|-------|-----------|------|------|-------|
+| 0 | 3 | [] | 栈为空，压入0 | - | - | - | - | - | - | 0 |
+|  |  | [0] |  |  |  |  |  |  |  |  |
+| 1 | 2 | [0] | 2<3，压入1 | - | - | - | - | - | - | 0 |
+|  |  | [0,1] |  |  |  |  |  |  |  |  |
+| 2 | 1 | [0,1] | 1<2，压入2 | - | - | - | - | - | - | 0 |
+|  |  | [0,1,2] |  |  |  |  |  |  |  |  |
+| 3 | 5 | [0,1,2] | 5>1，弹出2 | 2 | 1 | 1 | 2 | 1 | 1 | 1 |
+|  |  | [0,1] | 5>2，弹出1 | 1 | 2 | 0 | 3 | 1 | 2 | 3 |
+|  |  | [0] | 5>3，弹出0 | 0 | 3 | - | - | - | - | 3 |
+|  |  | [3] | 压入3 |  |  |  |  |  |  |  |
+| 4 | 2 | [3] | 2<5，压入4 | - | - | - | - | - | - | 3 |
+|  |  | [3,4] |  |  |  |  |  |  |  |  |
+| 5 | 2 | [3,4] | 2=2，压入5 | - | - | - | - | - | - | 3 |
+|  |  | [3,4,5] |  |  |  |  |  |  |  |  |
+| 6 | 6 | [3,4,5] | 6>2，弹出5 | 5 | 2 | 4 | 2 | 0 | 1 | 3 |
+|  |  | [3,4] | 6>2，弹出4 | 4 | 2 | 3 | 5 | 3 | 2 | 9 |
+|  |  | [3] | 6>5，弹出3 | 3 | 5 | - | - | - | - | 9 |
+|  |  | [6] | 压入6 |  |  |  |  |  |  |  |
+
+最终接水量为9。通过这个例子，我们可以清晰地看到单调栈如何处理每个位置并计算积水。
+>>>>>>> new
 
 #### 代码实现
 (Requires `java.util.Deque` and `java.util.ArrayDeque`)
