@@ -2436,6 +2436,7 @@ textarea,
   overflow: hidden;
   margin-bottom: 1.5em; // Add some space below the cover image
   border-radius: 6px; // Optional: match post card border radius
+  background-color: rgba(var(--link-color-rgb), 0.1); // Add placeholder background
 
   img {
     position: absolute;
@@ -2447,8 +2448,25 @@ textarea,
     border-radius: 6px; // Optional: match container's border radius
     transition: transform 0.3s ease; // For a subtle hover effect
   }
+  
+  img.lazy {
+    opacity: 0; // Hide lazy images until loaded
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  img.lazy-loaded {
+    opacity: 1; // Show images when loaded
+  }
 
   a:hover img {
     transform: scale(1.05); // Slight zoom on hover
+  }
+}
+
+/* Mobile optimization for images */
+@media screen and (max-width: 767px) {
+  .post-preview-cover {
+    padding-top: 60%; // Slightly taller on mobile
+    margin-bottom: 1em;
   }
 }

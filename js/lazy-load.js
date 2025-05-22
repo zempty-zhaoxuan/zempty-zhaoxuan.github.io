@@ -1,5 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
+  // First, check if we're on iOS - if so, load images immediately
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  
+  // Also check if we're on a mobile device (more broadly)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
   var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+  
+  // For iOS or mobile devices, load all images immediately
+  if (isIOS || isMobile) {
+    console.log("Mobile device detected, loading images immediately");
+    lazyImages.forEach(function(lazyImage) {
+      if (lazyImage.dataset.src) {
+        lazyImage.src = lazyImage.dataset.src;
+      }
+      if (lazyImage.dataset.srcset) {
+        lazyImage.srcset = lazyImage.dataset.srcset;
+      }
+      lazyImage.classList.remove("lazy");
+      lazyImage.classList.add("lazy-loaded");
+    });
+    return; // Exit early for mobile devices
+  }
 
   if ("IntersectionObserver" in window) {
     let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
@@ -64,4 +86,35 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initial check
     lazyLoad();
   }
+  
+  // Backup - load all images that might have been missed after 3 seconds
+  setTimeout(function() {
+    document.querySelectorAll("img.lazy").forEach(function(lazyImage) {
+      if (lazyImage.dataset.src) {
+        lazyImage.src = lazyImage.dataset.src;
+      }
+      if (lazyImage.dataset.srcset) {
+        lazyImage.srcset = lazyImage.dataset.srcset;
+      }
+      lazyImage.classList.remove("lazy");
+      lazyImage.classList.add("lazy-loaded");
+    });
+  }, 3000);
+  
+  // Special handling for orientation changes on mobile
+  window.addEventListener("orientationchange", function() {
+    // Reload all lazy images after orientation change
+    setTimeout(function() {
+      document.querySelectorAll("img.lazy").forEach(function(lazyImage) {
+        if (lazyImage.dataset.src && !lazyImage.src.includes(lazyImage.dataset.src)) {
+          lazyImage.src = lazyImage.dataset.src;
+        }
+        if (lazyImage.dataset.srcset && !lazyImage.srcset) {
+          lazyImage.srcset = lazyImage.dataset.srcset;
+        }
+        lazyImage.classList.remove("lazy");
+        lazyImage.classList.add("lazy-loaded");
+      });
+    }, 200); // Small delay to let the orientation change complete
+  });
 }); 
