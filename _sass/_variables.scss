@@ -19,10 +19,10 @@ $helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $georgia: Georgia, serif;
 
 // Fonts
-$base-font: "Noto Serif", "PT Serif", source-han-serif-sc, "Source Han Serif SC",
+$base-font: 'Lxgw WenKai', "Noto Serif", "PT Serif", source-han-serif-sc, "Source Han Serif SC",
   "Source Han Serif CN", "Source Han Serif TC", "Source Han Serif TW",
   "Source Han Serif", "Songti SC", SimSon, serif;
-$code-font: "Menlo", "Courier New", "Monaco", "Spoqa Han Sans", monospace;
+$code-font: 'JetBrains Mono', "Menlo", "Courier New", "Monaco", "Spoqa Han Sans", monospace;
 
 // Font sizes
 $base-font-size: 16px;
@@ -41,6 +41,11 @@ $link-color: $oc-blue-8;
 $link-lighten-color: $oc-blue-6;
 $link-bghv-color: $oc-blue-0;
 $divider-color: $oc-gray-1;
+
+// Added for card text hierarchy
+$text-color-strong: $oc-gray-9; // Darker for strong emphasis, like titles
+$text-color-title: $oc-gray-9; // Specific for titles, can be same as strong or different
+$text-color-muted: $oc-gray-7;   // Lighter for less emphasis, like post body text
 
 $accent-color: #20c997;
 

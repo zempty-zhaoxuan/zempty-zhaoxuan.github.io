@@ -13,6 +13,53 @@
 @import "enhancements"; // 导入新的增强功能样式
 @import "mobile-enhancements"; // 导入移动端增强样式
 
+// Custom Font Definitions
+
+// Lxgw WenKai (霞鹜文楷)
+@font-face {
+  font-family: 'Lxgw WenKai';
+  src: url('assets/fonts/LxgwWenKai/LXGWWenKai-Regular.ttf') format('truetype');
+  font-weight: normal; // 400
+  font-style: normal;
+  font-display: swap;
+}
+
+// JetBrains Mono - Regular
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: normal; // 400
+  font-style: normal;
+  font-display: swap;
+}
+
+// JetBrains Mono - Bold
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: bold; // 700
+  font-style: normal;
+  font-display: swap;
+}
+
+// JetBrains Mono - Italic
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Italic.woff2') format('woff2');
+  font-weight: normal; // 400
+  font-style: italic;
+  font-display: swap;
+}
+
+// JetBrains Mono - Bold Italic
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-BoldItalic.woff2') format('woff2');
+  font-weight: bold; // 700
+  font-style: italic;
+  font-display: swap;
+}
+
 // Syntax highlighting @import is at the bottom of this file
 
 /**************/
@@ -27,18 +74,19 @@ body {
   font-family: $base-font;
   color: var(--text-color);
   background-color: var(--background-color);
-  line-height: 1.8em;
-  letter-spacing: 0.02em;
+  line-height: 1.9em;
+  letter-spacing: 0.03em;
   transition: background-color 0.3s ease, color 0.3s ease;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  border: 5px solid red !important;
 }
 
 // 深色主题文本渲染优化
 .dark-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   font-weight: 400;
-  letter-spacing: 0.02em;
 }
 
 .container {
@@ -122,6 +170,10 @@ h6 {
 p {
   color: var(--text-color);
   margin: 1.2em 0;
+  text-align: justify;
+  hyphens: auto;
+  widows: 2;
+  orphans: 2;
 }
 
 a {
@@ -2334,5 +2386,69 @@ textarea,
   .back-to-top.visible {
     opacity: 1 !important;
     visibility: visible !important;
+  }
+}
+
+// Article card styling
+.post {
+  background-color: var(--background-lighten-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+
+  h1, h2, h3, h4, h5, h6 { // More specific selectors might be needed depending on post structure
+    color: var(--text-color-strong); // Assuming a variable for stronger text color
+    a {
+      color: var(--text-color-strong); // Ensure links within titles also have strong contrast
+      &:hover {
+        color: var(--accent-color); // Keep hover effect for links
+      }
+    }
+  }
+
+  // Ensure the post title (typically h1 or h2 in the list) is prominent
+  > h1 a, > h2 a { // Targeting direct children h1/h2 of .post for the main title
+    color: var(--text-color-title, var(--text-color-strong)); // Use a specific title color or fallback
+    font-weight: bold; // Ensure it's bold
+  }
+   > h1 a:hover, > h2 a:hover {
+     color: var(--accent-color);
+   }
+
+  .entry p, .entry { // Assuming post content is within a div with class 'entry'
+    color: var(--text-color-muted); // Assuming a variable for muted/less prominent text
+    font-size: 0.95em; // Slightly smaller font for body
+  }
+}
+
+// Cover image standardization
+.post-preview-cover {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; // 16:9 Aspect Ratio (9 / 16 * 100)
+  overflow: hidden;
+  margin-bottom: 1.5em; // Add some space below the cover image
+  border-radius: 6px; // Optional: match post card border radius
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // This will cover the area, cropping if necessary
+    border-radius: 6px; // Optional: match container's border radius
+    transition: transform 0.3s ease; // For a subtle hover effect
+  }
+
+  a:hover img {
+    transform: scale(1.05); // Slight zoom on hover
   }
 }
