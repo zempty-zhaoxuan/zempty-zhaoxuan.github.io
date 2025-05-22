@@ -1,1 +1,88 @@
- 
+/* 移动端响应式增强样式 */
+
+/* 设置基本的移动端视口规则 */
+html, body {
+  overflow-x: hidden !important;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+/* 防止内容溢出 */
+.wrapper-content, .post, .entry, article, .container {
+  overflow-x: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+/* 修复代码块滚动 */
+pre.highlight {
+  overflow-x: auto;  /* 使用auto代替scroll */
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  white-space: pre;
+}
+
+/* 确保图片不会溢出 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 确保表格可以在移动设备上正确显示 */
+table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+}
+
+/* 确保长链接和长单词会换行 */
+p, li, td, th, h1, h2, h3, h4, h5, h6 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* 处理可能导致水平滚动的其他元素 */
+blockquote, iframe, .toc, .highlight {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 修复默认的列表样式导致的额外内边距 */
+ul, ol {
+  padding-left: 30px;
+}
+
+/* 确保按钮和控件在视口内 */
+#theme-toggle, #sidebar-toggle, #home-button, #mobile-sidebar-toggle {
+  position: fixed;
+  z-index: 1000;
+}
+
+/* 代码块容器在移动端的特殊处理 */
+@media screen and (max-width: 767px) {
+  .code-block-wrapper {
+    margin: 1em 0 !important;
+    width: 100% !important;
+  }
+  
+  .code-block-wrapper pre.highlight {
+    font-size: 13px !important;
+  }
+  
+  /* 移动端按钮样式优化 */
+  .copy-code-button {
+    padding: 3px 5px !important;
+    top: 2px !important;
+    right: 2px !important;
+  }
+  
+  .copy-code-button svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+} 

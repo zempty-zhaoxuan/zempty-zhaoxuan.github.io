@@ -66,7 +66,7 @@
     href="{{ '/assets/css/custom.css' | relative_url }}"
   />
 
-  <!-- 内联样式以确保行号被隐藏 -->
+  <!-- 内联样式以确保行号被隐藏和代码适应移动设备 -->
   <style>
     .highlight table td.gutter,
     .highlight table td.rouge-gutter,
@@ -87,6 +87,47 @@
     table.rouge-table td.rouge-code {
       padding-left: 0 !important;
       width: 100% !important;
+    }
+    
+    /* 移动端适配 */
+    @media screen and (max-width: 767px) {
+      /* 防止水平滚动 */
+      html, body {
+        overflow-x: hidden !important;
+        width: 100%;
+      }
+      
+      /* 代码块适配 */
+      pre, pre.highlight {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        white-space: pre;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      
+      /* 表格响应式 */
+      table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* 确保代码复制按钮固定在右上角 */
+      .code-button-container {
+        position: sticky !important;
+        position: -webkit-sticky !important;
+        top: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+      }
+      
+      /* 确保代码块可以水平滚动但垂直方向按钮可见 */
+      pre.highlight {
+        overflow-y: visible !important;
+        overflow-x: auto !important;
+      }
     }
   </style>
 </head>

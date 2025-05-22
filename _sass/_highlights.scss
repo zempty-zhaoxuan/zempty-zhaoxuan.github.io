@@ -15,9 +15,13 @@ pre.highlight {
   padding: .45em .45em .45em .625em;
   border: 1px solid $oc-gray-3;
   border-radius: 3px;
-  margin: 1em 0;
-  overflow: scroll;
+  margin: 0; /* 移除外边距，现在由包装容器管理 */
+  overflow-x: auto;
+  overflow-y: hidden; /* 隐藏垂直滚动条 */
   position: relative;
+  max-width: 100%;
+  box-sizing: border-box;
+  z-index: 1; /* 确保在复制按钮下方 */
 }
 
 .highlight  { background: $oc-gray-0; }
@@ -165,25 +169,52 @@ code.highlighter-rouge {
   border: 1px solid rgba(100, 100, 100, 0.4);
 }
 
+/* 代码块包装容器 */
+.code-block-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  margin: 1em 0 !important;
+  display: block !important;
+}
+
 /* Styles for the copy code button */
 .copy-code-button {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  left: auto !important; /* 确保不使用left定位 */
-  background: rgba(245, 245, 245, 0.7) !important; /* 半透明背景 */
-  border: none;
-  border-bottom-left-radius: 4px;
-  padding: 0.3em 0.5em;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: all 0.2s ease;
-  z-index: 100 !important; /* 大幅提高z-index以确保在最上层 */
-  display: block; /* Always visible */
-  margin: 0 !important; /* Remove any margin that might affect positioning */
-  float: right !important; /* 添加浮动确保按钮靠右 */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(2px); /* 添加模糊效果 */
+  top: 4px !important;
+  right: 4px !important;
+  background: rgba(245, 245, 245, 0.8) !important; /* 半透明背景 */
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 4px 6px !important;
+  cursor: pointer !important;
+  opacity: 0.9 !important;
+  transition: all 0.2s ease !important;
+  z-index: 100 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(2px) !important; /* 添加模糊效果 */
+}
+
+/* 复制按钮悬停效果 */
+.copy-code-button:hover {
+  opacity: 1 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 按钮图标 */
+.copy-code-button svg {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  fill: #333 !important;
+}
+
+/* 复制成功状态 */
+.copy-code-button.copied {
+  background: rgba(220, 240, 220, 0.9) !important;
+}
+
+.copy-code-button.copied svg {
+  fill: #37a853 !important;
 }
 
 .copy-code-button:hover {
@@ -208,25 +239,48 @@ code.highlighter-rouge {
   fill: #37a853; /* Google绿色 - 更现代的成功颜色 */
 }
 
-/* Dark theme adjustments for the copy button */
-.dark-theme pre.highlight .copy-code-button {
+/* 深色主题按钮样式 */
+.dark-theme .code-block-wrapper .copy-code-button {
   background: rgba(60, 60, 60, 0.8) !important; /* 深色但半透明背景 */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
-.dark-theme pre.highlight .copy-code-button:hover {
+.dark-theme .code-block-wrapper .copy-code-button:hover {
   background: rgba(80, 80, 80, 0.9) !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
 }
 
-.dark-theme pre.highlight .copy-code-button svg {
-  fill: #ddd; /* 浅色图标 */
+.dark-theme .code-block-wrapper .copy-code-button svg {
+  fill: #ddd !important; /* 浅色图标 */
 }
 
-.dark-theme pre.highlight .copy-code-button.copied {
+.dark-theme .code-block-wrapper .copy-code-button.copied {
   background: rgba(40, 70, 40, 0.9) !important; /* 深色主题下的成功状态 */
 }
 
-.dark-theme pre.highlight .copy-code-button.copied svg {
-  fill: #8ded8d; /* 浅绿色图标 */
+.dark-theme .code-block-wrapper .copy-code-button.copied svg {
+  fill: #8ded8d !important; /* 浅绿色图标 */
+}
+
+/* 代码内容区域设置，保持水平滚动 */
+pre.highlight > code {
+  display: block !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 移动设备上的特殊处理 */
+@media screen and (max-width: 767px) {
+  .code-button-container {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+  }
+  
+  .copy-code-button {
+    padding: 0.2em 0.4em !important;
+    font-size: 0.9em !important;
+  }
 }
