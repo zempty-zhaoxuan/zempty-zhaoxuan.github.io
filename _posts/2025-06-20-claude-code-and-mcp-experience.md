@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Claude Code 与 MCP 协议上手体验：终端丝滑编码新纪元"
+title: "体验 Claude Code：终端丝滑编程新体验，AI 助力开发效率飞跃"
 date: 2025-06-20
 toc: true
 excerpt: "本文结合官方资讯与个人实践，介绍 Anthropic 最新发布的 Claude Code 及其背后的 Model Context Protocol（MCP）开放标准，并分享在终端、Cursor 与 JetBrains IDE 中的丝滑体验与高效工作流配置指南。"
@@ -70,16 +70,20 @@ claude login   # 浏览器弹出 OAuth 窗口，支持个人账号 / 企业 SSO
 claude whoami  # 查看当前登录状态与配额
 ```
 
-### 3. 常用 CLI 子命令
+### 3. 高频使用命令
 
-| 命令 | 说明 |
-| --- | --- |
-| `claude repl` | 进入交互式 REPL（等价于直接输入 `claude`） |
-| `claude mcp list` | 查看已连接的 MCP 服务器及其工具 |
-| `claude mcp add <name> <url>` | 手动添加远程 MCP 服务器 |
-| `claude config` | 打开配置文件（YAML），可设置模型、配色、预算上限等 |
-| `claude update` | 检查并更新本地 CLI 版本 |
-| `claude --help` | 查看完整帮助文档 |
+| 命令 | 说明 | 使用频率 |
+| --- | --- | --- |
+| `claude` | 启动交互式对话（最常用） | ⭐⭐⭐⭐⭐ |
+| `claude --file <path>` | 分析指定文件内容 | ⭐⭐⭐⭐⭐ |
+| `claude --diff` | 对比代码变更并获取建议 | ⭐⭐⭐⭐ |
+| `claude --project` | 分析整个项目结构 | ⭐⭐⭐⭐ |
+| `claude mcp list` | 查看可用的 MCP 工具 | ⭐⭐⭐ |
+| `claude config` | 配置模型参数和偏好设置 | ⭐⭐⭐ |
+| `claude history` | 查看对话历史记录 | ⭐⭐⭐ |
+| `claude --debug` | 开启调试模式，查看详细信息 | ⭐⭐ |
+| `claude update` | 更新到最新版本 | ⭐⭐ |
+| `claude --help` | 查看帮助文档 | ⭐⭐ |
 
 ### 4. 会话快捷键
 
