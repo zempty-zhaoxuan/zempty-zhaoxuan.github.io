@@ -48,7 +48,7 @@ permalink: /tags/
 
   <!-- Tag Sections -->
   <div class="tag-sections">
-    {% assign sorted_tags = site.tags | sort: 'name' %}
+    {% assign sorted_tags = site.tags | sort %}
     {% for tag in sorted_tags %}
       <section class="tag-section" id="{{ tag[0] }}">
         <div class="tag-header">

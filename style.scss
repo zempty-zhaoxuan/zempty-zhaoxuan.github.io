@@ -81,7 +81,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   text-rendering: optimizeLegibility;
   font-kerning: normal;
-  border: 5px solid red !important;
 }
 
 // 深色主题文本渲染优化
@@ -427,12 +426,25 @@ img {
 
 // Specify the color of the selection
 ::-moz-selection {
-  //  color: $selection-color;
-  background: $selection-background-color;
+  color: #ffffff;
+  background: var(--selection-background-color);
 }
 ::selection {
-  //  color: $selection-color;
-  background: $selection-background-color;
+  color: #ffffff;
+  background: var(--selection-background-color);
+}
+
+// 深色主题下的文字选中优化
+.dark-theme {
+  ::-moz-selection {
+    color: #1a1a1a;
+    background: var(--selection-background-color);
+  }
+  
+  ::selection {
+    color: #1a1a1a;
+    background: var(--selection-background-color);
+  }
 }
 
 // Nicolas Gallagher's micro clearfix hack
@@ -1238,141 +1250,126 @@ footer {
   }
 }
 
-// 主题切换按钮样式
-#theme-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--background-lighten-color);
-  color: var(--text-color);
-  border: 1px solid var(--divider-color);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* 右下角按钮组 - 强制对齐样式 */
+.floating-buttons {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  z-index: 1000 !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  height: 45px !important;
+  flex-wrap: nowrap !important;
+}
 
-  @include mobile {
-    bottom: 15px;
-    right: 15px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+/* 强制重置所有按钮的定位 */
+#theme-toggle,
+#sidebar-toggle,
+#home-button,
+#mobile-sidebar-toggle {
+  position: static !important;
+  bottom: auto !important;
+  right: auto !important;
+  left: auto !important;
+  top: auto !important;
+  /* 统一按钮大小和样式 */
+  width: 45px !important;
+  height: 45px !important;
+  min-width: 45px !important;
+  min-height: 45px !important;
+  max-width: 45px !important;
+  max-height: 45px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  /* 确保垂直对齐 */
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  /* 重置链接样式 */
+  text-decoration: none !important;
+  /* 统一显示属性 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* 统一边框和背景 */
+  border-radius: 50% !important;
+  background-color: var(--background-lighten-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--divider-color) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  line-height: 1 !important;
+  font-family: inherit !important;
+  font-weight: normal !important;
+  
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    border-color: var(--accent-color) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
   }
 }
 
-#theme-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+// 主题切换按钮样式
+#theme-toggle {
+  font-size: 20px !important;
 }
 
 /* 侧边栏折叠按钮 */
 #sidebar-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 70px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--background-lighten-color);
-  color: var(--text-color);
-  border: 1px solid var(--divider-color);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#sidebar-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 18px !important;
+  font-weight: bold !important;
 }
 
 /* 返回首页按钮 */
 #home-button {
-  position: fixed;
-  bottom: 20px;
-  right: 120px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--background-lighten-color);
-  color: var(--text-color);
-  border: 1px solid var(--divider-color);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-}
-
-#home-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 20px !important;
 }
 
 /* 移动端侧边栏折叠按钮 */
 #mobile-sidebar-toggle {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 70px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--background-lighten-color);
-  color: var(--text-color);
-  border: 1px solid var(--divider-color);
-  font-size: 20px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 18px !important;
+  display: none !important;
 }
 
-#mobile-sidebar-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
+/* 移动端适配 */
 @include mobile {
-  #theme-toggle {
-    right: 15px;
+  .floating-buttons {
+    bottom: 15px !important;
+    right: 15px !important;
+    gap: 12px !important;
   }
-
+  
+  #theme-toggle,
+  #sidebar-toggle,
+  #home-button,
   #mobile-sidebar-toggle {
-    bottom: 15px;
-    right: 65px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
+    font-size: 18px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
   }
-
-  #home-button {
-    bottom: 15px;
-    right: 115px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  
+  /* 在移动端显示移动端按钮，隐藏桌面端按钮 */
+  #sidebar-toggle {
+    display: none !important;
+  }
+  
+  #mobile-sidebar-toggle {
+    display: flex !important;
   }
 }
 
@@ -1421,12 +1418,19 @@ footer {
   margin-left: 0;
 }
 
-/* 响应式处理 */
-@media (max-width: 768px) {
-  #sidebar-toggle {
+/* 桌面端按钮显示逻辑 */
+@media (min-width: 769px) {
+  #mobile-sidebar-toggle {
     display: none;
   }
+  
+  #sidebar-toggle {
+    display: flex;
+  }
+}
 
+/* 响应式处理 */
+@media (max-width: 768px) {
   .mobile-sidebar-collapsed .wrapper-sidebar {
     margin-bottom: 0;
     border-bottom: none;
@@ -1548,728 +1552,6 @@ body.mobile-sidebar-collapsed {
 }
 
 /* iPad Pro specific fixes */
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  /* Common button styling for better alignment on iPad Pro */
-  #theme-toggle,
-  #sidebar-toggle,
-  #home-button,
-  #mobile-sidebar-toggle {
-    width: 42px;
-    height: 42px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Fix bottom spacing to ensure all three buttons have the same distance from bottom */
-  #theme-toggle,
-  #sidebar-toggle,
-  #home-button,
-  #mobile-sidebar-toggle {
-    bottom: 20px !important;
-  }
-
-  /* Specific spacing for landscape mode */
-  @media (orientation: landscape) {
-    #theme-toggle {
-      right: 20px;
-    }
-
-    #sidebar-toggle {
-      right: 72px;
-      display: flex;
-    }
-
-    #home-button {
-      right: 124px;
-    }
-
-    #mobile-sidebar-toggle {
-      display: none;
-    }
-  }
-
-  /* Specific spacing for portrait mode */
-  @media (orientation: portrait) {
-    #theme-toggle {
-      right: 20px;
-    }
-
-    #sidebar-toggle {
-      display: none;
-    }
-
-    #mobile-sidebar-toggle {
-      right: 72px;
-      display: flex;
-    }
-
-    #home-button {
-      right: 124px;
-    }
-    
-    /* 在iPad Pro竖屏模式下隐藏标签云 */
-    .sidebar-tags {
-      display: none;
-    }
-  }
-}
-
-/* Custom iPad Pro portrait fixes: hide sidebar/TOC and enforce full-width article container */
-@media screen and (max-width: 1024px) and (orientation: portrait) {
-  /* Make sidebar hidden by default but allow it to be shown with toggle */
-  .wrapper-sidebar {
-    display: block !important;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s ease;
-    border: none !important;
-    box-shadow: none !important;
-    background: var(--background-color) !important;
-  }
-  
-  /* When toggled, show the sidebar */
-  .wrapper-sidebar:not(.mobile-collapsed) {
-    height: auto;
-    display: block !important;
-    padding: 20px;
-    border: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    margin-bottom: 0 !important;
-  }
-  
-  .toc {
-    display: none !important;
-  }
-
-  /* Main content area full width */
-  .wrapper-content,
-  .wrapper-content.withtoc {
-    float: none !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    border-top: none !important;
-    background: var(--background-color) !important;
-  }
-
-  /* Container with symmetrical mobile-like padding */
-  .container {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 20px !important;
-    margin: 0 auto !important;
-    box-sizing: border-box !important;
-    background: var(--background-color) !important;
-  }
-  
-  /* 移除可能显示的分隔线 */
-  body:before, body:after,
-  .wrapper-sidebar:before, .wrapper-sidebar:after,
-  .wrapper-content:before, .wrapper-content:after,
-  .container:before, .container:after {
-    display: none !important;
-    content: none !important;
-    border: none !important;
-    border-top: none !important;
-    border-bottom: none !important;
-  }
-}
-
-// iPad Pro and mobile full-width content override
-@media (max-width: 1024px) {
-  /* Make sidebar hidden by default but allow it to be shown with toggle */
-  .wrapper-sidebar {
-    display: block !important;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s ease;
-    border: none !important;
-    box-shadow: none !important;
-    background: var(--background-color) !important;
-  }
-  
-  /* When toggled, show the sidebar */
-  .wrapper-sidebar:not(.mobile-collapsed) {
-    height: auto;
-    display: block !important;
-    padding: 20px;
-    border: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    margin-bottom: 0 !important;
-  }
-  
-  .toc {
-    display: none !important;
-  }
-  
-  .wrapper-content,
-  .wrapper-content.withtoc {
-    float: none !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    border-top: none !important;
-    background: var(--background-color) !important;
-  }
-  
-  .container {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 20px !important;
-    margin: 0 auto !important;
-    box-sizing: border-box !important;
-    background: var(--background-color) !important;
-  }
-  
-  /* 统一背景颜色 */
-  html, body {
-    background: var(--background-color) !important;
-  }
-}
-
-/* 文章归档日历样式 - 增强版 */
-.sidebar-archive {
-  padding: 0 20px;
-  margin: 0;
-  border-top: none;
-  padding-top: 5px;
-  padding-bottom: 0;
-  border-bottom: none;
-  background-color: var(--background-color);
-  box-shadow: none;
-}
-
-.sidebar-archive:before,
-.sidebar-archive:after {
-  display: none;
-}
-
-/* 完全解决侧边栏日历区域的水平线问题 */
-.sidebar,
-.sidebar > div,
-.sidebar > section,
-.sidebar-archive,
-.archive-calendar,
-.navlist,
-.wrapper-footer-desktop,
-.site-info {
-  position: relative;
-  background-color: var(--background-color) !important;
-  border: none !important;
-  border-top: none !important;
-  border-bottom: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  box-shadow: none !important;
-}
-
-/* 移除侧边栏和日历区域中所有可能的水平线 */
-.sidebar:before, .sidebar:after,
-.sidebar > div:before, .sidebar > div:after,
-.sidebar-archive:before, .sidebar-archive:after,
-.archive-calendar:before, .archive-calendar:after,
-.navlist:before, .navlist:after {
-  display: none !important;
-  border: none !important;
-  content: none !important;
-  background: none !important;
-}
-
-/* 确保日历网格容器样式 */
-.archive-calendar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 0 auto;
-  background-color: var(--background-color) !important;
-  border: none !important;
-}
-
-/* 确保月份块之间没有线条 */
-.archive-month {
-  text-decoration: none;
-  background: none !important;
-  border: none !important;
-}
-
-/* 重新设置月份块的样式，确保与背景良好分离 */
-.month-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 6px;
-  border-radius: 14px;
-  background-color: rgba(128, 128, 128, 0.07) !important;
-  color: var(--text-color);
-  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-  text-align: center;
-  height: 80px;
-  box-shadow: none !important;
-  position: relative;
-  overflow: hidden;
-  border: none !important;
-}
-
-.month-block:hover {
-  background-color: var(--link-color) !important;
-  color: white;
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* 深色主题下月份块的样式 */
-.dark-theme .month-block {
-  background-color: rgba(75, 75, 75, 0.2) !important;
-  color: #e0e0e0;
-}
-
-.month-name {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 3px;
-  position: relative;
-  z-index: 1;
-}
-
-.month-year {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 5px;
-  position: relative;
-  z-index: 1;
-}
-
-.post-count {
-  font-size: 15px;
-  font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  padding: 2px 8px;
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
-}
-
-.month-block:hover .post-count {
-  background-color: rgba(255, 255, 255, 0.25);
-}
-
-/* 移除导航和日历之间的分隔 */
-.navlist {
-  border-bottom: none !important;
-  margin-bottom: 5px;
-  padding-bottom: 5px;
-}
-
-.navlist + .sidebar-archive {
-  border-top: none !important;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-/* 适配深色主题 */
-.dark-theme .month-block {
-  background-color: rgba(45, 45, 45, 0.3);
-  color: #e0e0e0;
-  box-shadow: none;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.dark-theme .sidebar,
-.dark-theme .sidebar > *,
-.dark-theme .navlist,
-.dark-theme .sidebar-archive,
-.dark-theme .wrapper-footer-desktop {
-  border: none !important;
-  border-top: none !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* 归档页面样式增强 */
-.archive-container {
-  margin-top: 40px;
-}
-
-/* Media query for medium-sized screens (tablet landscape and smaller laptops) */
-@media screen and (max-width: 1200px) {
-  .archive-container {
-    margin-top: 30px;
-  }
-  
-  .month-group {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-  }
-
-  /* 调整中等尺寸屏幕的侧边栏按钮 */
-  #sidebar-toggle {
-    display: none !important;
-  }
-  
-  #mobile-sidebar-toggle {
-    display: flex !important;
-    bottom: 15px;
-    right: 65px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  #home-button {
-    bottom: 15px;
-    right: 115px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* 确保侧边栏在中等尺寸屏幕上也有移动端的折叠行为 */
-  .wrapper-sidebar {
-    width: 100%;
-    position: relative;
-    border-right: none;
-    border-bottom: 1px solid var(--divider-color);
-    height: auto;
-    transition: height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-  }
-  
-  .wrapper-sidebar.mobile-collapsed {
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: none;
-    margin: 0;
-  }
-  
-  .wrapper-content {
-    float: none;
-    width: 100%;
-    margin-left: 0;
-  }
-}
-
-/* Hide archive calendar on mobile devices */
-@media screen and (max-width: 767px) {
-  .sidebar-archive,
-  .archive-calendar {
-    display: none !important;
-  }
-}
-
-.month-group {
-  margin-bottom: 50px;
-  padding-bottom: 25px;
-  border-bottom: 1px dashed var(--divider-color);
-  animation: fadeIn 0.6s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.month-title {
-  font-size: 26px;
-  color: var(--text-color);
-  margin-bottom: 20px;
-  font-weight: bold;
-  position: relative;
-  padding-left: 25px;
-  letter-spacing: 0.5px;
-}
-
-.month-title:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 12px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: var(--link-color);
-  box-shadow: 0 0 0 4px rgba(var(--link-color-rgb), 0.2);
-}
-
-.month-posts {
-  list-style-type: none;
-  padding-left: 25px;
-  margin-left: 5px;
-  border-left: 1px solid var(--divider-color-light);
-}
-
-.archive-item {
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px dotted var(--divider-color-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.archive-item:before {
-  content: "";
-  position: absolute;
-  left: -31px;
-  top: 10px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--background-lighten-color);
-  border: 1px solid var(--divider-color);
-  transition: all 0.3s ease;
-}
-
-.archive-item:hover:before {
-  background-color: var(--link-color);
-  border-color: var(--link-color);
-  box-shadow: 0 0 0 3px rgba(var(--link-color-rgb), 0.2);
-}
-
-.archive-item:last-child {
-  border-bottom: none;
-}
-
-.archive-item a {
-  flex: 1;
-  color: var(--text-color);
-  text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.archive-item a:hover {
-  color: var(--link-color);
-  transform: translateX(3px);
-}
-
-.archive-item time {
-  color: var(--text-lighten-color);
-  font-size: 14px;
-  margin-left: 15px;
-  padding: 3px 8px;
-  border-radius: 12px;
-  background-color: var(--background-lighten-color);
-  transition: all 0.3s ease;
-}
-
-.archive-item:hover time {
-  background-color: rgba(var(--link-color-rgb), 0.1);
-}
-
-@include mobile {
-  .month-title {
-    font-size: 22px;
-    padding-left: 20px;
-  }
-  
-  .month-title:before {
-    width: 10px;
-    height: 10px;
-    top: 10px;
-  }
-  
-  .month-posts {
-    padding-left: 20px;
-  }
-  
-  .archive-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .archive-item:before {
-    left: -26px;
-    top: 8px;
-    width: 8px;
-    height: 8px;
-  }
-  
-  .archive-item time {
-    margin-left: 0;
-    margin-top: 8px;
-    font-size: 12px;
-    align-self: flex-start;
-  }
-}
-
-/* Additional mobile adjustments for archive page */
-@media screen and (max-width: 767px) {
-  .archive-container {
-    margin-top: 20px;
-  }
-}
-
-/* 响应式工具类 */
-.responsive-hide {
-  @media screen and (max-width: 767px) {
-    display: none !important;
-  }
-}
-
-/* Hide specific elements on medium screens (like our problem case around 1144px × 1010px) */
-@media screen and (min-width: 768px) and (max-width: 1200px) {
-  .sidebar-archive.responsive-hide {
-    display: none !important;
-  }
-}
-
-/* 归档页面样式增强 */
-.archive-container {
-  margin-top: 40px;
-}
-
-/* 所有屏幕尺寸的响应式按钮调整 */
-@media screen and (max-width: 1200px) {
-  /* 确保移动折叠按钮显示 */
-  #mobile-sidebar-toggle {
-    display: flex;
-    bottom: 15px;
-    right: 65px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-  }
-  
-  /* 隐藏桌面侧边栏折叠按钮 */
-  #sidebar-toggle {
-    display: none;
-  }
-  
-  /* 调整返回首页按钮位置 */
-  #home-button {
-    bottom: 15px;
-    right: 115px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-  }
-  
-  /* 调整主题切换按钮位置 */
-  #theme-toggle {
-    bottom: 15px;
-    right: 15px;
-    width: 35px;
-    height: 35px;
-  }
-}
-
-/* 中等尺寸屏幕的特定调整（约1144px × 1010px） */
-@media screen and (min-width: 768px) and (max-width: 1200px) {
-  #mobile-sidebar-toggle {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  #mobile-sidebar-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  }
-  
-  /* 优化按钮间距，防止重叠 */
-  #home-button {
-    right: 110px;
-  }
-}
-
-@include mobile {
-  #theme-toggle {
-    right: 15px;
-  }
-
-  #mobile-sidebar-toggle {
-    bottom: 15px;
-    right: 65px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-
-  #home-button {
-    bottom: 15px;
-    right: 115px;
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-}
-
-/* 自定义按钮的tooltip效果 */
-#theme-toggle, #sidebar-toggle, #home-button, #mobile-sidebar-toggle, #toc-toggle-button {
-  &:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 5px 10px;
-    border-radius: 4px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-size: 14px;
-    white-space: nowrap;
-    border: 1px solid var(--divider-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    opacity: 0.9;
-  }
-}
-
-/* 为移动端设备调整的tooltip样式 */
-@include mobile {
-  #theme-toggle, #sidebar-toggle, #home-button, #mobile-sidebar-toggle, #toc-toggle-button {
-    &:hover::after {
-      font-size: 12px;
-      padding: 4px 8px;
-      bottom: 120%;
-    }
-  }
-}
-
-/* 移动端适配 */
-@include mobile {
-  .sidebar-archive {
-    padding: 0 15px;
-    margin: 20px 0 30px;
-  }
-
-  .archive-calendar {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .month-block {
-    padding: 10px 5px;
-    height: 80px;
-  }
-
-  .month-name {
-    font-size: 13px;
-  }
-
-  .month-year {
-    font-size: 11px;
-  }
-
-  .post-count {
-    font-size: 15px;
-    padding: 2px 8px;
-  }
-}
-
-/* iPad Pro适配 */
 @media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
   .sidebar-archive {
     display: none;

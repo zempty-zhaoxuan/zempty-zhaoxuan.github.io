@@ -2,10 +2,32 @@
 <html>
   {% include head.html %}
   <body>
+    <style>
+      /* 文字选中样式优化 - 确保良好的对比度 */
+      ::-moz-selection {
+        color: #ffffff !important;
+        background: #1971c2 !important;
+      }
+      
+      ::selection {
+        color: #ffffff !important;
+        background: #1971c2 !important;
+      }
+      
+      /* 深色主题下的文字选中优化 */
+      .dark-theme ::-moz-selection {
+        color: #1a1a1a !important;
+        background: #74c0fc !important;
+      }
+      
+      .dark-theme ::selection {
+        color: #1a1a1a !important;
+        background: #74c0fc !important;
+      }
+    </style>
     {% include nav.html %}
 
-    <!-- 移动端侧边栏折叠按钮 -->
-    <button id="mobile-sidebar-toggle" aria-label="折叠/展开移动端侧边栏" title="折叠/展开移动端侧边栏">▲</button>
+
 
     {% if page.toc==true %}
       <aside class="toc">
@@ -23,14 +45,20 @@
       </div>
     </div>
 
-    <!-- 主题切换按钮 -->
-    <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
-    
-    <!-- 侧边栏折叠按钮 -->
-    <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">«</button>
-    
-    <!-- 返回首页按钮 -->
-    <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
+    <!-- 右下角浮动按钮组 -->
+    <div class="floating-buttons">
+      <!-- 主题切换按钮 -->
+      <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
+      
+      <!-- 侧边栏折叠按钮 -->
+      <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">☰</button>
+      
+      <!-- 移动端侧边栏折叠按钮 -->
+      <button id="mobile-sidebar-toggle" aria-label="折叠/展开移动端侧边栏" title="折叠/展开移动端侧边栏">☰</button>
+      
+      <!-- 返回首页按钮 -->
+      <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
+    </div>
 
     {% include analytics.html %}
     

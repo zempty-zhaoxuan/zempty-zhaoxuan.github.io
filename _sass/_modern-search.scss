@@ -160,11 +160,24 @@
   .search-result-item {
     padding: $space-lg;
     border-bottom: 1px solid var(--divider-color);
-    transition: background-color $transition-fast;
+    transition: all $transition-fast;
     cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 2px;
 
     &:hover {
       background: var(--search-result-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      .result-title {
+        color: var(--link-color);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     &:last-child {
@@ -180,10 +193,8 @@
       text-decoration: none;
       display: block;
       transition: color $transition-fast;
-
-      &:hover {
-        color: var(--link-color);
-      }
+      pointer-events: none; // Prevent double-click since parent handles navigation
+      position: relative;
 
       // Highlight matched text
       mark {

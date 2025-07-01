@@ -15,35 +15,18 @@ layout: default
 
 <!--script src="https://unpkg.com/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script-->
 <script src="{{ site.baseurl }}/js/simple-jekyll-search.min.js"></script>
+<script src="{{ site.baseurl }}/js/search-enhancements.js"></script>
 
 <script>
-	window.simpleJekyllSearch = new SimpleJekyllSearch({
-	searchInput: document.getElementById('search-input'),
-	resultsContainer: document.getElementById('results-container'),
-	json: '{{ site.baseurl }}/search.json',
-	searchResultTemplate: '<div class="search-result-item">' + 
-	                      '<a href="{url}" class="result-title">{title}</a>' +
-	                      '<div class="result-meta">' +
-	                      '<span class="result-date">{date}</span>' +
-	                      '</div>' +
-	                      '<div class="result-excerpt">{excerpt}</div>' +
-	                      '</div>',
-	noResultsText: '<div class="no-results">' +
-	               '<div class="no-results-icon">🔍</div>' +
-	               '<div class="no-results-title">没有找到匹配结果</div>' +
-	               '<div class="no-results-suggestion">请尝试其他关键词或检查拼写</div>' +
-	               '</div>',
-	limit: 8,
-	fuzzy: true,
-	exclude: ['Welcome']
-  })
-
   // Modern search functionality
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const searchClear = document.getElementById('search-clear');
     const searchResults = document.getElementById('results-container');
     const searchContainer = document.querySelector('.modern-search-container');
+    
+    let isLoading = false;
+    let searchTimeout;
     
     // Show/hide search results
     function showSearchResults() {
@@ -52,6 +35,7 @@ layout: default
     
     function hideSearchResults() {
       searchResults.classList.remove('show');
+      isLoading = false;
     }
     
     // Show/hide clear button
@@ -63,47 +47,136 @@ layout: default
       }
     }
     
-    // Search input events
-    searchInput.addEventListener('input', function() {
-      toggleClearButton();
-      if (this.value.trim()) {
+    // Show loading state
+    function showLoading() {
+      if (!isLoading) {
+        isLoading = true;
+        searchResults.innerHTML = '<div class="search-loading">' +
+                                 '<div class="loading-spinner"></div>' +
+                                 '<div>正在搜索...</div>' +
+                                 '</div>';
         showSearchResults();
-      } else {
+      }
+    }
+    
+    // Initialize Simple Jekyll Search
+    try {
+      window.simpleJekyllSearch = new SimpleJekyllSearch({
+        searchInput: searchInput,
+        resultsContainer: searchResults,
+        json: '{{ site.baseurl }}/search.json',
+        searchResultTemplate: '<div class="search-result-item" data-url="{url}">' + 
+                              '<a href="{url}" class="result-title">{title}</a>' +
+                              '<div class="result-meta">' +
+                              '<span class="result-date">{date}</span>' +
+                              '</div>' +
+                              '<div class="result-excerpt">{excerpt}</div>' +
+                              '</div>',
+        noResultsText: '<div class="no-results">' +
+                       '<div class="no-results-icon">🔍</div>' +
+                       '<div class="no-results-title">没有找到匹配结果</div>' +
+                       '<div class="no-results-suggestion">请尝试其他关键词或检查拼写</div>' +
+                       '</div>',
+        limit: 8,
+        fuzzy: true,
+        exclude: ['Welcome']
+      });
+      
+      console.log('Search initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize search:', error);
+      searchResults.innerHTML = '<div class="no-results">' +
+                               '<div class="no-results-icon">❌</div>' +
+                               '<div class="no-results-title">搜索功能初始化失败</div>' +
+                               '<div class="no-results-suggestion">请刷新页面重试</div>' +
+                               '</div>';
+      return;
+    }
+    
+    // Override the original input event handler for enhanced UX
+    // We need to wait for SimpleJekyllSearch to set up its event listener first
+    setTimeout(() => {
+      const originalInput = searchInput;
+      const wrapper = originalInput.parentNode;
+      
+      // Create a new input element
+      const newInput = originalInput.cloneNode(true);
+      wrapper.replaceChild(newInput, originalInput);
+      
+      // Re-setup clear button reference
+      const currentSearchInput = document.getElementById('search-input');
+      
+      // Enhanced input handler with loading state
+      currentSearchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        toggleClearButton();
+        
+        // Clear previous timeout
+        if (searchTimeout) {
+          clearTimeout(searchTimeout);
+        }
+        
+        if (query) {
+          showLoading();
+          // Perform search with slight delay to show loading
+          searchTimeout = setTimeout(() => {
+            if (window.simpleJekyllSearch) {
+              window.simpleJekyllSearch.search(query);
+              isLoading = false;
+              showSearchResults();
+            }
+          }, 150);
+        } else {
+          hideSearchResults();
+        }
+      });
+      
+      currentSearchInput.addEventListener('focus', function() {
+        if (this.value.trim()) {
+          showSearchResults();
+        }
+      });
+      
+      // Update clear button handler for new input
+      searchClear.onclick = function() {
+        currentSearchInput.value = '';
+        currentSearchInput.focus();
         hideSearchResults();
-      }
-    });
-    
-    searchInput.addEventListener('focus', function() {
-      if (this.value.trim()) {
-        showSearchResults();
-      }
-    });
-    
-    // Clear search
-    searchClear.addEventListener('click', function() {
-      searchInput.value = '';
-      searchInput.focus();
-      hideSearchResults();
-      toggleClearButton();
-    });
+        toggleClearButton();
+      };
+      
+    }, 100);
     
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
       // Ctrl+K to focus search
       if (e.ctrlKey && e.key === 'k') {
         e.preventDefault();
-        searchInput.focus();
+        document.getElementById('search-input').focus();
       }
       
       // Escape to close search results
       if (e.key === 'Escape') {
         hideSearchResults();
-        searchInput.blur();
+        document.getElementById('search-input').blur();
       }
     });
     
-    // Click outside to close search results
+    // Handle search result clicks
     document.addEventListener('click', function(e) {
+      // Handle search result item clicks (entire box)
+      const resultItem = e.target.closest('.search-result-item');
+      if (resultItem) {
+        const url = resultItem.getAttribute('data-url');
+        if (url) {
+          console.log('Search result clicked:', url);
+          // Navigate to the URL
+          window.location.href = url;
+          return;
+        }
+      }
+      
+      // Close search results when clicking outside
       if (!searchContainer.contains(e.target)) {
         hideSearchResults();
       }

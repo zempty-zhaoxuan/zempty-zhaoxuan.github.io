@@ -59,3 +59,255 @@ pre.highlight code .line:before {
   content: none !important;
   display: none !important;
 }
+
+/* 浮动按钮完全重置和对齐修复 */
+.floating-buttons {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  height: 45px !important;
+  z-index: 1000 !important;
+  flex-wrap: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  /* 确保容器本身对齐 */
+  line-height: 45px !important;
+}
+
+/* 统一所有浮动按钮的样式 - 包括button和a标签 */
+.floating-buttons > *,
+.floating-buttons > button,
+.floating-buttons > a {
+  /* 完全重置所有默认样式 */
+  all: unset !important;
+  /* 然后应用我们的样式 */
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  width: 45px !important;
+  height: 45px !important;
+  min-width: 45px !important;
+  min-height: 45px !important;
+  max-width: 45px !important;
+  max-height: 45px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background-color: var(--background-lighten-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--divider-color) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  line-height: 1 !important;
+  font-weight: normal !important;
+  text-decoration: none !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  /* 确保文本居中 */
+  text-align: center !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+.floating-buttons > *:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  border-color: var(--accent-color) !important;
+}
+
+.floating-buttons > *:active {
+  transform: translateY(0) !important;
+}
+
+/* 字体和渲染优化 - 确保图标垂直居中 */
+#theme-toggle,
+#sidebar-toggle,
+#home-button,
+#mobile-sidebar-toggle {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  font-size: 20px !important;
+  /* 使用flex确保完美居中 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* 移除可能影响对齐的属性 */
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+/* 调整特定图标的大小和位置 */
+#theme-toggle {
+  font-size: 20px !important;
+}
+
+#sidebar-toggle,
+#mobile-sidebar-toggle {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  /* 微调菜单图标位置 */
+  padding-top: 1px !important;
+}
+
+#home-button {
+  font-size: 20px !important;
+  /* 微调房子图标位置 */
+  padding-top: 1px !important;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .floating-buttons {
+    bottom: 15px !important;
+    right: 15px !important;
+    gap: 10px !important;
+  }
+  
+  .floating-buttons > * {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
+    font-size: 18px !important;
+  }
+  
+  #sidebar-toggle {
+    display: none !important;
+  }
+  
+  #mobile-sidebar-toggle {
+    display: flex !important;
+  }
+}
+
+/* Search Enhancement Styles */
+.search-tips {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.search-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Search result tags */
+.search-result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.search-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.search-tag.matched {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* Search result relevance score */
+.result-score {
+  margin-left: 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* Enhanced search result item */
+.search-result-item.enhanced {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.search-result-item.enhanced:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight matched terms */
+.search-result-item mark {
+  background: #fff3cd;
+  color: #856404;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .search-tips {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .search-tag {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .search-tag.matched {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .search-result-item mark {
+  background: rgba(255, 220, 0, 0.3);
+  color: #ffd700;
+}
+
+/* 额外的浮动按钮对齐修复 */
+.floating-buttons {
+  /* 使用CSS Grid确保完美对齐 */
+  display: grid !important;
+  grid-template-columns: repeat(3, 45px) !important;
+  grid-gap: 12px !important;
+  align-items: center !important;
+}
+
+/* 移除之前的flex相关样式 */
+.floating-buttons > *,
+.floating-buttons > button,
+.floating-buttons > a {
+  /* 确保所有按钮占据整个网格单元 */
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 移动端保持flex布局 */
+@media screen and (max-width: 768px) {
+  .floating-buttons {
+    display: flex !important;
+    grid-template-columns: none !important;
+  }
+}

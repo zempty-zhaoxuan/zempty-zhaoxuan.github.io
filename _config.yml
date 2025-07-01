@@ -30,7 +30,7 @@ navigation:
     url: /archive
 # Pagination
 plugins: [jekyll-paginate]
-paginate: 8 # 每页文章数
+paginate: 10 # 每页文章数
 paginate_path: "essay/page:num" # 可选，分页链接
 
 excerpt_separator: <!-- more -->auts
