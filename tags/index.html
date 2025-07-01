@@ -8,37 +8,353 @@ permalink: /tags/
   <h2>No post found</h2>
 {% endif %}
 
-<div class="tags">
-  <ul class="label">
-    {% for tag in site.tags %}
-    <li>
-      <a href="#{{ tag[0] }}">
-        <span>{{ tag[0] }}</span>
-        <span class="count">{{ tag[1] | size }}</span>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-
-  {% for tag in site.tags %}
-    <h2 id="{{ tag[0] }}">
-      {{ tag[0] }}
+<div class="modern-tags-container">
+  <!-- Tag Cloud -->
+  <div class="tag-cloud-section">
+    <h2 class="section-title">
+      <span class="title-icon">🏷️</span>
+      标签云
     </h2>
-    <ul class="tag">
-      {% for post in tag[1] %}
-        {% if post.title != null %}
-          <li>
-            {% if post.link %}
-              <a href="{{ post.link }}">
-            {% else %}
-              <a href="{{ site.baseurl }}{{ post.url }}">
-            {% endif %}
-                {{ post.title }}
-              </a>
-              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-          </li>
+    <div class="tag-cloud">
+      {% assign max_count = 0 %}
+      {% for tag in site.tags %}
+        {% if tag[1].size > max_count %}
+          {% assign max_count = tag[1].size %}
         {% endif %}
       {% endfor %}
-    </ul>
-  {% endfor %}
+      
+      {% for tag in site.tags %}
+        {% assign tag_count = tag[1].size %}
+        {% assign tag_percent = tag_count | times: 100 | divided_by: max_count %}
+        <a href="#{{ tag[0] }}" class="tag-cloud-item" data-count="{{ tag_count }}" style="--tag-size: {{ tag_percent }}%">
+          <span class="tag-name">{{ tag[0] }}</span>
+          <span class="tag-count">{{ tag_count }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Tag Statistics -->
+  <div class="tag-stats">
+    <div class="stat-item">
+      <span class="stat-number">{{ site.tags.size }}</span>
+      <span class="stat-label">个标签</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{ site.posts.size }}</span>
+      <span class="stat-label">篇文章</span>
+    </div>
+  </div>
+
+  <!-- Tag Sections -->
+  <div class="tag-sections">
+    {% assign sorted_tags = site.tags | sort: 'name' %}
+    {% for tag in sorted_tags %}
+      <section class="tag-section" id="{{ tag[0] }}">
+        <div class="tag-header">
+          <h3 class="tag-title">
+            <span class="tag-symbol">#</span>{{ tag[0] }}
+            <span class="tag-post-count">{{ tag[1].size }} 篇文章</span>
+          </h3>
+        </div>
+        
+        <div class="tag-posts-grid">
+          {% for post in tag[1] %}
+            {% if post.title != null %}
+              <article class="tag-post-card">
+                {% if post.cover_image %}
+                <div class="tag-post-cover">
+                  <img src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }}" loading="lazy">
+                </div>
+                {% endif %}
+                
+                <div class="tag-post-content">
+                  <h4 class="tag-post-title">
+                    {% if post.link %}
+                      <a href="{{ post.link }}" target="_blank" rel="noopener">
+                    {% else %}
+                      <a href="{{ site.baseurl }}{{ post.url }}">
+                    {% endif %}
+                        {{ post.title }}
+                      </a>
+                  </h4>
+                  
+                  <div class="tag-post-meta">
+                    <time class="tag-post-date">{{ post.date | date: "%Y-%m-%d" }}</time>
+                    {% if post.excerpt %}
+                    <div class="tag-post-excerpt">
+                      {{ post.excerpt | strip_html | truncate: 100 }}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
 </div>
+
+<style>
+/* Modern Tags Styling */
+.modern-tags-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.title-icon {
+  font-size: 1.5rem;
+}
+
+/* Tag Cloud */
+.tag-cloud-section {
+  margin-bottom: 3rem;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--background-lighten-color);
+  border-radius: 16px;
+  border: 1px solid var(--divider-color);
+}
+
+.tag-cloud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 25px;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: calc(0.8rem + var(--tag-size) * 0.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tag-cloud-item:hover {
+  background: var(--link-color);
+  color: white;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.tag-count {
+  background: var(--background-lighten-color);
+  color: var(--blockquote-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tag-cloud-item:hover .tag-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Tag Statistics */
+.tag-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--card-background);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--link-color);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--blockquote-color);
+  font-size: 0.9rem;
+}
+
+/* Tag Sections */
+.tag-section {
+  margin-bottom: 3rem;
+  scroll-margin-top: 2rem;
+}
+
+.tag-header {
+  margin-bottom: 1.5rem;
+}
+
+.tag-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.tag-symbol {
+  color: var(--link-color);
+  font-weight: 700;
+}
+
+.tag-post-count {
+  font-size: 0.9rem;
+  color: var(--blockquote-color);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+/* Tag Posts Grid */
+.tag-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.tag-post-card {
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.tag-post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.tag-post-cover {
+  height: 120px;
+  overflow: hidden;
+}
+
+.tag-post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.tag-post-card:hover .tag-post-cover img {
+  transform: scale(1.05);
+}
+
+.tag-post-content {
+  padding: 1rem;
+}
+
+.tag-post-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.tag-post-title a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.tag-post-title a:hover {
+  color: var(--link-color);
+}
+
+.tag-post-meta {
+  color: var(--blockquote-color);
+}
+
+.tag-post-date {
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.tag-post-excerpt {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+  .modern-tags-container {
+    padding: 1rem;
+  }
+  
+  .tag-cloud {
+    padding: 1rem;
+  }
+  
+  .tag-stats {
+    gap: 1rem;
+  }
+  
+  .stat-item {
+    padding: 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .tag-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tag-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .tag-post-count {
+    margin-left: 0;
+  }
+}
+
+/* Dark theme adjustments */
+.dark-theme .tag-cloud-item:hover .tag-count {
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+</style>

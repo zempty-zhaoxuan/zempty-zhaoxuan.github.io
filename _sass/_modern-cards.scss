@@ -1,0 +1,390 @@
+// Modern Card Design System
+// 现代化卡片设计系统
+
+// Base Card Styles - 基础卡片样式
+.modern-card {
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: $card-border-radius;
+  box-shadow: var(--card-shadow);
+  transition: all $transition-normal;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+    background: var(--card-background-hover);
+  }
+
+  // Card content spacing
+  &-content {
+    padding: $space-lg;
+  }
+
+  &-header {
+    padding: $space-lg $space-lg $space-md;
+  }
+
+  &-body {
+    padding: 0 $space-lg $space-lg;
+  }
+
+  &-footer {
+    padding: $space-md $space-lg $space-lg;
+    border-top: 1px solid var(--divider-color);
+    background: var(--background-lighten-color);
+  }
+}
+
+// Post Card Specific Styles - 文章卡片专用样式
+.post-card {
+  @extend .modern-card;
+  margin-bottom: $space-xl;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 280px;
+
+  // Post cover image
+  &-cover {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, var(--background-lighten-color), var(--background-color));
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform $transition-slow;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    // Overlay for better text readability
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 70%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+      opacity: 0;
+      transition: opacity $transition-normal;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  // Post content area
+  &-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: $space-lg;
+  }
+
+  // Post title
+  &-title {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 $space-md;
+    color: var(--text-color);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: var(--link-color);
+      }
+    }
+  }
+
+  // Post meta information
+  &-meta {
+    display: flex;
+    align-items: center;
+    gap: $space-md;
+    margin-bottom: $space-md;
+    font-size: $font-size-sm;
+    color: var(--blockquote-color);
+
+    .date {
+      display: flex;
+      align-items: center;
+      gap: $space-xs;
+
+      &::before {
+        content: '📅';
+        font-size: $font-size-xs;
+      }
+    }
+
+    .reading-time {
+      display: flex;
+      align-items: center;
+      gap: $space-xs;
+
+      &::before {
+        content: '⏱️';
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  // Post excerpt
+  &-excerpt {
+    flex: 1;
+    font-size: $font-size-base;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: $space-lg;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // Post tags
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-xs;
+    margin-bottom: $space-md;
+
+    .tag {
+      background: var(--background-lighten-color);
+      color: var(--blockquote-color);
+      padding: $space-xs $space-sm;
+      border-radius: 20px;
+      font-size: $font-size-xs;
+      text-decoration: none;
+      transition: all $transition-fast;
+      border: 1px solid var(--divider-color);
+
+      &:hover {
+        background: var(--link-color);
+        color: white;
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  // Read more button
+  &-read-more {
+    align-self: flex-start;
+    background: var(--button-primary-bg);
+    color: white;
+    padding: $space-sm $space-lg;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: $font-size-sm;
+    transition: all $transition-normal;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-xs;
+
+    &:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &::after {
+      content: '→';
+      transition: transform $transition-fast;
+    }
+
+    &:hover::after {
+      transform: translateX(4px);
+    }
+  }
+}
+
+// Grid Layout for Cards - 卡片网格布局
+.posts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-xl;
+  margin-bottom: $space-xxl;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Alternative: Masonry-like layout for varied heights
+.posts-masonry {
+  columns: 1;
+  column-gap: $space-xl;
+  margin-bottom: $space-xxl;
+
+  @media (min-width: 768px) {
+    columns: 2;
+  }
+
+  @media (min-width: 1200px) {
+    columns: 3;
+  }
+
+  .post-card {
+    break-inside: avoid;
+    margin-bottom: $space-xl;
+  }
+}
+
+// Featured Post Card - 特色文章卡片
+.post-card-featured {
+  @extend .post-card;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 320px;
+  margin-bottom: $space-xxl;
+
+  .post-card-cover {
+    height: 100%;
+  }
+
+  .post-card-content {
+    padding: $space-xl;
+  }
+
+  .post-card-title {
+    font-size: $font-size-2xl;
+  }
+
+  &::before {
+    content: '⭐ 精选';
+    position: absolute;
+    top: $space-md;
+    right: $space-md;
+    background: var(--warning-color);
+    color: white;
+    padding: $space-xs $space-sm;
+    border-radius: 12px;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    z-index: 10;
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+
+    .post-card-cover {
+      height: 200px;
+    }
+  }
+}
+
+// Card hover effects - 卡片悬停效果
+@keyframes cardFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.post-card {
+  &.animate-float:hover {
+    animation: cardFloat 2s ease-in-out infinite;
+  }
+}
+
+// Loading skeleton for cards - 卡片加载骨架屏
+.post-card-skeleton {
+  @extend .modern-card;
+  margin-bottom: $space-xl;
+  min-height: 280px;
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--background-lighten-color) 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      var(--background-lighten-color) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
+
+  &-cover {
+    height: 200px;
+    @extend .skeleton;
+  }
+
+  &-title {
+    height: 24px;
+    width: 80%;
+    margin: $space-lg $space-lg $space-md;
+    @extend .skeleton;
+  }
+
+  &-excerpt {
+    height: 16px;
+    width: 100%;
+    margin: 0 $space-lg $space-sm;
+    @extend .skeleton;
+
+    &:nth-child(2) {
+      width: 90%;
+    }
+
+    &:nth-child(3) {
+      width: 60%;
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Dark theme specific adjustments - 深色主题特定调整
+.dark-theme {
+  .post-card-tags .tag {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+
+    &:hover {
+      background: var(--link-color);
+      color: white;
+    }
+  }
+
+  .post-card-featured::before {
+    background: var(--warning-color);
+    color: #1a1a1a;
+  }
+}

@@ -19,6 +19,31 @@
   --tag-index-label-background-color: #e9ecef;
   --tag-index-count-background-color: #f1f3f5;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  
+  // Modern Card Variables - 现代卡片变量
+  --card-background: #ffffff;
+  --card-background-hover: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.06);
+  --card-shadow: #{$card-shadow-light};
+  --card-shadow-hover: #{$card-shadow-hover};
+  
+  // Search Variables - 搜索相关变量
+  --search-background: #ffffff;
+  --search-border: #e1e5e9;
+  --search-focus-border: #1971c2;
+  --search-placeholder: #6c757d;
+  --search-result-hover: #f8f9fa;
+  
+  // Button Variables - 按钮变量
+  --button-primary-bg: #{$primary-600};
+  --button-primary-hover: #{$primary-700};
+  --button-secondary-bg: #f8f9fa;
+  --button-secondary-hover: #e9ecef;
+  
+  // Status Colors - 状态颜色
+  --success-color: #{$success-500};
+  --warning-color: #{$warning-500};
+  --error-color: #{$error-500};
 }
 
 // 深色主题
@@ -42,6 +67,31 @@
   --tag-index-label-background-color: #495057;
   --tag-index-count-background-color: #343a40;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  
+  // Modern Card Variables - 深色主题卡片变量
+  --card-background: #2d3338;
+  --card-background-hover: #343a40;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: #{$card-shadow-dark};
+  --card-shadow-hover: #{$card-shadow-hover-dark};
+  
+  // Search Variables - 深色主题搜索变量
+  --search-background: #2d3338;
+  --search-border: #495057;
+  --search-focus-border: #74c0fc;
+  --search-placeholder: #adb5bd;
+  --search-result-hover: #343a40;
+  
+  // Button Variables - 深色主题按钮变量
+  --button-primary-bg: #{$primary-500};
+  --button-primary-hover: #{$primary-600};
+  --button-secondary-bg: #343a40;
+  --button-secondary-hover: #495057;
+  
+  // Status Colors - 深色主题状态颜色
+  --success-color: #{$success-500};
+  --warning-color: #{$warning-500};
+  --error-color: #{$error-500};
 }
 
 // 浅色主题（当用户显式切换时使用）
@@ -65,4 +115,29 @@
   --tag-index-label-background-color: #e9ecef;
   --tag-index-count-background-color: #f1f3f5;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  
+  // Modern Card Variables - 浅色主题卡片变量
+  --card-background: #ffffff;
+  --card-background-hover: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.06);
+  --card-shadow: #{$card-shadow-light};
+  --card-shadow-hover: #{$card-shadow-hover};
+  
+  // Search Variables - 浅色主题搜索变量
+  --search-background: #ffffff;
+  --search-border: #e1e5e9;
+  --search-focus-border: #1971c2;
+  --search-placeholder: #6c757d;
+  --search-result-hover: #f8f9fa;
+  
+  // Button Variables - 浅色主题按钮变量
+  --button-primary-bg: #{$primary-600};
+  --button-primary-hover: #{$primary-700};
+  --button-secondary-bg: #f8f9fa;
+  --button-secondary-hover: #e9ecef;
+  
+  // Status Colors - 浅色主题状态颜色
+  --success-color: #{$success-500};
+  --warning-color: #{$warning-500};
+  --error-color: #{$error-500};
 } 

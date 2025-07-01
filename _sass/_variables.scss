@@ -27,6 +27,7 @@ $code-font: 'JetBrains Mono', "Menlo", "Courier New", "Monaco", "Spoqa Han Sans"
 // Font sizes
 $base-font-size: 16px;
 $small-font-size: 14px;
+$base-radius: 6px;
 
 // Colors
 $base-color: $oc-gray-8;
@@ -90,6 +91,15 @@ $dt-width: 180px;
 $dt-dd-space: 20px;
 $dd-position: $dt-width + $dt-dd-space;
 
+// Screen size breakpoints
+$phone-max: 767px;
+$small-tablet-min: 768px;
+$small-tablet-max: 991px;
+$tablet-min: 768px;
+$tablet-max: 1024px;
+$medium-screen-min: 768px;
+$medium-screen-max: 1199px;
+
 // Mobile breakpoints
 @mixin mobile {
   @media screen and (max-width: $medium-screen-max) {
@@ -138,3 +148,62 @@ $dd-position: $dt-width + $dt-dd-space;
     @content;
   }
 }
+
+// Modern UI Variables - 现代化UI变量
+$card-border-radius: 16px;
+$card-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+$card-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+$card-shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.25);
+$card-shadow-hover-dark: 0 12px 40px rgba(0, 0, 0, 0.4);
+
+// Animation Variables - 动画变量
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+$transition-spring: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// Spacing System - 间距系统 (8px grid)
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-xxl: 48px;
+
+// Typography Scale - 字体缩放
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-base: 1rem;    // 16px
+$font-size-lg: 1.125rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.5rem;   // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem;  // 36px
+
+// Modern Color Palette - 现代色彩调色板
+$primary-50: #eff6ff;
+$primary-100: #dbeafe;
+$primary-500: #3b82f6;
+$primary-600: #2563eb;
+$primary-700: #1d4ed8;
+
+$success-50: #f0fdf4;
+$success-500: #22c55e;
+$success-600: #16a34a;
+
+$warning-50: #fffbeb;
+$warning-500: #f59e0b;
+$warning-600: #d97706;
+
+$error-50: #fef2f2;
+$error-500: #ef4444;
+$error-600: #dc2626;
+
+// Z-index Scale - 层级系统
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
