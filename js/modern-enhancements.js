@@ -154,30 +154,8 @@
       }
     });
 
-    // Add debounced search
-    let searchTimeout;
-    const originalInput = searchInput.addEventListener;
-    
-    searchInput.addEventListener('input', (e) => {
-      clearTimeout(searchTimeout);
-      currentQuery = e.target.value;
-      
-      if (!currentQuery.trim()) {
-        showSearchHistory();
-        return;
-      }
-      
-      searchTimeout = setTimeout(() => {
-        // Add loading state
-        searchResults.innerHTML = `
-          <div class="search-loading">
-            <div class="loading-spinner"></div>
-            <div>搜索中...</div>
-          </div>
-        `;
-        searchResults.classList.add('show');
-      }, 300);
-    });
+    // 移除与主搜索功能冲突的代码
+    // 搜索历史功能保持独立
   }
 
   // Smooth scroll enhancements - 平滑滚动增强

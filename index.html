@@ -67,7 +67,10 @@ layout: default
     searchInput.addEventListener('input', function() {
       toggleClearButton();
       if (this.value.trim()) {
-        showSearchResults();
+        // 延迟显示结果，让SimpleJekyllSearch先处理
+        setTimeout(() => {
+          showSearchResults();
+        }, 100);
       } else {
         hideSearchResults();
       }
