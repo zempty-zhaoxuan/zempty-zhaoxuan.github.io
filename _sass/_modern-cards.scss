@@ -40,11 +40,11 @@
 // Post Card Specific Styles - 文章卡片专用样式
 .post-card {
   @extend .modern-card;
-  margin-bottom: 0; // 移除底部margin，由grid gap控制
+  margin-bottom: $space-xl;
   display: flex;
   flex-direction: column;
   height: auto;
-  min-height: 320px; // 增加最小高度确保一致性
+  min-height: 280px;
 
   // Post cover image
   &-cover {
@@ -221,22 +221,15 @@
 .posts-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $space-lg; // 减少间距
-  margin-bottom: $space-xl;
+  gap: $space-xl;
+  margin-bottom: $space-xxl;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: $space-xl;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
-    gap: $space-lg; // 减少间距以容纳更多内容
-  }
-
-  @media (min-width: 1400px) {
-    grid-template-columns: repeat(4, 1fr); // 大屏幕显示4列
-    gap: $space-lg;
   }
 }
 
@@ -263,9 +256,23 @@
 // Featured Post Card - 特色文章卡片
 .post-card-featured {
   @extend .post-card;
-  // 不再占用整行，保持正常卡片大小
-  min-height: 380px; // 稍微增加高度以突出重要性
-  border: 2px solid var(--link-color); // 添加边框突出显示
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 320px;
+  margin-bottom: $space-xxl;
+
+  .post-card-cover {
+    height: 100%;
+  }
+
+  .post-card-content {
+    padding: $space-xl;
+  }
+
+  .post-card-title {
+    font-size: $font-size-2xl;
+  }
 
   &::before {
     content: '⭐ 精选';
@@ -279,7 +286,14 @@
     font-size: $font-size-xs;
     font-weight: 600;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+
+    .post-card-cover {
+      height: 200px;
+    }
   }
 }
 

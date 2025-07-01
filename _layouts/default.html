@@ -23,12 +23,14 @@
       </div>
     </div>
 
-    <!-- 固定按钮容器 -->
-    <div class="fixed-buttons-container">
-      <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换主题">🌙</button>
-      <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="侧边栏">«</button>
-      <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
-    </div>
+    <!-- 主题切换按钮 -->
+    <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
+    
+    <!-- 侧边栏折叠按钮 -->
+    <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">«</button>
+    
+    <!-- 返回首页按钮 -->
+    <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
 
     {% include analytics.html %}
     
