@@ -2804,65 +2804,89 @@ footer .svg-icon svg:hover {
   width: 100%;
 }
 
-/* 侧边栏折叠时优化网格布局 */
+/* 侧边栏折叠时优化网格布局 - 保持卡片式多列布局 */
 .wrapper-content.sidebar-collapsed .posts-grid {
-  grid-template-columns: 1fr;
-  max-width: 900px;
+  display: grid;
+  max-width: 1000px;
   margin: 0 auto;
   gap: 2rem;
+  /* 小屏幕默认单列 */
+  grid-template-columns: 1fr;
 }
 
-/* 大屏幕下允许更多列 */
-@media (min-width: 1400px) {
+/* 中等屏幕：2列布局 */
+@media (min-width: 768px) {
   .wrapper-content.sidebar-collapsed .posts-grid {
     grid-template-columns: repeat(2, 1fr);
-    max-width: 1200px;
+    max-width: 1100px;
+    gap: 2rem;
+  }
+}
+
+/* 大屏幕：3列布局 */
+@media (min-width: 1200px) {
+  .wrapper-content.sidebar-collapsed .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1300px;
     gap: 2.5rem;
   }
 }
 
-@media (min-width: 1800px) {
+/* 超大屏幕：4列布局 */
+@media (min-width: 1600px) {
   .wrapper-content.sidebar-collapsed .posts-grid {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 1500px;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1600px;
     gap: 3rem;
   }
 }
 
 /* 侧边栏折叠时搜索框居中 */
 .wrapper-content.sidebar-collapsed .modern-search-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto 2rem auto;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 768px) {
   .wrapper-content.sidebar-collapsed .modern-search-container {
-    max-width: 1200px;
+    max-width: 1100px;
   }
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 1200px) {
   .wrapper-content.sidebar-collapsed .modern-search-container {
-    max-width: 1500px;
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed .modern-search-container {
+    max-width: 1600px;
   }
 }
 
 /* 侧边栏折叠时分页器居中 */
 .wrapper-content.sidebar-collapsed .pagination {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 2rem auto;
   text-align: center;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 768px) {
   .wrapper-content.sidebar-collapsed .pagination {
-    max-width: 1200px;
+    max-width: 1100px;
   }
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 1200px) {
   .wrapper-content.sidebar-collapsed .pagination {
-    max-width: 1500px;
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed .pagination {
+    max-width: 1600px;
   }
 }
 
@@ -2946,14 +2970,16 @@ footer .svg-icon svg:hover {
     max-width: 100%;
     width: 100%;
   }
-  /* 移动端侧边栏折叠时优化网格布局 */
+  /* 移动端侧边栏折叠时优化网格布局 - 保持卡片式布局 */
   .mobile-sidebar-collapsed .wrapper-content .posts-grid {
-    grid-template-columns: 1fr;
+    display: grid;
     max-width: 100%;
     margin: 0 auto;
     gap: 1.5rem;
+    /* 手机默认单列 */
+    grid-template-columns: 1fr;
   }
-  /* 平板设备允许两列布局 */
+  /* 平板设备：2列布局 */
 }
 
 @media (max-width: 1200px) and (min-width: 768px) and (max-width: 1200px) {
