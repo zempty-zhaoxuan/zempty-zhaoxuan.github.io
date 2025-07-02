@@ -28,8 +28,8 @@
   animation: fadeInSearch 0.3s ease forwards;
   position: relative;
   border-bottom: 1px solid var(--divider-color);
-  padding: 12px 15px;
-  margin-bottom: 5px;
+  padding: 8px 12px; /* 减少内边距 */
+  margin-bottom: 3px; /* 减少外边距 */
   background-color: var(--background-color);
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -110,10 +110,10 @@
 #results-container:not(:empty) {
   max-height: 500px;
   overflow-y: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  border-radius: 6px; /* 减少圆角 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 减少阴影强度 */
   background-color: var(--background-color);
-  padding: 12px;
+  padding: 6px; /* 减少内边距 */
   opacity: 1;
   border: 1px solid var(--divider-color);
 }
@@ -127,8 +127,8 @@
 
 #results-container li:hover {
   background-color: var(--background-lighten-color);
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+  transform: translateY(-1px); /* 减少悬停移动距离 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04); /* 减少悬停阴影强度 */
 }
 
 #results-container li a {

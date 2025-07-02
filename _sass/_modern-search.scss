@@ -18,7 +18,7 @@
   // Modern search input
   .search-input {
     width: 100%;
-    padding: $space-md $space-xl $space-md $space-xxl;
+    padding: $space-md $space-xl $space-md 50px;
     border: 2px solid var(--search-border);
     border-radius: 50px;
     background: var(--search-background);
@@ -50,10 +50,10 @@
   // Search icon
   .search-icon {
     position: absolute;
-    left: $space-lg;
+    left: 18px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
     color: var(--search-placeholder);
     transition: color $transition-fast;
     pointer-events: none;
@@ -126,14 +126,14 @@
   right: 0;
   background: var(--search-background);
   border: 1px solid var(--search-border);
-  border-radius: $space-md;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border-radius: 8px; // 适中的圆角
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); // 减少阴影强度
   max-height: 70vh;
   overflow-y: auto;
   z-index: $z-dropdown + 10;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
+  transform: translateY(-5px); // 减少初始偏移
   transition: all $transition-normal;
 
   &.show {
@@ -162,109 +162,135 @@
     border-bottom: 1px solid var(--divider-color);
     transition: all $transition-fast;
     cursor: pointer;
-    border-radius: 8px;
-    margin-bottom: 2px;
+    background: var(--search-background);
+    position: relative;
 
     &:hover {
       background: var(--search-result-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-      .result-title {
-        color: var(--link-color);
-      }
-    }
-
-    &:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid var(--link-color);
     }
 
     &:last-child {
       border-bottom: none;
     }
 
-    // Result title
-    .result-title {
-      font-size: $font-size-lg;
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: $space-xs;
-      text-decoration: none;
-      display: block;
-      transition: color $transition-fast;
-      pointer-events: none; // Prevent double-click since parent handles navigation
-      position: relative;
-
-      // Highlight matched text
-      mark {
-        background: var(--warning-color);
-        color: white;
-        padding: 2px 4px;
-        border-radius: 4px;
-        font-weight: 700;
-      }
-    }
-
-    // Result meta (date, category, etc.)
-    .result-meta {
-      display: flex;
-      align-items: center;
-      gap: $space-md;
-      margin-bottom: $space-sm;
-      font-size: $font-size-sm;
-      color: var(--blockquote-color);
-
-      .result-date::before {
-        content: '📅';
-        margin-right: $space-xs;
-      }
-
-      .result-category {
-        background: var(--background-lighten-color);
-        padding: 2px $space-xs;
-        border-radius: 4px;
-        font-size: $font-size-xs;
-      }
-    }
-
-    // Result excerpt
-    .result-excerpt {
-      font-size: $font-size-sm;
-      line-height: 1.5;
-      color: var(--text-color);
-      opacity: 0.8;
-
-      mark {
-        background: rgba(var(--link-color-rgb), 0.2);
-        color: var(--link-color);
-        padding: 1px 3px;
-        border-radius: 3px;
+    // Result header section - 标题和基本信息区域
+    .result-header {
+      margin-bottom: $space-md;
+      
+      .result-title {
+        font-size: $font-size-xl;
         font-weight: 600;
-      }
-    }
-
-    // Result tags
-    .result-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: $space-xs;
-      margin-top: $space-sm;
-
-      .tag {
-        background: var(--background-lighten-color);
-        color: var(--blockquote-color);
-        padding: 2px $space-xs;
-        border-radius: 10px;
-        font-size: $font-size-xs;
-        text-decoration: none;
-        transition: all $transition-fast;
-
-        &:hover {
-          background: var(--link-color);
-          color: white;
+        line-height: 1.3;
+        margin: 0 0 $space-sm 0;
+        
+        a {
+          color: var(--text-color);
+          text-decoration: none;
+          transition: color $transition-fast;
+          
+          &:hover {
+            color: var(--link-color);
+          }
+          
+          // Highlight matched text
+          mark {
+            background: var(--warning-color);
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 700;
+          }
         }
       }
+
+      .result-meta {
+        display: flex;
+        align-items: center;
+        gap: $space-md;
+        font-size: $font-size-sm;
+        
+        .result-date {
+          display: flex;
+          align-items: center;
+          gap: $space-xs;
+          color: var(--blockquote-color);
+          font-weight: 400;
+        }
+
+        .result-score {
+          background: var(--link-color);
+          color: white;
+          padding: 3px 8px;
+          border-radius: 12px;
+          font-size: $font-size-xs;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    // Result content section - 摘要和标签区域
+    .result-content {
+      
+      .result-excerpt {
+        font-size: $font-size-base;
+        line-height: 1.5;
+        color: var(--text-color);
+        opacity: 0.8;
+        margin: 0 0 $space-md 0;
+        
+        // 确保摘要不会过长
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        mark {
+          background: rgba(var(--link-color-rgb), 0.2);
+          color: var(--link-color);
+          padding: 1px 2px;
+          border-radius: 2px;
+          font-weight: 500;
+        }
+      }
+
+      // Result tags - 标签区域
+      .result-tags, .search-result-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-xs;
+
+        .tag, .search-tag {
+          background: var(--background-lighten-color);
+          color: var(--blockquote-color);
+          padding: 3px 8px;
+          border-radius: 12px;
+          font-size: $font-size-xs;
+          text-decoration: none;
+          transition: all $transition-fast;
+          border: 1px solid var(--divider-color);
+          font-weight: 400;
+
+          &:hover {
+            background: var(--link-color);
+            color: white;
+            border-color: var(--link-color);
+          }
+
+          &.matched {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    // Enhanced state for search results
+    &.enhanced {
+      // 移除额外的边框样式，保持简洁
     }
   }
 
@@ -400,13 +426,13 @@
     margin: 0 $space-md $space-lg;
 
     .search-input {
-      padding: $space-md $space-lg $space-md $space-xl;
+      padding: $space-md $space-lg $space-md 40px; // 移动端调整左内边距
       font-size: $font-size-base;
     }
 
     .search-icon {
-      left: $space-md;
-      font-size: $font-size-lg;
+      left: 14px; // 移动端调整图标位置
+      font-size: $font-size-base;
     }
 
     .search-shortcut {
@@ -420,10 +446,40 @@
     max-height: 60vh;
 
     .search-result-item {
-      padding: $space-md;
+      padding: $space-md; // 移动端统一内边距
 
-      .result-title {
-        font-size: $font-size-base;
+      .result-header {
+        margin-bottom: $space-sm;
+        
+        .result-title {
+          font-size: $font-size-lg;
+          margin-bottom: $space-xs;
+        }
+
+        .result-meta {
+          gap: $space-sm;
+          font-size: $font-size-xs;
+          
+          .result-score {
+            padding: 2px 6px;
+            font-size: $font-size-xs;
+          }
+        }
+      }
+
+      .result-content {
+        .result-excerpt {
+          font-size: $font-size-sm;
+          line-height: 1.4;
+          margin-bottom: $space-sm;
+        }
+        
+        .result-tags, .search-result-tags {
+          .tag, .search-tag {
+            padding: 2px 6px;
+            font-size: $font-size-xs;
+          }
+        }
       }
     }
   }

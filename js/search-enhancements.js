@@ -161,13 +161,19 @@
 
         html += 
           `<div class="search-result-item enhanced" data-url="${post.url}">` +
-          `<a href="${post.url}" class="result-title">${highlightedTitle}</a>` +
+          `<div class="result-header">` +
+          `<h3 class="result-title">` +
+          `<a href="${post.url}">${highlightedTitle}</a>` +
+          `</h3>` +
           `<div class="result-meta">` +
-          `<span class="result-date">${post.date}</span>` +
-          `<span class="result-score" title="相关度分数: ${result.score}">相关度: ${getRelevanceLabel(result.score)}</span>` +
+          `<span class="result-date">📅 ${post.date}</span>` +
+          `<span class="result-score">${getRelevanceLabel(result.score)}</span>` +
           `</div>` +
+          `</div>` +
+          `<div class="result-content">` +
+          `<p class="result-excerpt">${highlightedExcerpt}</p>` +
           tagsHtml +
-          `<div class="result-excerpt">${highlightedExcerpt}</div>` +
+          `</div>` +
           `</div>`;
       });
 
@@ -188,9 +194,9 @@
     }
 
     function getRelevanceLabel(score) {
-      if (score >= 15) return '⭐⭐⭐ 非常相关';
-      if (score >= 10) return '⭐⭐ 相关';
-      return '⭐ 部分相关';
+      if (score >= 15) return '高度匹配';
+      if (score >= 10) return '相关';
+      return '部分匹配';
     }
 
     function escapeHtml(text) {

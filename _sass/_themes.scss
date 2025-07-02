@@ -19,6 +19,7 @@
   --tag-index-label-background-color: #e9ecef;
   --tag-index-count-background-color: #f1f3f5;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  --accent-color-rgb: 32, 201, 151;
   
   // Modern Card Variables - 现代卡片变量
   --card-background: #ffffff;
@@ -67,6 +68,7 @@
   --tag-index-label-background-color: #495057;
   --tag-index-count-background-color: #343a40;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  --accent-color-rgb: 32, 201, 151;
   
   // Modern Card Variables - 深色主题卡片变量
   --card-background: #2d3338;
@@ -115,6 +117,7 @@
   --tag-index-label-background-color: #e9ecef;
   --tag-index-count-background-color: #f1f3f5;
   --accent-color: #{$accent-color}; // 引入强调色变量
+  --accent-color-rgb: 32, 201, 151;
   
   // Modern Card Variables - 浅色主题卡片变量
   --card-background: #ffffff;

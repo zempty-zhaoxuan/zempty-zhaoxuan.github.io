@@ -66,11 +66,15 @@ layout: default
         resultsContainer: searchResults,
         json: '{{ site.baseurl }}/search.json',
         searchResultTemplate: '<div class="search-result-item" data-url="{url}">' + 
-                              '<a href="{url}" class="result-title">{title}</a>' +
+                              '<div class="result-header">' +
+                              '<h3 class="result-title"><a href="{url}">{title}</a></h3>' +
                               '<div class="result-meta">' +
-                              '<span class="result-date">{date}</span>' +
+                              '<span class="result-date">📅 {date}</span>' +
                               '</div>' +
-                              '<div class="result-excerpt">{excerpt}</div>' +
+                              '</div>' +
+                              '<div class="result-content">' +
+                              '<p class="result-excerpt">{excerpt}</p>' +
+                              '</div>' +
                               '</div>',
         noResultsText: '<div class="no-results">' +
                        '<div class="no-results-icon">🔍</div>' +

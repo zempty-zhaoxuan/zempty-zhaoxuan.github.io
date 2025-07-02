@@ -1052,48 +1052,92 @@ nav {
   font-weight: 300;
   padding: 40px 0;
   width: 100%;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   @include mobile {
     font-size: $small-font-size;
     padding: 24px 0;
   }
 
+  // 页码数字居中显示
+  .page_num,
+  .pagination__page-number {
+    flex: 0 0 auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 10px 20px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    
+    @include mobile {
+      font-size: $small-font-size;
+      padding: 8px 16px;
+    }
+  }
+
   > .prev {
-    float: left;
-    width: 50%;
+    flex: 0 0 auto;
+    
     a {
       color: var(--text-color);
       opacity: 0.8;
       border: 1px solid var(--divider-color);
       padding: 10px 20px;
       background: var(--background-color);
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s ease;
 
       &:hover,
       &:focus {
         color: var(--link-lighten-color);
         border: 1px solid var(--link-lighten-color);
         background-color: var(--link-bghv-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      @include mobile {
+        padding: 8px 16px;
+        font-size: $small-font-size;
       }
     }
   }
 
   > .next {
-    float: right;
-    text-align: right;
-    width: 50%;
+    flex: 0 0 auto;
+    
     a {
       color: var(--text-color);
       opacity: 0.8;
       border: 1px solid var(--divider-color);
       padding: 10px 20px;
       background: var(--background-color);
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s ease;
 
       &:hover,
       &:focus {
         color: var(--link-lighten-color);
         border: 1px solid var(--link-lighten-color);
         background-color: var(--link-bghv-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      @include mobile {
+        padding: 8px 16px;
+        font-size: $small-font-size;
       }
     }
   }
