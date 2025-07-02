@@ -1,72 +1,128 @@
 <div class="wrapper-sidebar" style="border: none; box-shadow: none; background-color: var(--background-color);">
-  <header class="sidebar clearfix" style="border: none; border-bottom: none; background-color: var(--background-color);">
-    <div class="site-info" style="border: none; box-shadow: none;">
-      {% if site.avatar %}
-        <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
-      {% endif %} 
-      <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
-      <p class="site-description">{{ site.description }}</p>
+  <!-- 现代化品牌区域 -->
+  <div class="site-branding">
+    <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
+    <p class="site-description">{{ site.description }}</p>
+  </div>
+
+  <!-- 现代化导航区域 -->
+  <nav class="modern-nav">
+    {% for nav in site.navigation %}
+      {% assign is_external = false %}
+      {% if nav.url contains 'http://' or nav.url contains 'https://' %}
+        {% assign is_external = true %}
+      {% endif %}
+
+      {% assign item_url = nav.url %}
+      {% unless is_external %}
+        {% assign item_url = nav.url | relative_url %}
+      {% endunless %}
+
+      {% assign is_active = false %}
+      {% if page.url == item_url %}
+        {% assign is_active = true %}
+      {% endif %}
+      {% if item_url == "/" and page.url == "/index.html" %}
+         {% assign is_active = true %} {# Handle index page special case #}
+      {% endif %}
+
+      {% assign nav_icon = '' %}
+      {% case nav.name %}
+        {% when '首页' %}
+          {% assign nav_icon = '🏠' %}
+        {% when '标签' %}
+          {% assign nav_icon = '🏷️' %}
+        {% when '归档' %}
+          {% assign nav_icon = '📚' %}
+        {% when '关于' %}
+          {% assign nav_icon = '👤' %}
+        {% else %}
+          {% assign nav_icon = '📄' %}
+      {% endcase %}
+
+      <a href="{{ item_url }}" class="nav-item {% if is_active %}active{% endif %}">
+        <span class="nav-icon">{{ nav_icon }}</span>
+        {{ nav.name }}
+      </a>
+    {% endfor %}
+  </nav>
+
+  <!-- 搜索功能 -->
+  <div class="sidebar-search">
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="搜索文章..." />
+      <button id="search-btn">🔍</button>
     </div>
-  </header>
+    <div id="search-results" class="search-results"></div>
+  </div>
 
-  <div class="navlist" style="border: none; border-bottom: none; box-shadow: none; background-color: var(--background-color);">
-    <nav>
-      {% for nav in site.navigation %}
-        {% assign is_external = false %}
-        {% if nav.url contains 'http://' or nav.url contains 'https://' %}
-          {% assign is_external = true %}
-        {% endif %}
+  <!-- 博客统计 -->
+  <div class="blog-stats">
+    <div class="stat-item">
+      <span class="stat-number">{{ site.posts.size }}</span>
+      <span class="stat-label">篇文章</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{ site.tags.size }}</span>
+      <span class="stat-label">个标签</span>
+    </div>
+  </div>
 
-        {% assign item_url = nav.url %}
-        {% unless is_external %}
-          {% assign item_url = nav.url | relative_url %}
-        {% endunless %}
-
-        {% assign is_active = false %}
-        {% if page.url == item_url %}
-          {% assign is_active = true %}
-        {% endif %}
-        {% if item_url == "/" and page.url == "/index.html" %}
-           {% assign is_active = true %} {# Handle index page special case #}
-        {% endif %}
-
-        <a href="{{ item_url }}" {% if is_active %}class="active"{% endif %}>{{ nav.name }}</a>
+  <!-- 热门标签云 -->
+  <div class="popular-tags">
+    <h4>🏷️ 热门标签</h4>
+    <div class="tag-cloud">
+      {% assign sorted_tags = site.tags | sort: site.tags.size | reverse %}
+      {% for tag in sorted_tags limit:8 %}
+      <a href="/tags#{{ tag[0] }}" class="tag-item" data-count="{{ tag[1].size }}">
+        {{ tag[0] }}
+        <span class="tag-count">{{ tag[1].size }}</span>
+      </a>
       {% endfor %}
-    </nav>
+    </div>
+  </div>
+
+  <!-- 最新文章 -->
+  <div class="recent-posts">
+    <h4>📄 最新文章</h4>
+    {% for post in site.posts limit:5 %}
+    <div class="recent-post-item">
+      <a href="{{ post.url }}">
+        <span class="post-title">{{ post.title | truncate: 28 }}</span>
+        <span class="post-date">{{ post.date | date: "%m-%d" }}</span>
+      </a>
+    </div>
+    {% endfor %}
   </div>
   
-  <!-- 文章归档日历 -->
-  <div class="sidebar-archive responsive-hide" style="background-color: var(--background-color); border: none; box-shadow: none; margin: 0; padding-top: 5px;">
-    <div class="archive-calendar" style="background-color: var(--background-color); border: none; box-shadow: none;">
-      {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
-      {% assign sorted_months = post_months | sort: "name" | reverse %}
-      {% for month in sorted_months limit:12 %}
-        {% assign month_date = month.name | split: "-" %}
-        {% assign year = month_date[0] %}
-        {% assign month_num = month_date[1] %}
-        {% case month_num %}
-          {% when '01' %}{% assign month_name = "一月" %}
-          {% when '02' %}{% assign month_name = "二月" %}
-          {% when '03' %}{% assign month_name = "三月" %}
-          {% when '04' %}{% assign month_name = "四月" %}
-          {% when '05' %}{% assign month_name = "五月" %}
-          {% when '06' %}{% assign month_name = "六月" %}
-          {% when '07' %}{% assign month_name = "七月" %}
-          {% when '08' %}{% assign month_name = "八月" %}
-          {% when '09' %}{% assign month_name = "九月" %}
-          {% when '10' %}{% assign month_name = "十月" %}
-          {% when '11' %}{% assign month_name = "十一月" %}
-          {% when '12' %}{% assign month_name = "十二月" %}
-        {% endcase %}
-        <a href="{{ site.baseurl }}/archive/#{{ month.name }}" class="archive-month">
-          <div class="month-block">
-            <span class="month-name">{{ month_name }}</span>
-            <span class="month-year">{{ year }}</span>
-            <span class="post-count">{{ month.items.size }}</span>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
+  <!-- 现代化归档时间线 -->
+  <div class="archive-timeline responsive-hide">
+    <h4>📅 文章归档</h4>
+    {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
+    {% assign sorted_months = post_months | sort: "name" | reverse %}
+    {% for month in sorted_months limit:8 %}
+      {% assign month_date = month.name | split: "-" %}
+      {% assign year = month_date[0] %}
+      {% assign month_num = month_date[1] %}
+      {% case month_num %}
+        {% when '01' %}{% assign month_name = "一月" %}
+        {% when '02' %}{% assign month_name = "二月" %}
+        {% when '03' %}{% assign month_name = "三月" %}
+        {% when '04' %}{% assign month_name = "四月" %}
+        {% when '05' %}{% assign month_name = "五月" %}
+        {% when '06' %}{% assign month_name = "六月" %}
+        {% when '07' %}{% assign month_name = "七月" %}
+        {% when '08' %}{% assign month_name = "八月" %}
+        {% when '09' %}{% assign month_name = "九月" %}
+        {% when '10' %}{% assign month_name = "十月" %}
+        {% when '11' %}{% assign month_name = "十一月" %}
+        {% when '12' %}{% assign month_name = "十二月" %}
+      {% endcase %}
+      <a href="{{ site.baseurl }}/archive/#{{ month.name }}" class="timeline-item">
+        <div class="archive-date">{{ month_name }} {{ year }}</div>
+        <span class="post-count">{{ month.items.size }}</span>
+      </a>
+    {% endfor %}
   </div>
 
   <div class="wrapper-footer-desktop" style="border: none; border-top: none; box-shadow: none; background-color: var(--background-color);">
