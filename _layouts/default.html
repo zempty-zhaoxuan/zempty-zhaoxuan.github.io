@@ -47,17 +47,17 @@
 
     <!-- 右下角浮动按钮组 -->
     <div class="floating-buttons">
-      <!-- 主题切换按钮 -->
-      <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
-      
-      <!-- 侧边栏折叠按钮 -->
-      <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">☰</button>
-      
-      <!-- 移动端侧边栏折叠按钮 -->
-      <button id="mobile-sidebar-toggle" aria-label="折叠/展开移动端侧边栏" title="折叠/展开移动端侧边栏">☰</button>
-      
       <!-- 返回首页按钮 -->
       <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
+      
+      <!-- 桌面端侧边栏折叠按钮 (水平折叠) -->
+      <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">☰</button>
+      
+      <!-- 移动端侧边栏折叠按钮 (垂直折叠) -->
+      <button id="mobile-sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">▼</button>
+      
+      <!-- 主题切换按钮 -->
+      <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
     </div>
 
     {% include analytics.html %}

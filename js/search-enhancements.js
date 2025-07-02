@@ -236,6 +236,7 @@
     });
 
     // Add search tips
+    /* Search tips removed as per requirement to remove prompt text above the search bar.
     const searchContainer = document.querySelector('.modern-search-container');
     if (searchContainer) {
       const tipsHtml = 
@@ -245,6 +246,7 @@
       
       searchContainer.insertAdjacentHTML('afterbegin', tipsHtml);
     }
+    */
 
     console.log('Enhanced search initialized');
   }

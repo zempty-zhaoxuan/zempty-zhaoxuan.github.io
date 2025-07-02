@@ -10,80 +10,96 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.querySelector(".wrapper-sidebar");
   const themeToggle = document.getElementById("theme-toggle");
   const homeButton = document.getElementById("home-button");
+  
+  // 检查关键元素是否存在
+  if (!wrapper || !sidebar) {
+    console.error("Essential elements (wrapper-content or wrapper-sidebar) not found");
+    return;
+  }
   const currentState = localStorage.getItem("sidebar-state");
   const mobileSidebarState = localStorage.getItem("mobile-sidebar-state");
   const sidebarArchive = document.querySelector(".sidebar-archive");
 
   // 桌面版侧边栏状态应用
-  if (currentState === "collapsed") {
-    wrapper.classList.add("sidebar-collapsed");
-    sidebar.classList.add("collapsed");
-    sidebarToggle.innerHTML = "≡";
-    sidebarToggle.setAttribute("title", "展开侧边栏");
-  } else {
-    sidebarToggle.innerHTML = "«";
-    sidebarToggle.setAttribute("title", "折叠侧边栏");
+  if (sidebarToggle) {
+    if (currentState === "collapsed") {
+      wrapper.classList.add("sidebar-collapsed");
+      sidebar.classList.add("collapsed");
+      sidebarToggle.innerHTML = "≡";
+      sidebarToggle.setAttribute("title", "展开侧边栏");
+    } else {
+      sidebarToggle.innerHTML = "«";
+      sidebarToggle.setAttribute("title", "折叠侧边栏");
+    }
   }
 
   // 移动版侧边栏状态应用
-  if (mobileSidebarState === "collapsed") {
-    sidebar.classList.add("mobile-collapsed");
-    document.body.classList.add("mobile-sidebar-collapsed");
-    mobileSidebarToggle.innerHTML = "▼";
-    mobileSidebarToggle.setAttribute("title", "展开侧边栏");
-  } else {
-    mobileSidebarToggle.innerHTML = "▲";
-    mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
-  }
-
-  // 桌面版切换侧边栏状态
-  sidebarToggle.addEventListener("click", function () {
-    wrapper.classList.toggle("sidebar-collapsed");
-    sidebar.classList.toggle("collapsed");
-
-    if (wrapper.classList.contains("sidebar-collapsed")) {
-      localStorage.setItem("sidebar-state", "collapsed");
-      sidebarToggle.setAttribute("title", "展开侧边栏");
-      sidebarToggle.innerHTML = "≡";
-    } else {
-      localStorage.setItem("sidebar-state", "expanded");
-      sidebarToggle.setAttribute("title", "折叠侧边栏");
-      sidebarToggle.innerHTML = "«";
-    }
-  });
-
-  // 移动版切换侧边栏状态
-  mobileSidebarToggle.addEventListener("click", function () {
-    sidebar.classList.toggle("mobile-collapsed");
-    document.body.classList.toggle("mobile-sidebar-collapsed");
-
-    if (sidebar.classList.contains("mobile-collapsed")) {
-      localStorage.setItem("mobile-sidebar-state", "collapsed");
-      mobileSidebarToggle.innerHTML = "▼";
+  if (mobileSidebarToggle) {
+    if (mobileSidebarState === "collapsed") {
+              sidebar.classList.add("mobile-collapsed");
+        document.body.classList.add("mobile-sidebar-collapsed");
+        if (mobileSidebarToggle) mobileSidebarToggle.innerHTML = "▼";
       mobileSidebarToggle.setAttribute("title", "展开侧边栏");
     } else {
-      localStorage.setItem("mobile-sidebar-state", "expanded");
       mobileSidebarToggle.innerHTML = "▲";
       mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
     }
-  });
+  }
+
+  // 桌面版切换侧边栏状态
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener("click", function () {
+      wrapper.classList.toggle("sidebar-collapsed");
+      sidebar.classList.toggle("collapsed");
+
+      if (wrapper.classList.contains("sidebar-collapsed")) {
+        localStorage.setItem("sidebar-state", "collapsed");
+        sidebarToggle.setAttribute("title", "展开侧边栏");
+        sidebarToggle.innerHTML = "≡";
+      } else {
+        localStorage.setItem("sidebar-state", "expanded");
+        sidebarToggle.setAttribute("title", "折叠侧边栏");
+        sidebarToggle.innerHTML = "«";
+      }
+    });
+  }
+
+  // 移动版切换侧边栏状态
+  if (mobileSidebarToggle) {
+    mobileSidebarToggle.addEventListener("click", function () {
+      sidebar.classList.toggle("mobile-collapsed");
+      document.body.classList.toggle("mobile-sidebar-collapsed");
+
+      if (sidebar.classList.contains("mobile-collapsed")) {
+        localStorage.setItem("mobile-sidebar-state", "collapsed");
+        mobileSidebarToggle.innerHTML = "▼";
+        mobileSidebarToggle.setAttribute("title", "展开侧边栏");
+      } else {
+        localStorage.setItem("mobile-sidebar-state", "expanded");
+        mobileSidebarToggle.innerHTML = "▲";
+        mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
+      }
+    });
+  }
 
   // 设置返回首页按钮的提示文字
-  homeButton.setAttribute("title", "返回首页");
+  if (homeButton) {
+    homeButton.setAttribute("title", "返回首页");
+  }
 
   // 主题变化监听，同步更新按钮样式
   const updateButtonsByTheme = function () {
     // 复用主题切换按钮的样式逻辑
     if (document.body.classList.contains("dark-theme")) {
       // 深色主题
-      sidebarToggle.classList.add("dark-theme");
-      mobileSidebarToggle.classList.add("dark-theme");
-      homeButton.classList.add("dark-theme");
+      if (sidebarToggle) sidebarToggle.classList.add("dark-theme");
+      if (mobileSidebarToggle) mobileSidebarToggle.classList.add("dark-theme");
+      if (homeButton) homeButton.classList.add("dark-theme");
     } else {
       // 浅色主题
-      sidebarToggle.classList.remove("dark-theme");
-      mobileSidebarToggle.classList.remove("dark-theme");
-      homeButton.classList.remove("dark-theme");
+      if (sidebarToggle) sidebarToggle.classList.remove("dark-theme");
+      if (mobileSidebarToggle) mobileSidebarToggle.classList.remove("dark-theme");
+      if (homeButton) homeButton.classList.remove("dark-theme");
     }
   };
 
@@ -91,10 +107,12 @@ document.addEventListener("DOMContentLoaded", function () {
   updateButtonsByTheme();
 
   // 监听主题切换事件
-  themeToggle.addEventListener("click", function () {
-    // 主题切换后稍微延迟更新按钮样式
-    setTimeout(updateButtonsByTheme, 50);
-  });
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      // 主题切换后稍微延迟更新按钮样式
+      setTimeout(updateButtonsByTheme, 50);
+    });
+  }
 
   // 响应式处理
   const handleResize = function () {
@@ -102,8 +120,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const windowHeight = window.innerHeight;
     // 检测iPad Pro和中等尺寸屏幕
     const isIPadPro = windowWidth >= SCREEN_MD_MIN && windowWidth <= SCREEN_MD_MAX;
-    const isMediumScreen = windowWidth > SCREEN_MD_MAX && windowWidth <= SCREEN_LG_MAX; // Use SCREEN_MD_MAX as lower bound
+    const isMediumScreen = windowWidth > SCREEN_MD_MAX && windowWidth <= SCREEN_LG_MAX;
     const isPortrait = windowHeight > windowWidth;
+    // 检测iPhone横屏 (通常宽度在800-950px之间，高度较小)
+    const isIPhoneLandscape = windowWidth >= 800 && windowWidth <= 950 && windowHeight <= 500;
+    
+    // 调试信息 (可在控制台查看)
+    console.log(`Screen: ${windowWidth}x${windowHeight}, iPad Pro: ${isIPadPro}, Medium: ${isMediumScreen}, Portrait: ${isPortrait}, iPhone Landscape: ${isIPhoneLandscape}`);
     
     // 处理文章归档日历显示
     if (sidebarArchive) {
@@ -117,26 +140,29 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 中等尺寸屏幕（1144px × 1010px左右）或移动设备或iPad Pro竖屏使用垂直折叠功能
-    if (windowWidth <= SCREEN_LG_MAX || (isIPadPro && isPortrait)) {
+    // 中等尺寸屏幕、移动设备、iPad Pro竖屏、iPhone横屏使用垂直折叠功能
+    if (windowWidth <= SCREEN_LG_MAX || (isIPadPro && isPortrait) || isIPhoneLandscape) {
       // 重置桌面折叠状态
       wrapper.classList.remove("sidebar-collapsed");
       sidebar.classList.remove("collapsed");
 
       // 设置移动端折叠按钮
-      sidebarToggle.style.display = "none";
-      mobileSidebarToggle.style.display = "flex";
+      if (sidebarToggle) sidebarToggle.style.display = "none";
+      if (mobileSidebarToggle) mobileSidebarToggle.style.display = "flex";
+      console.log("使用移动端按钮 (垂直折叠)");
       
       // 确保箭头朝上或朝下
-      if (sidebar.classList.contains("mobile-collapsed")) {
-        mobileSidebarToggle.innerHTML = "▼";
-      } else {
-        mobileSidebarToggle.innerHTML = "▲";
+      if (mobileSidebarToggle) {
+        if (sidebar.classList.contains("mobile-collapsed")) {
+          mobileSidebarToggle.innerHTML = "▼";
+        } else {
+          mobileSidebarToggle.innerHTML = "▲";
+        }
       }
 
       // 默认折叠侧边栏以最大化内容区域
       if (!sidebar.classList.contains("mobile-collapsed") && 
-          (isMediumScreen || isIPadPro || windowWidth <= SCREEN_SM)) { // Use SCREEN_SM here
+          (isMediumScreen || isIPadPro || isIPhoneLandscape || windowWidth <= SCREEN_SM)) {
         
         // Only update localStorage if the state actually changes to "collapsed"
         const currentMobileSidebarState = localStorage.getItem("mobile-sidebar-state");
@@ -153,8 +179,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // 大屏幕桌面设备使用水平折叠功能
       sidebar.classList.remove("mobile-collapsed");
       document.body.classList.remove("mobile-sidebar-collapsed");
-      sidebarToggle.style.display = "flex";
-      mobileSidebarToggle.style.display = "none";
+      if (sidebarToggle) sidebarToggle.style.display = "flex";
+      if (mobileSidebarToggle) mobileSidebarToggle.style.display = "none";
+      console.log("使用桌面端按钮 (水平折叠)");
     }
   };
 

@@ -68,7 +68,7 @@ pre.highlight code .line:before {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  justify-content: flex-end !important;
+  justify-content: center !important;
   gap: 12px !important;
   height: 45px !important;
   z-index: 1000 !important;
@@ -77,6 +77,7 @@ pre.highlight code .line:before {
   padding: 0 !important;
   /* 确保容器本身对齐 */
   line-height: 45px !important;
+  grid-template-columns: none !important;
 }
 
 /* 统一所有浮动按钮的样式 - 包括button和a标签 */
@@ -166,8 +167,19 @@ pre.highlight code .line:before {
   padding-top: 1px !important;
 }
 
-/* 移动端适配 */
-@media screen and (max-width: 768px) {
+/* 大屏幕桌面端适配 - 仅在超大屏幕显示桌面端按钮 */
+@media screen and (min-width: 1201px) {
+  #mobile-sidebar-toggle {
+    display: none !important;
+  }
+  
+  #sidebar-toggle {
+    display: inline-flex !important;
+  }
+}
+
+/* 中等屏幕和移动端适配 - iPad Pro、iPhone横屏等 */
+@media screen and (max-width: 1200px) {
   .floating-buttons {
     bottom: 15px !important;
     right: 15px !important;
@@ -189,7 +201,27 @@ pre.highlight code .line:before {
   }
   
   #mobile-sidebar-toggle {
-    display: flex !important;
+    display: inline-flex !important;
+    font-size: 16px !important;
+  }
+}
+
+/* 超小屏幕适配 */
+@media screen and (max-width: 480px) {
+  .floating-buttons {
+    bottom: 12px !important;
+    right: 12px !important;
+    gap: 8px !important;
+  }
+  
+  .floating-buttons > * {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    font-size: 16px !important;
   }
 }
 
@@ -286,28 +318,32 @@ pre.highlight code .line:before {
   color: #ffd700;
 }
 
-/* 额外的浮动按钮对齐修复 */
+/* =====================================================
+   Floaing buttons alignment - override grid fix (2025-07-02)
+   强制使用 Flexbox 保持水平排列，避免 Grid 布局造成错乱
+===================================================== */
 .floating-buttons {
-  /* 使用CSS Grid确保完美对齐 */
-  display: grid !important;
-  grid-template-columns: repeat(3, 45px) !important;
-  grid-gap: 12px !important;
+  display: flex !important;         /* 使用 Flex 水平排列 */
+  flex-direction: row !important;
   align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;             /* 按钮间距 */
+  grid-template-columns: none !important; /* 取消 Grid 设置 */
 }
 
-/* 移除之前的flex相关样式 */
+/* 兼容所有子按钮尺寸，避免被 width:100% 撑开 */
 .floating-buttons > *,
 .floating-buttons > button,
 .floating-buttons > a {
-  /* 确保所有按钮占据整个网格单元 */
-  width: 100% !important;
-  height: 100% !important;
+  width: 45px !important;
+  height: 45px !important;
 }
 
-/* 移动端保持flex布局 */
-@media screen and (max-width: 768px) {
+/* 确保中等屏幕和移动端仍维持同样布局（可以结合之前媒体查询调整） */
+@media screen and (max-width: 1200px) {
   .floating-buttons {
     display: flex !important;
-    grid-template-columns: none !important;
+    flex-direction: row !important;
+    gap: 10px !important;
   }
 }
