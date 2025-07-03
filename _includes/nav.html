@@ -72,8 +72,8 @@
   <div class="popular-tags">
     <h4>🏷️ 热门标签</h4>
     <div class="tag-cloud">
-      {% assign sorted_tags = site.tags | sort: site.tags.size | reverse %}
-      {% for tag in sorted_tags limit:8 %}
+      {% assign sorted_tags_array = site.tags | sort %}
+      {% for tag in sorted_tags_array limit:8 %}
       <a href="/tags#{{ tag[0] }}" class="tag-item" data-count="{{ tag[1].size }}">
         {{ tag[0] }}
         <span class="tag-count">{{ tag[1].size }}</span>
@@ -99,8 +99,8 @@
   <div class="archive-timeline responsive-hide">
     <h4>📅 文章归档</h4>
     {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
-    {% assign sorted_months = post_months | sort: "name" | reverse %}
-    {% for month in sorted_months limit:8 %}
+    {% assign sorted_months_array = post_months | reverse %}
+    {% for month in sorted_months_array limit:8 %}
       {% assign month_date = month.name | split: "-" %}
       {% assign year = month_date[0] %}
       {% assign month_num = month_date[1] %}
