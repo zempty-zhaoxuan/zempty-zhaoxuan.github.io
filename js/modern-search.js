@@ -40,10 +40,10 @@ class ModernSearch {
   }
   
   bindEvents() {
-    // 输入框事件
+    // 输入框事件 - 移除长度限制，支持单字符搜索
     this.searchInput.addEventListener('input', this.debounce((e) => {
       const query = e.target.value.trim();
-      if (query.length >= 2) {
+      if (query.length >= 1) { // 改为支持单字符搜索
         this.performSearch(query);
       } else {
         this.hideResults();
@@ -55,7 +55,7 @@ class ModernSearch {
       this.searchBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const query = this.searchInput.value.trim();
-        if (query.length >= 2) {
+        if (query.length >= 1) { // 改为支持单字符搜索
           this.performSearch(query);
         }
       });
@@ -66,7 +66,7 @@ class ModernSearch {
       if (e.key === 'Enter') {
         e.preventDefault();
         const query = this.searchInput.value.trim();
-        if (query.length >= 2) {
+        if (query.length >= 1) { // 改为支持单字符搜索
           this.performSearch(query);
         }
       }
@@ -213,9 +213,7 @@ class ModernSearch {
   }
   
   formatTags(tags) {
-    return tags.slice(0, 3).map(tag => 
-      `<span class="search-tag">${tag}</span>`
-    ).join('');
+    return tags.map(tag => `<span class="search-tag">${tag}</span>`).join(' ');
   }
   
   showResults() {
@@ -234,16 +232,11 @@ class ModernSearch {
     this.searchInput.blur();
   }
   
-  // 工具函数
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
+  debounce(func, delay) {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
   }
   

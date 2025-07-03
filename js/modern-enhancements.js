@@ -93,7 +93,7 @@
 
     // Save search to history
     function saveToHistory(query) {
-      if (!query || query.length < 2) return;
+      if (!query || query.length < 1) return; // 改为支持单字符搜索历史
       
       // Remove duplicates and add to beginning
       searchHistory = searchHistory.filter(item => item !== query);

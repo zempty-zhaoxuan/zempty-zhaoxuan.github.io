@@ -124,9 +124,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const isPortrait = windowHeight > windowWidth;
     // 检测iPhone横屏 (通常宽度在800-950px之间，高度较小)
     const isIPhoneLandscape = windowWidth >= 800 && windowWidth <= 950 && windowHeight <= 500;
+    // 检测iPad Pro竖屏
+    const isIPadProPortrait = isIPadPro && isPortrait;
     
     // 调试信息 (可在控制台查看)
-    console.log(`Screen: ${windowWidth}x${windowHeight}, iPad Pro: ${isIPadPro}, Medium: ${isMediumScreen}, Portrait: ${isPortrait}, iPhone Landscape: ${isIPhoneLandscape}`);
+    console.log(`Screen: ${windowWidth}x${windowHeight}, iPad Pro: ${isIPadPro}, iPad Pro Portrait: ${isIPadProPortrait}, Medium: ${isMediumScreen}, Portrait: ${isPortrait}, iPhone Landscape: ${isIPhoneLandscape}`);
     
     // 处理文章归档日历显示
     if (sidebarArchive) {
@@ -141,8 +143,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 中等尺寸屏幕、移动设备、iPad Pro竖屏、iPhone横屏使用垂直折叠功能
-    if (windowWidth <= SCREEN_LG_MAX || (isIPadPro && isPortrait) || isIPhoneLandscape) {
-      // 重置桌面折叠状态
+    if (windowWidth <= SCREEN_LG_MAX || isIPadProPortrait || isIPhoneLandscape) {
+      // 强制重置桌面折叠状态，特别是对于手机横屏
       wrapper.classList.remove("sidebar-collapsed");
       sidebar.classList.remove("collapsed");
 
@@ -162,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // 默认折叠侧边栏以最大化内容区域
       if (!sidebar.classList.contains("mobile-collapsed") && 
-          (isMediumScreen || isIPadPro || isIPhoneLandscape || windowWidth <= SCREEN_SM)) {
+          (isMediumScreen || isIPadProPortrait || isIPhoneLandscape || windowWidth <= SCREEN_SM)) {
         
         // Only update localStorage if the state actually changes to "collapsed"
         const currentMobileSidebarState = localStorage.getItem("mobile-sidebar-state");

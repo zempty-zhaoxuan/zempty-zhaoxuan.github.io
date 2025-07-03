@@ -511,8 +511,10 @@ img {
   border-right: 1px solid var(--divider-color);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
+  padding-bottom: 45px; // 为底部固定的footer留出空间（优化后更紧凑）
 
-  @include mobile {
+  // 在小屏幕设备上使用相对定位 (768px以下)
+  @media screen and (max-width: 768px) {
     width: 100%;
     height: auto;
     padding-bottom: 0;
@@ -521,6 +523,11 @@ img {
     border-right: 0;
     transform: none !important; // 确保移动端不会被折叠
     background-color: var(--background-lighten-color);
+  }
+
+  // iPad Pro portrait模式下不需要底部间距
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    padding-bottom: 0;
   }
 
   @include ipad-pro-portrait {
@@ -536,7 +543,8 @@ img {
   padding: 20px 0;
   background-color: transparent;
 
-  @include mobile {
+  // 只在真正的小屏幕设备上调整样式 (768px以下)
+  @media screen and (max-width: 768px) {
     text-align: center;
   }
 }
@@ -575,18 +583,62 @@ img {
   cursor: pointer;
   font-family: $base-font;
   font-weight: 700;
-  font-size: 28px;
-  letter-spacing: 1px;
+  font-size: 32px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  transition: all 0.3s ease;
+  
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent-color), var(--link-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+  }
+  
+  @include mobile {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
 }
 
 .site-description {
-  margin: 15px auto;
+  margin: 20px auto;
   color: var(--text-color);
-  opacity: 0.8;
-  font-size: 16px;
+  opacity: 0.9;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 280px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--background-lighten-color), rgba(255,255,255,0.05));
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    border-color: rgba(255,255,255,0.2);
+  }
 
   @include mobile {
-    margin: 10px auto;
+    margin: 15px auto;
+    font-size: 16px;
+    max-width: 90%;
+    padding: 10px 16px;
+    border-radius: 20px;
   }
 }
 
@@ -685,14 +737,15 @@ nav {
   width: calc(100% - 250px);
   margin-left: 250px;
 
-  @include mobile {
+  // 只在真正的小屏幕设备上调整布局 (768px以下)
+  @media screen and (max-width: 768px) {
     float: none;
     width: 100%;
     margin-left: 0;
   }
 }
 
-// iPad Pro portrait mode optimization
+// iPad Pro portrait mode optimization - 恢复垂直折叠功能
 @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
   .wrapper-sidebar {
     width: 100%;
@@ -702,7 +755,7 @@ nav {
     border-bottom: none;
     border-right: 0;
     transform: none !important;
-    background-color: var(--background-color);
+    background-color: var(--background-lighten-color);
   }
 
   .wrapper-content {
@@ -1215,49 +1268,125 @@ nav {
   }
 }
 
-// Footer
+// Footer - 固定在侧边栏底部（桌面端）
 .wrapper-footer-desktop {
-  margin-top: 50px;
-  border-top: 1px solid var(--footer-border-color);
-  background-color: var(--footer-background-color);
-  position: absolute;
-  clear: both;
-  width: 100%;
+  position: fixed;
   bottom: 0;
+  left: 0;
+  width: 250px;
+  background-color: var(--background-lighten-color);
+  border-top: 1px solid var(--divider-color);
+  padding: 4px 0;
+  z-index: 5;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 
-  @include mobile {
+  // 在真正的移动设备上隐藏 (手机端，767px以下)
+  @media screen and (max-width: 767px) {
     display: none;
+  }
+
+  // iPad Pro portrait模式下使用相对定位，支持侧边栏折叠
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    left: auto !important;
+    bottom: auto !important;
+    background-color: var(--background-color) !important;
+    box-shadow: none !important;
+    border-top: 1px solid var(--divider-color) !important;
+    margin-top: 20px !important;
+    padding: 8px 0 !important;
+    z-index: 1 !important;
+  }
+
+  // iPad Pro landscape模式下隐藏桌面端footer，使用移动端footer
+  @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (max-height: 1024px) {
+    display: none;
+  }
+
+  // 对于中等屏幕设备（小尺寸笔记本等），在宽度不足时隐藏
+  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+    display: none;
+  }
+  
+  // 特别确保iPad Pro竖屏时显示footer
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    display: block !important;
+  }
+
+  // 固定footer内的内容更紧凑
+  footer {
+    padding: 4px 0 !important;
+    margin: 0 !important;
+    
+    .svg-icon {
+      margin: 0;
+      
+      li {
+        margin: 3px !important;
+      }
+      
+      svg {
+        height: 16px !important;
+        width: 16px !important;
+      }
+    }
   }
 }
 
 .wrapper-footer-mobile {
   display: none;
 
-  @include mobile {
+  // 在手机端显示 (767px以下)
+  @media screen and (max-width: 767px) {
     display: block;
     width: 100%;
     border-top: none;
     margin-top: 20px;
     background-color: var(--background-color);
   }
+
+  // 在iPad Pro landscape模式下显示
+  @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (max-height: 1024px) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
+
+  // 在中等屏幕设备上显示 (1025px-1199px)，避免与iPad Pro竖屏冲突
+  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
 }
 
 footer {
-  padding: 20px 0;
+  padding: 8px 0;
   text-align: center;
 
-  @include mobile {
-    padding: 10px 0;
+  // 在手机端调整样式 (767px以下)
+  @media screen and (max-width: 767px) {
+    padding: 15px 0;
+  }
+
+  // 在平板和中等屏幕设备上调整样式 (768px-1199px)
+  @media screen and (min-width: 768px) and (max-width: 1199px) {
+    padding: 12px 0;
   }
 
   p {
     font-size: $small-font-size;
     color: var(--text-color);
     opacity: 0.7;
-
-    @include mobile {
-      margin: 0.5em 0;
-    }
+    margin: 0.3em 0;
   }
 
   .svg-icon {
@@ -1267,31 +1396,42 @@ footer {
     margin: 0;
     text-align: center;
 
-    @include mobile {
-      margin: 10px 0;
-    }
-
     li {
       display: inline-block;
-      margin: 10px;
+      margin: 5px;
 
-      @include mobile {
-        margin: 5px;
+      // 在手机端增加图标间距 (767px以下)
+      @media screen and (max-width: 767px) {
+        margin: 8px;
+      }
+
+      // 在平板和中等屏幕设备上调整间距 (768px-1199px)
+      @media screen and (min-width: 768px) and (max-width: 1199px) {
+        margin: 6px;
       }
     }
 
     svg {
-      height: 20px;
-      width: 20px;
+      height: 18px;
+      width: 18px;
       fill: var(--text-color);
-      opacity: 0.7;
+      opacity: 0.8;
+      transition: all 0.3s ease;
 
       &:hover {
-        fill: var(--link-lighten-color);
+        fill: var(--accent-color);
         opacity: 1;
+        transform: scale(1.15) translateY(-1px);
       }
 
-      @include mobile {
+      // 在手机端调整图标大小 (767px以下)
+      @media screen and (max-width: 767px) {
+        height: 20px;
+        width: 20px;
+      }
+
+      // 在平板和中等屏幕设备上调整大小 (768px-1199px)
+      @media screen and (min-width: 768px) and (max-width: 1199px) {
         height: 18px;
         width: 18px;
       }
@@ -1418,14 +1558,16 @@ footer {
   border-right: none;
 }
 
-/* 移动端侧边栏折叠状态 */
+/* 移动端侧边栏折叠状态 - 上下折叠 */
 .wrapper-sidebar.mobile-collapsed {
-  height: 0;
-  padding: 0;
-  overflow: hidden;
-  border: none;
-  margin: 0;
-  box-shadow: none;
+  height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* 移动端UI优化 */
@@ -1723,6 +1865,71 @@ body.mobile-sidebar-collapsed {
   transition: height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* 手机横屏时的特殊处理 - 强制使用上下折叠 */
+@media screen and (max-width: 950px) and (orientation: landscape) and (max-height: 500px) {
+  /* 强制重置所有可能的水平折叠样式 */
+  .wrapper-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  
+  .wrapper-sidebar.collapsed {
+    /* 禁用桌面端的水平折叠 */
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .wrapper-sidebar.mobile-collapsed {
+    height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+  
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    height: auto !important;
+    padding: 20px 0 !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+  
+  /* 确保内容区域在手机横屏时的正确布局 */
+  .wrapper-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    float: none !important;
+  }
+  
+  .mobile-sidebar-collapsed .wrapper-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+  }
+  
+  /* 强制桌面端按钮隐藏，移动端按钮显示 */
+  #sidebar-toggle {
+    display: none !important;
+  }
+  
+  #mobile-sidebar-toggle {
+    display: flex !important;
+  }
+}
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
@@ -1837,8 +2044,8 @@ body.mobile-sidebar-collapsed {
   }
 }
 
-/* 修复竖屏模式下sidebar和文章内容之间的横线 */
-@media screen and (orientation: portrait) {
+/* 修复竖屏模式下sidebar和文章内容之间的横线 - 但排除手机横屏 */
+@media screen and (orientation: portrait) and (min-width: 951px) {
   .wrapper-sidebar {
     border-bottom: none !important;
     box-shadow: none !important;
