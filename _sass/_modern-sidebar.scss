@@ -1,0 +1,479 @@
+// 现代化侧边栏样式
+// Modern Sidebar Styles
+
+// ===== 品牌区域 =====
+.site-branding {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-light));
+  border-radius: 0 0 24px 24px;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  
+  // 装饰性背景
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  
+  .site-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    
+    a {
+      color: white;
+      text-decoration: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      }
+    }
+  }
+  
+  .site-description {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.9);
+    margin: 0.5rem 0 0;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ===== 现代化导航 =====
+.modern-nav {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: var(--background-lighten-color);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 400;
+    
+    &:hover {
+      background: var(--accent-color);
+      color: white;
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      text-decoration: none;
+      
+      .nav-icon {
+        transform: scale(1.1);
+      }
+    }
+    
+    &.active {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color-dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-icon {
+      margin-right: 0.5rem;
+      font-size: 1.1em;
+      transition: transform 0.3s ease;
+    }
+  }
+}
+
+// ===== 搜索功能 =====
+.sidebar-search {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  
+  .search-container {
+    position: relative;
+    display: flex;
+    background: var(--background-lighten-color);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--divider-color);
+    transition: all 0.3s ease;
+    
+    &:focus-within {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(var(--accent-color), 0.1);
+    }
+    
+    input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      font-size: 0.9rem;
+      outline: none;
+      
+      &::placeholder {
+        color: var(--muted-text-color);
+      }
+    }
+    
+    button {
+      padding: 0.75rem 1rem;
+      border: none;
+      background: var(--accent-color);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      
+      &:hover {
+        background: var(--accent-color-dark);
+      }
+    }
+  }
+  
+  .search-results {
+    margin-top: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    background: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: none;
+    
+    &.active {
+      display: block;
+    }
+  }
+}
+
+// ===== 博客统计 =====
+.blog-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 1.5rem 1rem;
+  margin-bottom: 2rem;
+  background: var(--background-lighten-color);
+  border-radius: 16px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  
+  .stat-item {
+    text-align: center;
+    
+    .stat-number {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      line-height: 1.2;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted-text-color);
+      font-weight: 400;
+    }
+  }
+}
+
+// ===== 热门标签云 =====
+.popular-tags {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    
+    .tag-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.8rem;
+      background: var(--background-lighten-color);
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--divider-color);
+      
+      &:hover {
+        background: var(--accent-color);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      
+      .tag-count {
+        margin-left: 0.3rem;
+        background: var(--accent-color-light);
+        color: var(--accent-color-dark);
+        padding: 0.1rem 0.4rem;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      
+      &:hover .tag-count {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+    }
+  }
+}
+
+// ===== 最新文章 =====
+.recent-posts {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  
+  .recent-post-item {
+    margin-bottom: 0.75rem;
+    
+    a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: var(--background-lighten-color);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: var(--accent-color);
+        color: white;
+        text-decoration: none;
+        transform: translateX(4px);
+        
+        .post-date {
+          color: rgba(255,255,255,0.8);
+        }
+      }
+      
+      .post-title {
+        flex: 1;
+        font-size: 0.85rem;
+        color: var(--text-color);
+        font-weight: 500;
+      }
+      
+      .post-date {
+        font-size: 0.75rem;
+        color: var(--muted-text-color);
+        margin-left: 0.5rem;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// ===== 现代化归档时间线 =====
+.archive-timeline {
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  
+  .timeline-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.8rem 0.6rem 2rem;
+    margin-bottom: 0.75rem;
+    background: var(--background-lighten-color);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px var(--accent-color-light);
+    }
+    
+    &:hover {
+      background: var(--accent-color);
+      color: white;
+      text-decoration: none;
+      transform: translateX(4px);
+      
+      &::before {
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+      }
+      
+      .post-count {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+    }
+    
+    .archive-date {
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 0.85rem;
+    }
+    
+    .post-count {
+      background: var(--accent-color-light);
+      color: var(--accent-color-dark);
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+// ===== 深色主题适配 =====
+.dark-theme {
+  .site-branding {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-color-dark));
+  }
+  
+  .modern-nav .nav-item,
+  .blog-stats,
+  .popular-tags .tag-cloud .tag-item,
+  .recent-posts .recent-post-item a,
+  .archive-timeline .timeline-item,
+  .sidebar-search .search-container {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+  }
+  
+  .sidebar-search .search-results {
+    background: var(--background-color-dark);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+// ===== 响应式设计 =====
+@media (max-width: 768px) {
+  .site-branding {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+    
+    .site-name {
+      font-size: 1.5rem;
+    }
+    
+    .site-description {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .modern-nav {
+    padding: 0 0.5rem;
+    
+    .nav-item {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .blog-stats {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 1rem 0.5rem;
+    
+    .stat-item .stat-number {
+      font-size: 1.3rem;
+    }
+  }
+  
+  .popular-tags,
+  .recent-posts,
+  .archive-timeline {
+    padding: 0 0.5rem;
+  }
+  
+  .sidebar-search {
+    padding: 0 0.5rem;
+  }
+}
+
+// ===== 动画增强 =====
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modern-nav .nav-item,
+.recent-posts .recent-post-item,
+.archive-timeline .timeline-item {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.blog-stats .stat-item {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.popular-tags .tag-cloud .tag-item {
+  animation: fadeInUp 0.3s ease-out;
+}
