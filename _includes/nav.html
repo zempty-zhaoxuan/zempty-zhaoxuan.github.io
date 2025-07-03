@@ -1,6 +1,6 @@
-<div class="wrapper-sidebar" style="border: none; box-shadow: none; background-color: var(--background-color);">
-  <header class="sidebar clearfix" style="border: none; border-bottom: none; background-color: var(--background-color);">
-    <div class="site-info" style="border: none; box-shadow: none;">
+<div class="wrapper-sidebar">
+  <header class="sidebar clearfix">
+    <div class="site-info">
       {% if site.avatar %}
         <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
       {% endif %} 
@@ -9,7 +9,7 @@
     </div>
   </header>
 
-  <div class="navlist" style="border: none; border-bottom: none; box-shadow: none; background-color: var(--background-color);">
+  <div class="navlist">
     <nav>
       {% for nav in site.navigation %}
         {% assign is_external = false %}
@@ -36,8 +36,8 @@
   </div>
   
   <!-- 文章归档日历 -->
-  <div class="sidebar-archive responsive-hide" style="background-color: var(--background-color); border: none; box-shadow: none; margin: 0; padding-top: 5px;">
-    <div class="archive-calendar" style="background-color: var(--background-color); border: none; box-shadow: none;">
+  <div class="sidebar-archive responsive-hide">
+    <div class="archive-calendar">
       {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
       {% assign sorted_months = post_months | sort: "name" | reverse %}
       {% for month in sorted_months limit:12 %}
@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  <div class="wrapper-footer-desktop" style="border: none; border-top: none; box-shadow: none; background-color: var(--background-color);">
+  <div class="wrapper-footer-desktop">
     <footer class="footer">
       {% include footer.html %}
     </footer>
