@@ -9,19 +9,20 @@ class ModernSearch {
     this.posts = [];
     this.isInitialized = false;
     
-    this.init();
+    // 确保元素存在才初始化
+    if (this.searchInput && this.searchBtn && this.resultsContainer) {
+      this.init();
+    } else {
+      console.warn('Modern search elements not found, skipping initialization');
+    }
   }
   
   async init() {
-    if (!this.searchInput || !this.searchBtn || !this.resultsContainer) {
-      console.warn('Search elements not found');
-      return;
-    }
-    
     try {
       await this.loadPosts();
       this.bindEvents();
       this.isInitialized = true;
+      console.log('Modern search initialized successfully');
     } catch (error) {
       console.error('Failed to initialize search:', error);
     }

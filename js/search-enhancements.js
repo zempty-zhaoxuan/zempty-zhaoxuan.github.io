@@ -16,12 +16,18 @@
 
   function enhanceSearch() {
     const searchInput = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('results-container');
+    const resultsContainer = document.getElementById('search-results');
     
     if (!searchInput || !resultsContainer) {
-      console.error('Search elements not found');
+      console.error('Search elements not found for enhancement');
+      console.log('Available elements:', {
+        searchInput: !!searchInput,
+        resultsContainer: !!resultsContainer
+      });
       return;
     }
+    
+    console.log('Search enhancement initialized successfully');
 
     // Store original search data
     let searchData = [];
