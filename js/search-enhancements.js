@@ -16,7 +16,7 @@
 
   function enhanceSearch() {
     const searchInput = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('search-results');
+    const resultsContainer = document.getElementById('results-container');
     
     if (!searchInput || !resultsContainer) {
       console.error('Search elements not found for enhancement');
@@ -27,7 +27,7 @@
       return;
     }
     
-    console.log('Search enhancement initialized successfully');
+    console.log('Search enhancement initialized successfully on homepage');
 
     // Store original search data
     let searchData = [];

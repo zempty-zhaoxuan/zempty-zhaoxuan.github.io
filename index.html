@@ -1,7 +1,22 @@
 ---
 layout: default
 ---
-<!-- 主页搜索功能由侧边栏提供，这里不再重复 -->
+<div class="modern-search-container">
+  <div class="search-input-wrapper">
+    <input type="text" id="search-input" class="search-input" placeholder="搜索博客文章..." autocomplete="off">
+    <div class="search-icon">🔍</div>
+    <button class="search-clear" id="search-clear" title="清除搜索">×</button>
+    <div class="search-shortcut">Ctrl+K</div>
+  </div>
+  <div class="modern-search-results" id="results-container">
+    <!-- 搜索结果将在这里显示 -->
+  </div>
+</div>
+
+<!--script src="https://unpkg.com/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script-->
+<script src="{{ site.baseurl }}/js/simple-jekyll-search.min.js"></script>
+<script src="{{ site.baseurl }}/js/search-enhancements.js"></script>
+<script src="{{ site.baseurl }}/js/homepage-search-enhancements.js"></script>
 
 
  

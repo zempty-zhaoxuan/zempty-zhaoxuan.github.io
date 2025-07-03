@@ -5,12 +5,12 @@ class ModernSearch {
   constructor() {
     this.searchInput = document.getElementById('search-input');
     this.searchBtn = document.getElementById('search-btn');
-    this.resultsContainer = document.getElementById('search-results');
+    this.resultsContainer = document.getElementById('results-container');
     this.posts = [];
     this.isInitialized = false;
     
-    // 确保元素存在才初始化
-    if (this.searchInput && this.searchBtn && this.resultsContainer) {
+    // 确保元素存在才初始化（现在主要在首页使用）
+    if (this.searchInput && this.resultsContainer) {
       this.init();
     } else {
       console.warn('Modern search elements not found, skipping initialization');
@@ -50,14 +50,16 @@ class ModernSearch {
       }
     }, 300));
     
-    // 搜索按钮事件
-    this.searchBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const query = this.searchInput.value.trim();
-      if (query.length >= 2) {
-        this.performSearch(query);
-      }
-    });
+    // 搜索按钮事件（如果存在）
+    if (this.searchBtn) {
+      this.searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const query = this.searchInput.value.trim();
+        if (query.length >= 2) {
+          this.performSearch(query);
+        }
+      });
+    }
     
     // 回车键搜索
     this.searchInput.addEventListener('keydown', (e) => {
@@ -77,7 +79,7 @@ class ModernSearch {
     
     // 点击外部区域隐藏结果
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.sidebar-search')) {
+      if (!e.target.closest('.modern-search-container')) {
         this.hideResults();
       }
     });
