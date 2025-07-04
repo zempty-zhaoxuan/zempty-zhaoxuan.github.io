@@ -50,12 +50,28 @@ class ModernSearch {
     // 绑定首页搜索事件
     if (this.homepageSearch.input && this.homepageSearch.results) {
       this.bindSearchEvents(this.homepageSearch, "homepage");
+      this.bindClearButton(this.homepageSearch);
     }
 
     // 绑定侧边栏搜索事件
     if (this.sidebarSearch.input && this.sidebarSearch.results) {
       this.bindSearchEvents(this.sidebarSearch, "sidebar");
     }
+
+    // 绑定全局键盘快捷键
+    document.addEventListener("keydown", (e) => {
+      // Ctrl+K 或 Cmd+K 激活搜索
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+
+        // 智能选择搜索框
+        const targetSearchInput = this.getTargetSearchInput();
+        if (targetSearchInput) {
+          targetSearchInput.focus();
+          targetSearchInput.select();
+        }
+      }
+    });
 
     // 点击外部区域隐藏结果
     document.addEventListener("click", (e) => {
@@ -66,6 +82,28 @@ class ModernSearch {
         this.hideResults(this.homepageSearch);
         this.hideResults(this.sidebarSearch);
       }
+    });
+  }
+
+  bindClearButton(searchObj) {
+    const clearButton = document.getElementById("search-clear");
+    if (!clearButton) return;
+
+    // 监听输入变化，显示/隐藏清除按钮
+    searchObj.input.addEventListener("input", () => {
+      if (searchObj.input.value.trim()) {
+        clearButton.classList.add("show");
+      } else {
+        clearButton.classList.remove("show");
+      }
+    });
+
+    // 点击清除按钮
+    clearButton.addEventListener("click", () => {
+      searchObj.input.value = "";
+      clearButton.classList.remove("show");
+      this.hideResults(searchObj);
+      searchObj.input.focus();
     });
   }
 
@@ -96,6 +134,17 @@ class ModernSearch {
       // ESC键清空搜索
       if (e.key === "Escape") {
         this.clearSearch(searchObj);
+      }
+    });
+
+    // 焦点事件 - 当搜索框获得焦点时，如果有内容且有结果，显示结果
+    searchObj.input.addEventListener("focus", () => {
+      if (
+        searchObj.input.value.trim() &&
+        searchObj.results.innerHTML &&
+        !searchObj.results.innerHTML.includes("search-loading")
+      ) {
+        this.showResults(searchObj);
       }
     });
   }
@@ -305,6 +354,12 @@ class ModernSearch {
   clearSearch(searchObj) {
     searchObj.input.value = "";
     this.hideResults(searchObj);
+
+    // 隐藏清除按钮
+    const clearButton = document.getElementById("search-clear");
+    if (clearButton) {
+      clearButton.classList.remove("show");
+    }
   }
 
   debounce(func, wait) {
@@ -317,6 +372,116 @@ class ModernSearch {
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
+  }
+
+  // 智能选择目标搜索框
+  getTargetSearchInput() {
+    // 1. 首先检查是否在首页且首页搜索框可用
+    if (this.homepageSearch.input && this.isHomepageSearchVisible()) {
+      return this.homepageSearch.input;
+    }
+
+    // 2. 检查侧边栏搜索是否可用且侧边栏展开
+    if (this.sidebarSearch.input && this.isSidebarSearchAccessible()) {
+      return this.sidebarSearch.input;
+    }
+
+    // 3. 如果侧边栏折叠但搜索框存在，优先展开侧边栏然后激活搜索
+    if (this.sidebarSearch.input && this.isSidebarCollapsed()) {
+      this.expandSidebarForSearch();
+      return this.sidebarSearch.input;
+    }
+
+    // 4. 最后的回退选项：返回任何可用的搜索框
+    return this.homepageSearch.input || this.sidebarSearch.input;
+  }
+
+  // 检查首页搜索是否可见
+  isHomepageSearchVisible() {
+    if (!this.homepageSearch.input) return false;
+
+    // 检查搜索框是否在视图中且可见
+    const searchContainer = this.homepageSearch.input.closest(
+      ".modern-search-container"
+    );
+    if (!searchContainer) return false;
+
+    const style = window.getComputedStyle(searchContainer);
+    return (
+      style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      style.opacity !== "0"
+    );
+  }
+
+  // 检查侧边栏搜索是否可访问
+  isSidebarSearchAccessible() {
+    if (!this.sidebarSearch.input) return false;
+
+    const sidebar = document.querySelector(".wrapper-sidebar");
+    if (!sidebar) return false;
+
+    // 检查侧边栏是否展开（桌面端和移动端）
+    const isDesktopCollapsed = sidebar.classList.contains("collapsed");
+    const isMobileCollapsed = sidebar.classList.contains("mobile-collapsed");
+
+    return !isDesktopCollapsed && !isMobileCollapsed;
+  }
+
+  // 检查侧边栏是否折叠
+  isSidebarCollapsed() {
+    const sidebar = document.querySelector(".wrapper-sidebar");
+    if (!sidebar) return false;
+
+    return (
+      sidebar.classList.contains("collapsed") ||
+      sidebar.classList.contains("mobile-collapsed")
+    );
+  }
+
+  // 为搜索展开侧边栏
+  expandSidebarForSearch() {
+    const sidebar = document.querySelector(".wrapper-sidebar");
+    const wrapper = document.querySelector(".wrapper-content");
+
+    if (!sidebar) return;
+
+    // 检查屏幕大小以决定使用哪种切换方式
+    const isMobileSize = window.innerWidth <= 1200;
+
+    if (isMobileSize) {
+      // 移动端：使用垂直切换
+      if (sidebar.classList.contains("mobile-collapsed")) {
+        sidebar.classList.remove("mobile-collapsed");
+        document.body.classList.remove("mobile-sidebar-collapsed");
+
+        // 更新移动端按钮状态
+        const mobileSidebarToggle = document.getElementById(
+          "mobile-sidebar-toggle"
+        );
+        if (mobileSidebarToggle) {
+          mobileSidebarToggle.innerHTML = "▲";
+          mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
+        }
+
+        localStorage.setItem("mobile-sidebar-state", "expanded");
+      }
+    } else {
+      // 桌面端：使用水平切换
+      if (sidebar.classList.contains("collapsed")) {
+        sidebar.classList.remove("collapsed");
+        if (wrapper) wrapper.classList.remove("sidebar-collapsed");
+
+        // 更新桌面端按钮状态
+        const sidebarToggle = document.getElementById("sidebar-toggle");
+        if (sidebarToggle) {
+          sidebarToggle.innerHTML = "«";
+          sidebarToggle.setAttribute("title", "折叠侧边栏");
+        }
+
+        localStorage.setItem("sidebar-state", "expanded");
+      }
+    }
   }
 }
 
