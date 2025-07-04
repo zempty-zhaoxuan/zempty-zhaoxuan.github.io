@@ -1285,19 +1285,9 @@ nav {
     display: none;
   }
 
-  // iPad Pro portrait模式下使用相对定位，支持侧边栏折叠
+  // iPad Pro portrait模式下隐藏桌面端footer，使用移动端footer
   @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-    display: block !important;
-    position: relative !important;
-    width: 100% !important;
-    left: auto !important;
-    bottom: auto !important;
-    background-color: var(--background-color) !important;
-    box-shadow: none !important;
-    border-top: 1px solid var(--divider-color) !important;
-    margin-top: 20px !important;
-    padding: 8px 0 !important;
-    z-index: 1 !important;
+    display: none !important;
   }
 
   // iPad Pro landscape模式下隐藏桌面端footer，使用移动端footer
@@ -1310,10 +1300,7 @@ nav {
     display: none;
   }
   
-  // 特别确保iPad Pro竖屏时显示footer
-  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-    display: block !important;
-  }
+
 
   // 固定footer内的内容更紧凑
   footer {
@@ -1357,7 +1344,17 @@ nav {
     padding: 10px 0;
   }
 
-  // 在中等屏幕设备上显示 (1025px-1199px)，避免与iPad Pro竖屏冲突
+  // 在iPad Pro竖屏模式下显示
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
+
+  // 在中等屏幕设备上显示 (1025px-1199px)
   @media screen and (min-width: 1025px) and (max-width: 1199px) {
     display: block;
     width: 100%;
