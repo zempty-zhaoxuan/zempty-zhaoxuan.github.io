@@ -20,8 +20,8 @@ layout: null
 
 // Lxgw WenKai (霞鹜文楷)
 @font-face {
-  font-family: 'Lxgw WenKai';
-  src: url('assets/fonts/LxgwWenKai/LXGWWenKai-Regular.ttf') format('truetype');
+  font-family: "Lxgw WenKai";
+  src: url("assets/fonts/LxgwWenKai/LXGWWenKai-Regular.ttf") format("truetype");
   font-weight: normal; // 400
   font-style: normal;
   font-display: swap;
@@ -29,8 +29,9 @@ layout: null
 
 // JetBrains Mono - Regular
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Regular.woff2")
+    format("woff2");
   font-weight: normal; // 400
   font-style: normal;
   font-display: swap;
@@ -38,8 +39,9 @@ layout: null
 
 // JetBrains Mono - Bold
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Bold.woff2') format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Bold.woff2")
+    format("woff2");
   font-weight: bold; // 700
   font-style: normal;
   font-display: swap;
@@ -47,8 +49,9 @@ layout: null
 
 // JetBrains Mono - Italic
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Italic.woff2') format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Italic.woff2")
+    format("woff2");
   font-weight: normal; // 400
   font-style: italic;
   font-display: swap;
@@ -56,8 +59,9 @@ layout: null
 
 // JetBrains Mono - Bold Italic
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-BoldItalic.woff2') format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-BoldItalic.woff2")
+    format("woff2");
   font-weight: bold; // 700
   font-style: italic;
   font-display: swap;
@@ -103,7 +107,7 @@ body {
     max-width: 100%;
     padding: 0 20px;
   }
-  
+
   @include mobile {
     padding: 0 15px;
     max-width: 100%;
@@ -441,7 +445,7 @@ img {
     color: #1a1a1a;
     background: var(--selection-background-color);
   }
-  
+
   ::selection {
     color: #1a1a1a;
     background: var(--selection-background-color);
@@ -469,7 +473,7 @@ img {
     border: none !important;
     height: 0 !important;
   }
-  
+
   .sidebar.clearfix {
     display: block !important;
     background: var(--background-color) !important;
@@ -587,7 +591,7 @@ img {
   letter-spacing: 1.5px;
   text-align: center;
   transition: all 0.3s ease;
-  
+
   a {
     color: var(--text-color);
     text-decoration: none;
@@ -596,13 +600,13 @@ img {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     transition: all 0.3s ease;
-    
+
     &:hover {
       transform: scale(1.05);
       filter: brightness(1.1);
     }
   }
-  
+
   @include mobile {
     font-size: 24px;
     letter-spacing: 1px;
@@ -620,17 +624,21 @@ img {
   text-align: center;
   letter-spacing: 0.5px;
   padding: 12px 20px;
-  background: linear-gradient(135deg, var(--background-lighten-color), rgba(255,255,255,0.05));
+  background: linear-gradient(
+    135deg,
+    var(--background-lighten-color),
+    rgba(255, 255, 255, 0.05)
+  );
   border-radius: 25px;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
-  
+
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   @include mobile {
@@ -694,7 +702,7 @@ nav {
       color: #fff;
       background-color: var(--accent-color); // Use accent color for active link
       font-weight: 600; // Make it bolder
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); // Subtle inner shadow
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); // Subtle inner shadow
     }
 
     @include mobile {
@@ -714,13 +722,19 @@ nav {
       &:hover,
       &:active {
         color: var(--accent-color); // Accent color on hover
-        background-color: rgba(var(--accent-color), 0.1); // Light accent background
+        background-color: rgba(
+          var(--accent-color),
+          0.1
+        ); // Light accent background
       }
 
       // Active style specific to mobile
       &.active {
         color: var(--accent-color); // Accent color
-        background-color: rgba(var(--accent-color), 0.15); // Slightly darker accent background
+        background-color: rgba(
+          var(--accent-color),
+          0.15
+        ); // Slightly darker accent background
         font-weight: 600;
         box-shadow: none; // Remove inner shadow on mobile
         border-left: 3px solid var(--accent-color); // Add left border indicator
@@ -820,7 +834,7 @@ nav {
   border: 1px solid var(--divider-color);
   border-radius: 8px;
   background-color: var(--background-lighten-color);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   width: 100%;
   max-width: 100%;
@@ -828,7 +842,7 @@ nav {
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -884,10 +898,13 @@ nav {
   width: 320px; /* Default width, can be adjusted by JS */
   max-height: calc(100vh - 120px); /* Adjust top/bottom margins */
   padding: 15px;
-  background-color: var(--toc-bg-color, var(--background-color)); /* Use theme variable or fallback */
+  background-color: var(
+    --toc-bg-color,
+    var(--background-color)
+  ); /* Use theme variable or fallback */
   border: 1px solid var(--divider-color); /* Changed from border-left */
   border-radius: 5px; /* Added */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Added */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added */
   overflow-y: auto;
   scrollbar-width: thin; /* Kept */
   z-index: 999; /* Kept, updated value */
@@ -932,14 +949,15 @@ nav {
     margin-bottom: 10px;
     line-height: 1.6;
     list-style: none; /* Ensure no default bullets */
-     &:before {
-       content: ""; /* Override default list style */
-       padding-right: 0;
-     }
+    &:before {
+      content: ""; /* Override default list style */
+      padding-right: 0;
+    }
   }
 
   // 一级目录项
-  > #toc-content > ul > li > a { /* Target links inside the content div */
+  > #toc-content > ul > li > a {
+    /* Target links inside the content div */
     color: #4285f4;
     font-weight: 500;
   }
@@ -986,11 +1004,11 @@ nav {
     overflow: visible !important; /* Allow button shadow if any */
 
     #toc-toggle-button {
-       margin-bottom: 0;
+      margin-bottom: 0;
     }
-     #toc-content {
-       display: none; // Hide content explicitly
-     }
+    #toc-content {
+      display: none; // Hide content explicitly
+    }
   }
 
   /* Dark theme adjustments (kept, adapted selectors) */
@@ -1021,13 +1039,14 @@ nav {
       color: #7baaf7;
     }
 
-    #toc-toggle-button { // Style button for dark theme if needed
-       background-color: var(--dark-button-bg, #444);
-       color: var(--dark-button-text, #eee);
-       border-color: var(--dark-divider-color, #555);
-       &:hover {
-         background-color: var(--dark-button-hover-bg, #555);
-       }
+    #toc-toggle-button {
+      // Style button for dark theme if needed
+      background-color: var(--dark-button-bg, #444);
+      color: var(--dark-button-text, #eee);
+      border-color: var(--dark-divider-color, #555);
+      &:hover {
+        background-color: var(--dark-button-hover-bg, #555);
+      }
     }
   }
 
@@ -1042,12 +1061,13 @@ nav {
   padding-right: 370px; /* Adjust this value based on original .toc width + gap */
   transition: padding-right 0.3s ease;
 
-  &.toc-collapsed { // Class added by JS
-     padding-right: 0 !important; /* Override padding when collapsed */
+  &.toc-collapsed {
+    // Class added by JS
+    padding-right: 0 !important; /* Override padding when collapsed */
   }
 
   @include mobile {
-     padding-right: 0 !important; // Ensure no padding on mobile
+    padding-right: 0 !important; // Ensure no padding on mobile
   }
 }
 
@@ -1128,7 +1148,7 @@ nav {
     line-height: 1.2;
     display: flex;
     align-items: center;
-    
+
     @include mobile {
       font-size: $small-font-size;
       padding: 8px 16px;
@@ -1137,7 +1157,7 @@ nav {
 
   > .prev {
     flex: 0 0 auto;
-    
+
     a {
       color: var(--text-color);
       opacity: 0.8;
@@ -1158,7 +1178,7 @@ nav {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
-      
+
       @include mobile {
         padding: 8px 16px;
         font-size: $small-font-size;
@@ -1168,7 +1188,7 @@ nav {
 
   > .next {
     flex: 0 0 auto;
-    
+
     a {
       color: var(--text-color);
       opacity: 0.8;
@@ -1189,7 +1209,7 @@ nav {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
-      
+
       @include mobile {
         padding: 8px 16px;
         font-size: $small-font-size;
@@ -1299,21 +1319,19 @@ nav {
   @media screen and (min-width: 1025px) and (max-width: 1199px) {
     display: none;
   }
-  
-
 
   // 固定footer内的内容更紧凑
   footer {
     padding: 4px 0 !important;
     margin: 0 !important;
-    
+
     .svg-icon {
       margin: 0;
-      
+
       li {
         margin: 3px !important;
       }
-      
+
       svg {
         height: 16px !important;
         width: 16px !important;
@@ -1540,7 +1558,7 @@ footer {
   #sidebar-toggle {
     display: none !important;
   }
-  
+
   #mobile-sidebar-toggle {
     display: flex !important;
     width: 45px !important;
@@ -1718,17 +1736,17 @@ footer {
   #mobile-sidebar-toggle {
     display: none !important;
   }
-  
+
   #sidebar-toggle {
     display: flex !important;
   }
-  
+
   /* 大屏幕下侧边栏折叠时的响应式优化 */
   .wrapper-content.sidebar-collapsed {
     padding-left: 3%;
     padding-right: 3%;
   }
-  
+
   .wrapper-content.sidebar-collapsed .container {
     max-width: 1400px;
   }
@@ -1740,7 +1758,7 @@ footer {
     padding-left: 5%;
     padding-right: 5%;
   }
-  
+
   .wrapper-content.sidebar-collapsed .container {
     max-width: 1600px;
   }
@@ -1752,7 +1770,7 @@ footer {
     padding-left: 2%;
     padding-right: 2%;
   }
-  
+
   .wrapper-content.sidebar-collapsed .container {
     max-width: 1100px;
   }
@@ -1763,11 +1781,11 @@ footer {
   #sidebar-toggle {
     display: none !important;
   }
-  
+
   #mobile-sidebar-toggle {
     display: flex !important;
   }
-  
+
   /* 移动端和平板端侧边栏折叠时的布局优化 */
   .mobile-sidebar-collapsed .wrapper-content {
     width: 100%;
@@ -1778,14 +1796,14 @@ footer {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .mobile-sidebar-collapsed .wrapper-content .container {
     max-width: 1000px;
     width: 100%;
     margin: 0 auto;
     padding: 0 15px;
   }
-  
+
   /* 移动端侧边栏折叠时文章列表的布局优化 */
   .mobile-sidebar-collapsed .wrapper-content .posts,
   .mobile-sidebar-collapsed .wrapper-content .posts-grid {
@@ -1796,13 +1814,13 @@ footer {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .mobile-sidebar-collapsed .wrapper-content .posts > .post,
   .mobile-sidebar-collapsed .wrapper-content .posts-grid > .post-card {
     max-width: 100%;
     width: 100%;
   }
-  
+
   /* 移动端侧边栏折叠时优化网格布局 - 保持卡片式布局 */
   .mobile-sidebar-collapsed .wrapper-content .posts-grid {
     display: grid;
@@ -1812,7 +1830,7 @@ footer {
     /* 手机默认单列 */
     grid-template-columns: 1fr;
   }
-  
+
   /* 平板设备：2列布局 */
   @media (min-width: 768px) and (max-width: 1200px) {
     .mobile-sidebar-collapsed .wrapper-content .posts-grid {
@@ -1821,13 +1839,13 @@ footer {
       gap: 2rem;
     }
   }
-  
+
   /* 移动端侧边栏折叠时搜索框居中 */
   .mobile-sidebar-collapsed .wrapper-content .modern-search-container {
     max-width: 100%;
     margin: 0 auto 1.5rem auto;
   }
-  
+
   /* 移动端侧边栏折叠时分页器居中 */
   .mobile-sidebar-collapsed .wrapper-content .pagination {
     max-width: 100%;
@@ -1873,14 +1891,14 @@ body.mobile-sidebar-collapsed {
     left: auto !important;
     top: auto !important;
   }
-  
+
   .wrapper-sidebar.collapsed {
     /* 禁用桌面端的水平折叠 */
     transform: none !important;
     width: 100% !important;
     height: auto !important;
   }
-  
+
   .wrapper-sidebar.mobile-collapsed {
     height: 0 !important;
     padding: 0 !important;
@@ -1893,7 +1911,7 @@ body.mobile-sidebar-collapsed {
     transform: none !important;
     width: 100% !important;
   }
-  
+
   .wrapper-sidebar:not(.mobile-collapsed) {
     height: auto !important;
     padding: 20px 0 !important;
@@ -1903,25 +1921,25 @@ body.mobile-sidebar-collapsed {
     transform: none !important;
     width: 100% !important;
   }
-  
+
   /* 确保内容区域在手机横屏时的正确布局 */
   .wrapper-content {
     width: 100% !important;
     margin-left: 0 !important;
     float: none !important;
   }
-  
+
   .mobile-sidebar-collapsed .wrapper-content {
     width: 100% !important;
     margin-left: 0 !important;
     margin-top: 10px !important;
   }
-  
+
   /* 强制桌面端按钮隐藏，移动端按钮显示 */
   #sidebar-toggle {
     display: none !important;
   }
-  
+
   #mobile-sidebar-toggle {
     display: flex !important;
   }
@@ -1975,7 +1993,7 @@ body.mobile-sidebar-collapsed {
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: rgba(0,0,0,0.05);
+  border-color: rgba(0, 0, 0, 0.05);
 }
 
 .tag-count {
@@ -2007,7 +2025,8 @@ body.mobile-sidebar-collapsed {
 
 /* 移动端适配 */
 @include mobile {
-  .sidebar-tags {
+  .sidebar-tags,
+  .popular-tags {
     padding: 0 15px;
     margin: 20px 0;
     display: none;
@@ -2017,17 +2036,41 @@ body.mobile-sidebar-collapsed {
     gap: 6px;
   }
 
-  .tag-cloud-item {
+  .tag-cloud-item,
+  .tag-item {
     padding: 3px 8px;
     font-size: 14px !important;
   }
-  
+
+  /* 现代化侧边栏移动端优化 */
+  .site-branding {
+    padding: 1.5rem 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .modern-nav {
+    padding: 0 1rem !important;
+  }
+
+  .blog-stats {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .sidebar-search,
+  .popular-tags,
+  .recent-posts,
+  .archive-timeline {
+    padding: 0 1rem !important;
+  }
+
   /* 小屏幕设备侧边栏折叠时的特殊优化 */
   .mobile-sidebar-collapsed .wrapper-content {
     padding-left: 1% !important;
     padding-right: 1% !important;
   }
-  
+
   .mobile-sidebar-collapsed .wrapper-content .container {
     max-width: 100% !important;
     padding: 0 10px !important;
@@ -2049,14 +2092,14 @@ body.mobile-sidebar-collapsed {
     background-image: none !important;
     margin-bottom: 0 !important;
   }
-  
+
   .wrapper-content {
     border-top: none !important;
     box-shadow: none !important;
     margin-top: 0 !important;
     background-image: none !important;
   }
-  
+
   /* 移除任何可能出现在两个容器之间的分隔线 */
   .wrapper-sidebar:after,
   .wrapper-sidebar:before,
@@ -2068,7 +2111,7 @@ body.mobile-sidebar-collapsed {
     background: none !important;
     height: 0 !important;
   }
-  
+
   /* 确保容器之间没有空隙 */
   .wrapper-sidebar + .wrapper-content {
     padding-top: 0 !important;
@@ -2084,13 +2127,13 @@ body.mobile-sidebar-collapsed {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
   }
-  
+
   /* 确保内容区域没有顶部边框 */
   .wrapper-content {
     border-top: none !important;
     padding-top: 0 !important;
   }
-  
+
   /* 移除侧边栏展开状态下的边框 */
   .wrapper-sidebar:not(.mobile-collapsed) {
     border-bottom: none !important;
@@ -2173,10 +2216,20 @@ textarea,
     transform: translateY(-5px);
   }
 
-  h1, h2, h3, h4, h5, h6 { // More specific selectors might be needed depending on post structure
-    color: var(--text-color-strong); // Assuming a variable for stronger text color
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    // More specific selectors might be needed depending on post structure
+    color: var(
+      --text-color-strong
+    ); // Assuming a variable for stronger text color
     a {
-      color: var(--text-color-strong); // Ensure links within titles also have strong contrast
+      color: var(
+        --text-color-strong
+      ); // Ensure links within titles also have strong contrast
       &:hover {
         color: var(--accent-color); // Keep hover effect for links
       }
@@ -2184,16 +2237,26 @@ textarea,
   }
 
   // Ensure the post title (typically h1 or h2 in the list) is prominent
-  > h1 a, > h2 a { // Targeting direct children h1/h2 of .post for the main title
-    color: var(--text-color-title, var(--text-color-strong)); // Use a specific title color or fallback
+  > h1 a,
+  > h2 a {
+    // Targeting direct children h1/h2 of .post for the main title
+    color: var(
+      --text-color-title,
+      var(--text-color-strong)
+    ); // Use a specific title color or fallback
     font-weight: bold; // Ensure it's bold
   }
-   > h1 a:hover, > h2 a:hover {
-     color: var(--accent-color);
-   }
+  > h1 a:hover,
+  > h2 a:hover {
+    color: var(--accent-color);
+  }
 
-  .entry p, .entry { // Assuming post content is within a div with class 'entry'
-    color: var(--text-color-muted); // Assuming a variable for muted/less prominent text
+  .entry p,
+  .entry {
+    // Assuming post content is within a div with class 'entry'
+    color: var(
+      --text-color-muted
+    ); // Assuming a variable for muted/less prominent text
     font-size: 0.95em; // Slightly smaller font for body
   }
 }
@@ -2206,7 +2269,10 @@ textarea,
   overflow: hidden;
   margin-bottom: 1.5em; // Add some space below the cover image
   border-radius: 6px; // Optional: match post card border radius
-  background-color: rgba(var(--link-color-rgb), 0.1); // Add placeholder background
+  background-color: rgba(
+    var(--link-color-rgb),
+    0.1
+  ); // Add placeholder background
 
   img {
     position: absolute;
@@ -2218,12 +2284,12 @@ textarea,
     border-radius: 6px; // Optional: match container's border radius
     transition: transform 0.3s ease; // For a subtle hover effect
   }
-  
+
   img.lazy {
     opacity: 0; // Hide lazy images until loaded
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
-  
+
   img.lazy-loaded {
     opacity: 1; // Show images when loaded
   }
@@ -2240,4 +2306,3 @@ textarea,
     margin-bottom: 1em;
   }
 }
-

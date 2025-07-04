@@ -1,127 +1,149 @@
 // 现代化搜索功能
-// Modern Search Functionality
+// Modern Search Functionality for Homepage and Sidebar
 
 class ModernSearch {
   constructor() {
-    this.searchInput = document.getElementById('search-input');
-    this.searchBtn = document.getElementById('search-btn');
-    this.resultsContainer = document.getElementById('results-container');
+    this.homepageSearch = {
+      input: document.getElementById("search-input"),
+      results: document.getElementById("results-container")
+    };
+
+    this.sidebarSearch = {
+      input: document.getElementById("sidebar-search-input"),
+      results: document.getElementById("sidebar-search-results")
+    };
+
     this.posts = [];
     this.isInitialized = false;
-    
-    // 确保元素存在才初始化（现在主要在首页使用）
-    if (this.searchInput && this.resultsContainer) {
-      this.init();
-    } else {
-      console.warn('Modern search elements not found, skipping initialization');
-    }
+
+    this.init();
   }
-  
+
   async init() {
+    if (this.isInitialized) return;
+
     try {
       await this.loadPosts();
       this.bindEvents();
       this.isInitialized = true;
-      console.log('Modern search initialized successfully');
+      console.log("Modern search initialized successfully");
     } catch (error) {
-      console.error('Failed to initialize search:', error);
+      console.error("Failed to initialize modern search:", error);
     }
   }
-  
+
   async loadPosts() {
     try {
-      const response = await fetch('/search.json');
-      const data = await response.json();
-      this.posts = data;
+      const response = await fetch("/search.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      this.posts = await response.json();
+      console.log(`Loaded ${this.posts.length} posts for search`);
     } catch (error) {
-      console.error('Failed to load posts:', error);
+      console.error("Error loading posts:", error);
       throw error;
     }
   }
-  
+
   bindEvents() {
-    // 输入框事件 - 移除长度限制，支持单字符搜索
-    this.searchInput.addEventListener('input', this.debounce((e) => {
-      const query = e.target.value.trim();
-      if (query.length >= 1) { // 改为支持单字符搜索
-        this.performSearch(query);
-      } else {
-        this.hideResults();
-      }
-    }, 300));
-    
-    // 搜索按钮事件（如果存在）
-    if (this.searchBtn) {
-      this.searchBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const query = this.searchInput.value.trim();
-        if (query.length >= 1) { // 改为支持单字符搜索
-          this.performSearch(query);
-        }
-      });
+    // 绑定首页搜索事件
+    if (this.homepageSearch.input && this.homepageSearch.results) {
+      this.bindSearchEvents(this.homepageSearch, "homepage");
     }
-    
+
+    // 绑定侧边栏搜索事件
+    if (this.sidebarSearch.input && this.sidebarSearch.results) {
+      this.bindSearchEvents(this.sidebarSearch, "sidebar");
+    }
+
+    // 点击外部区域隐藏结果
+    document.addEventListener("click", (e) => {
+      if (
+        !e.target.closest(".modern-search-container") &&
+        !e.target.closest(".sidebar-search")
+      ) {
+        this.hideResults(this.homepageSearch);
+        this.hideResults(this.sidebarSearch);
+      }
+    });
+  }
+
+  bindSearchEvents(searchObj, type) {
+    // 输入框事件
+    searchObj.input.addEventListener(
+      "input",
+      this.debounce((e) => {
+        const query = e.target.value.trim();
+        if (query.length >= 1) {
+          this.performSearch(query, searchObj, type);
+        } else {
+          this.hideResults(searchObj);
+        }
+      }, 300)
+    );
+
     // 回车键搜索
-    this.searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    searchObj.input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
         e.preventDefault();
-        const query = this.searchInput.value.trim();
-        if (query.length >= 1) { // 改为支持单字符搜索
-          this.performSearch(query);
+        const query = searchObj.input.value.trim();
+        if (query.length >= 1) {
+          this.performSearch(query, searchObj, type);
         }
       }
-      
+
       // ESC键清空搜索
-      if (e.key === 'Escape') {
-        this.clearSearch();
-      }
-    });
-    
-    // 点击外部区域隐藏结果
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.modern-search-container')) {
-        this.hideResults();
+      if (e.key === "Escape") {
+        this.clearSearch(searchObj);
       }
     });
   }
-  
-  performSearch(query) {
-    const results = this.searchPosts(query);
-    this.displayResults(results, query);
+
+  async performSearch(query, searchObj, type) {
+    if (!this.posts.length) {
+      await this.loadPosts();
+    }
+
+    const results = this.searchPosts(query, type);
+    this.displayResults(results, query, searchObj, type);
   }
-  
-  searchPosts(query) {
+
+  searchPosts(query, type) {
     const searchTerm = query.toLowerCase();
     const results = [];
-    
-    this.posts.forEach(post => {
+
+    this.posts.forEach((post) => {
       let score = 0;
       let matchedFields = [];
-      
+
       // 标题匹配（权重最高）
       if (post.title && post.title.toLowerCase().includes(searchTerm)) {
         score += 10;
-        matchedFields.push('title');
+        matchedFields.push("title");
       }
-      
+
       // 标签匹配
-      if (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchTerm))) {
+      if (
+        post.tags &&
+        post.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      ) {
         score += 5;
-        matchedFields.push('tags');
+        matchedFields.push("tags");
       }
-      
+
       // 内容匹配
       if (post.content && post.content.toLowerCase().includes(searchTerm)) {
         score += 2;
-        matchedFields.push('content');
+        matchedFields.push("content");
       }
-      
+
       // URL匹配
       if (post.url && post.url.toLowerCase().includes(searchTerm)) {
         score += 1;
-        matchedFields.push('url');
+        matchedFields.push("url");
       }
-      
+
       if (score > 0) {
         results.push({
           ...post,
@@ -130,41 +152,69 @@ class ModernSearch {
         });
       }
     });
-    
-    // 按分数排序
-    return results.sort((a, b) => b.score - a.score).slice(0, 10);
+
+    // 按分数排序，侧边栏显示更少结果
+    const limit = type === "sidebar" ? 8 : 10;
+    return results.sort((a, b) => b.score - a.score).slice(0, limit);
   }
-  
-  displayResults(results, query) {
+
+  displayResults(results, query, searchObj, type) {
     if (results.length === 0) {
-      this.resultsContainer.innerHTML = `
+      const isSidebar = type === "sidebar";
+      searchObj.results.innerHTML = `
         <div class="search-no-results">
-          <p>😕 没有找到包含 "<strong>${this.escapeHtml(query)}</strong>" 的文章</p>
-          <p class="search-tip">试试其他关键词或者检查拼写</p>
+          <p>😕 没有找到包含 "<strong>${this.escapeHtml(
+            query
+          )}</strong>" 的文章</p>
+          ${
+            !isSidebar
+              ? '<p class="search-tip">试试其他关键词或者检查拼写</p>'
+              : ""
+          }
         </div>
       `;
     } else {
-      const resultsHtml = results.map(post => this.createResultItem(post, query)).join('');
-      this.resultsContainer.innerHTML = `
+      const resultsHtml = results
+        .map((post) => this.createResultItem(post, query, type))
+        .join("");
+      searchObj.results.innerHTML = `
         <div class="search-results-header">
           <span>找到 ${results.length} 篇相关文章</span>
         </div>
         ${resultsHtml}
       `;
     }
-    
-    this.showResults();
+
+    this.showResults(searchObj);
   }
-  
-  createResultItem(post, query) {
+
+  createResultItem(post, query, type) {
     const highlightedTitle = this.highlightText(post.title, query);
-    const excerpt = this.createExcerpt(post.content, query);
-    const date = new Date(post.date).toLocaleDateString('zh-CN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    const excerptLength = type === "sidebar" ? 100 : 150;
+    const excerpt = this.createExcerpt(post.content, query, excerptLength);
+    const date = new Date(post.date).toLocaleDateString("zh-CN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
     });
-    
+
+    // 侧边栏搜索结果更紧凑
+    if (type === "sidebar") {
+      return `
+        <div class="search-result-item sidebar-result" data-score="${post.score}">
+          <div class="search-result-content">
+            <h4 class="search-result-title">
+              <a href="${post.url}">${highlightedTitle}</a>
+            </h4>
+            <p class="search-result-excerpt">${excerpt}</p>
+            <div class="search-result-meta">
+              <span class="search-result-date">📅 ${date}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     return `
       <div class="search-result-item" data-score="${post.score}">
         <div class="search-result-content">
@@ -174,80 +224,99 @@ class ModernSearch {
           <p class="search-result-excerpt">${excerpt}</p>
           <div class="search-result-meta">
             <span class="search-result-date">📅 ${date}</span>
-            ${post.tags ? `<span class="search-result-tags">${this.formatTags(post.tags)}</span>` : ''}
+            ${
+              post.tags
+                ? `<span class="search-result-tags">${this.formatTags(
+                    post.tags
+                  )}</span>`
+                : ""
+            }
           </div>
         </div>
       </div>
     `;
   }
-  
+
   createExcerpt(content, query, maxLength = 150) {
-    if (!content) return '';
-    
+    if (!content) return "";
+
     const searchTerm = query.toLowerCase();
     const contentLower = content.toLowerCase();
     const index = contentLower.indexOf(searchTerm);
-    
-    let excerpt = '';
+
+    let excerpt = "";
     if (index !== -1) {
       // 找到关键词，以关键词为中心创建摘要
       const start = Math.max(0, index - 50);
       const end = Math.min(content.length, index + 100);
       excerpt = content.slice(start, end);
-      if (start > 0) excerpt = '...' + excerpt;
-      if (end < content.length) excerpt = excerpt + '...';
+      if (start > 0) excerpt = "..." + excerpt;
+      if (end < content.length) excerpt = excerpt + "...";
     } else {
       // 没找到关键词，使用开头部分
       excerpt = content.slice(0, maxLength);
-      if (content.length > maxLength) excerpt += '...';
+      if (content.length > maxLength) excerpt += "...";
     }
-    
+
     return this.highlightText(excerpt, query);
   }
-  
+
   highlightText(text, query) {
     if (!text || !query) return text;
-    
-    const regex = new RegExp(`(${this.escapeRegExp(query)})`, 'gi');
-    return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    const regex = new RegExp(`(${this.escapeRegExp(query)})`, "gi");
+    return text.replace(regex, '<span class="search-highlight">$1</span>');
   }
-  
+
   formatTags(tags) {
-    return tags.map(tag => `<span class="search-tag">${tag}</span>`).join(' ');
+    if (!tags || !Array.isArray(tags)) return "";
+    return tags
+      .slice(0, 3)
+      .map((tag) => `<span class="search-tag">${this.escapeHtml(tag)}</span>`)
+      .join("");
   }
-  
-  showResults() {
-    this.resultsContainer.classList.add('active');
-    this.resultsContainer.style.display = 'block';
-  }
-  
-  hideResults() {
-    this.resultsContainer.classList.remove('active');
-    this.resultsContainer.style.display = 'none';
-  }
-  
-  clearSearch() {
-    this.searchInput.value = '';
-    this.hideResults();
-    this.searchInput.blur();
-  }
-  
-  debounce(func, delay) {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
-    };
-  }
-  
+
   escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const map = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    };
+    return text.replace(/[&<>"']/g, (m) => map[m]);
   }
-  
+
   escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  showResults(searchObj) {
+    searchObj.results.style.display = "block";
+    searchObj.results.classList.add("show", "active");
+  }
+
+  hideResults(searchObj) {
+    if (searchObj && searchObj.results) {
+      searchObj.results.style.display = "none";
+      searchObj.results.classList.remove("show", "active");
+    }
+  }
+
+  clearSearch(searchObj) {
+    searchObj.input.value = "";
+    this.hideResults(searchObj);
+  }
+
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
 }
 
@@ -394,10 +463,10 @@ const searchStyles = `
 `;
 
 // 初始化搜索功能
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // 添加样式
-  document.head.insertAdjacentHTML('beforeend', searchStyles);
-  
+  document.head.insertAdjacentHTML("beforeend", searchStyles);
+
   // 初始化搜索
   new ModernSearch();
 });

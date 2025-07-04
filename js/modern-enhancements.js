@@ -1,79 +1,79 @@
 // Modern Blog Enhancements
 // 现代化博客增强功能
 
-(function() {
-  'use strict';
+(function () {
+  "use strict";
 
   // Intersection Observer for animations - 滚动触发动画
   function initScrollAnimations() {
     const observerOptions = {
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      rootMargin: "0px 0px -50px 0px"
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
+          entry.target.classList.add("animate-in");
           observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
 
     // Observe post cards
-    document.querySelectorAll('.post-card').forEach(card => {
-      card.classList.add('animate-ready');
+    document.querySelectorAll(".post-card").forEach((card) => {
+      card.classList.add("animate-ready");
       observer.observe(card);
     });
   }
 
   // Enhanced card interactions - 增强卡片交互
   function initCardInteractions() {
-    document.querySelectorAll('.post-card').forEach(card => {
+    document.querySelectorAll(".post-card").forEach((card) => {
       let tiltTimeout;
 
       // Add subtle tilt effect on mouse move
-      card.addEventListener('mousemove', (e) => {
+      card.addEventListener("mousemove", (e) => {
         if (window.innerWidth < 768) return; // Skip on mobile
 
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-        
+
         const rotateX = (y - centerY) / 20;
         const rotateY = (centerX - x) / 20;
 
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-        
+
         clearTimeout(tiltTimeout);
       });
 
       // Reset tilt on mouse leave
-      card.addEventListener('mouseleave', () => {
+      card.addEventListener("mouseleave", () => {
         tiltTimeout = setTimeout(() => {
-          card.style.transform = '';
+          card.style.transform = "";
         }, 100);
       });
 
       // Add click ripple effect
-      card.addEventListener('click', (e) => {
-        const ripple = document.createElement('div');
-        ripple.classList.add('ripple-effect');
-        
+      card.addEventListener("click", (e) => {
+        const ripple = document.createElement("div");
+        ripple.classList.add("ripple-effect");
+
         const rect = card.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = e.clientX - rect.left - size / 2;
         const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        
+
+        ripple.style.width = ripple.style.height = size + "px";
+        ripple.style.left = x + "px";
+        ripple.style.top = y + "px";
+
         card.appendChild(ripple);
-        
+
         setTimeout(() => {
           ripple.remove();
         }, 600);
@@ -81,75 +81,90 @@
     });
   }
 
-  // Enhanced search with history - 增强搜索功能
+  // Enhanced search with history - 增强搜索功能 (已禁用，由modern-search.js统一处理)
   function initEnhancedSearch() {
-    const searchInput = document.getElementById('search-input');
-    const searchResults = document.getElementById('results-container');
-    
-    if (!searchInput) return;
+    // 此函数已被禁用，搜索功能现在由modern-search.js统一处理
+    return;
 
-    let searchHistory = JSON.parse(localStorage.getItem('blog-search-history') || '[]');
-    let currentQuery = '';
+    let searchHistory = JSON.parse(
+      localStorage.getItem("blog-search-history") || "[]"
+    );
+    let currentQuery = "";
 
     // Save search to history
     function saveToHistory(query) {
       if (!query || query.length < 1) return; // 改为支持单字符搜索历史
-      
+
       // Remove duplicates and add to beginning
-      searchHistory = searchHistory.filter(item => item !== query);
+      searchHistory = searchHistory.filter((item) => item !== query);
       searchHistory.unshift(query);
-      
+
       // Keep only last 10 searches
       searchHistory = searchHistory.slice(0, 10);
-      
-      localStorage.setItem('blog-search-history', JSON.stringify(searchHistory));
+
+      localStorage.setItem(
+        "blog-search-history",
+        JSON.stringify(searchHistory)
+      );
     }
 
     // Show search history
     function showSearchHistory() {
       if (searchHistory.length === 0) return;
-      
+
       const historyHTML = `
         <div class="search-history">
           <div class="search-history-title">最近搜索</div>
-          ${searchHistory.map(query => `
+          ${searchHistory
+            .map(
+              (query) => `
             <div class="search-history-item" data-query="${query}">
               <span class="history-text">${query}</span>
               <span class="history-remove" data-query="${query}">×</span>
             </div>
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
       `;
-      
+
       searchResults.innerHTML = historyHTML;
-      searchResults.classList.add('show');
+      searchResults.classList.add("show");
     }
 
     // Handle search history interactions
-    searchResults.addEventListener('click', (e) => {
-      if (e.target.classList.contains('history-text') || e.target.classList.contains('search-history-item')) {
-        const query = e.target.dataset.query || e.target.querySelector('.history-text').textContent;
+    searchResults.addEventListener("click", (e) => {
+      if (
+        e.target.classList.contains("history-text") ||
+        e.target.classList.contains("search-history-item")
+      ) {
+        const query =
+          e.target.dataset.query ||
+          e.target.querySelector(".history-text").textContent;
         searchInput.value = query;
-        searchInput.dispatchEvent(new Event('input'));
-      } else if (e.target.classList.contains('history-remove')) {
+        searchInput.dispatchEvent(new Event("input"));
+      } else if (e.target.classList.contains("history-remove")) {
         e.stopPropagation();
         const query = e.target.dataset.query;
-        searchHistory = searchHistory.filter(item => item !== query);
-        localStorage.setItem('blog-search-history', JSON.stringify(searchHistory));
+        searchHistory = searchHistory.filter((item) => item !== query);
+        localStorage.setItem(
+          "blog-search-history",
+          JSON.stringify(searchHistory)
+        );
         showSearchHistory();
       }
     });
 
     // Show history when input is focused and empty
-    searchInput.addEventListener('focus', () => {
+    searchInput.addEventListener("focus", () => {
       if (!searchInput.value.trim()) {
         showSearchHistory();
       }
     });
 
     // Save search when user presses enter or clicks a result
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && searchInput.value.trim()) {
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && searchInput.value.trim()) {
         saveToHistory(searchInput.value.trim());
       }
     });
@@ -157,16 +172,16 @@
     // Add debounced search
     let searchTimeout;
     const originalInput = searchInput.addEventListener;
-    
-    searchInput.addEventListener('input', (e) => {
+
+    searchInput.addEventListener("input", (e) => {
       clearTimeout(searchTimeout);
       currentQuery = e.target.value;
-      
+
       if (!currentQuery.trim()) {
         showSearchHistory();
         return;
       }
-      
+
       searchTimeout = setTimeout(() => {
         // Add loading state
         searchResults.innerHTML = `
@@ -175,7 +190,7 @@
             <div>搜索中...</div>
           </div>
         `;
-        searchResults.classList.add('show');
+        searchResults.classList.add("show");
       }, 300);
     });
   }
@@ -183,14 +198,14 @@
   // Smooth scroll enhancements - 平滑滚动增强
   function initSmoothScrolling() {
     // Add smooth scrolling to all anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(this.getAttribute("href"));
         if (target) {
           target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+            behavior: "smooth",
+            block: "start"
           });
         }
       });
@@ -199,57 +214,55 @@
 
   // Reading progress for homepage - 首页阅读进度
   function initReadingProgress() {
-    const progressBar = document.querySelector('.reading-progress-bar');
+    const progressBar = document.querySelector(".reading-progress-bar");
     if (!progressBar) return;
 
     function updateProgress() {
       const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const documentHeight =
+        document.documentElement.scrollHeight - windowHeight;
       const scrollPosition = window.scrollY;
       const progress = Math.min((scrollPosition / documentHeight) * 100, 100);
-      
-      progressBar.style.width = progress + '%';
+
+      progressBar.style.width = progress + "%";
     }
 
-    window.addEventListener('scroll', updateProgress);
-    window.addEventListener('resize', updateProgress);
+    window.addEventListener("scroll", updateProgress);
+    window.addEventListener("resize", updateProgress);
     updateProgress();
   }
 
   // Performance optimizations - 性能优化
   function initPerformanceOptimizations() {
     // Lazy load images with better loading states
-    if ('IntersectionObserver' in window) {
+    if ("IntersectionObserver" in window) {
       const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const img = entry.target;
             const src = img.dataset.src;
-            
+
             if (src) {
               img.src = src;
-              img.classList.add('loaded');
+              img.classList.add("loaded");
               imageObserver.unobserve(img);
             }
           }
         });
       });
 
-      document.querySelectorAll('img[data-src]').forEach(img => {
-        img.classList.add('lazy-loading');
+      document.querySelectorAll("img[data-src]").forEach((img) => {
+        img.classList.add("lazy-loading");
         imageObserver.observe(img);
       });
     }
 
     // Preload critical resources
-    const preloadLinks = [
-      '/search.json',
-      '/js/simple-jekyll-search.min.js'
-    ];
+    const preloadLinks = ["/search.json", "/js/simple-jekyll-search.min.js"];
 
-    preloadLinks.forEach(href => {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
+    preloadLinks.forEach((href) => {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
       link.href = href;
       document.head.appendChild(link);
     });
@@ -257,15 +270,15 @@
 
   // Theme transition enhancements - 主题切换增强
   function initThemeEnhancements() {
-    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggle = document.getElementById("theme-toggle");
     if (!themeToggle) return;
 
     // Add smooth transition when switching themes
-    themeToggle.addEventListener('click', () => {
-      document.body.style.transition = 'all 0.3s ease';
-      
+    themeToggle.addEventListener("click", () => {
+      document.body.style.transition = "all 0.3s ease";
+
       setTimeout(() => {
-        document.body.style.transition = '';
+        document.body.style.transition = "";
       }, 300);
     });
   }
@@ -273,8 +286,8 @@
   // Initialize all enhancements
   function init() {
     // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
       return;
     }
 
@@ -287,13 +300,12 @@
       initPerformanceOptimizations();
       initThemeEnhancements();
     } catch (error) {
-      console.warn('Some modern enhancements failed to initialize:', error);
+      console.warn("Some modern enhancements failed to initialize:", error);
     }
   }
 
   // Auto-initialize
   init();
-
 })();
 
 // Add CSS for animations and effects
@@ -387,4 +399,4 @@ const modernStyles = `
 `;
 
 // Inject styles
-document.head.insertAdjacentHTML('beforeend', modernStyles);
+document.head.insertAdjacentHTML("beforeend", modernStyles);

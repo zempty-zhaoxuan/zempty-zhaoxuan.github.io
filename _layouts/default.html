@@ -8,34 +8,34 @@
         color: #ffffff !important;
         background: #1971c2 !important;
       }
-      
+
       ::selection {
         color: #ffffff !important;
         background: #1971c2 !important;
       }
-      
+
       /* 深色主题下的文字选中优化 */
       .dark-theme ::-moz-selection {
         color: #1a1a1a !important;
         background: #74c0fc !important;
       }
-      
+
       .dark-theme ::selection {
         color: #1a1a1a !important;
         background: #74c0fc !important;
       }
     </style>
-    {% include nav.html %}
-
-
-
-    {% if page.toc==true %}
-      <aside class="toc">
-        <button id="toc-toggle-button" aria-label="展开/折叠目录" title="展开/折叠目录">目录 ▼</button>
-        <div id="toc-content">
-          {% include toc.html html=content %}
-        </div>
-      </aside>
+    {% include nav.html %} {% if page.toc==true %}
+    <aside class="toc">
+      <button
+        id="toc-toggle-button"
+        aria-label="展开/折叠目录"
+        title="展开/折叠目录"
+      >
+        目录 ▼
+      </button>
+      <div id="toc-content">{% include toc.html html=content %}</div>
+    </aside>
     {% endif %}
 
     <div id="main" role="main" class="wrapper-content page-transition">
@@ -48,61 +48,85 @@
     <!-- 右下角浮动按钮组 -->
     <div class="floating-buttons">
       <!-- 返回首页按钮 -->
-      <a href="{{ site.baseurl }}/" id="home-button" aria-label="返回首页" title="返回首页">🏠</a>
-      
+      <a
+        href="{{ site.baseurl }}/"
+        id="home-button"
+        aria-label="返回首页"
+        title="返回首页"
+        >🏠</a
+      >
+
       <!-- 桌面端侧边栏折叠按钮 (水平折叠) -->
-      <button id="sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">☰</button>
-      
+      <button
+        id="sidebar-toggle"
+        aria-label="折叠/展开侧边栏"
+        title="折叠/展开侧边栏"
+      >
+        ☰
+      </button>
+
       <!-- 移动端侧边栏折叠按钮 (垂直折叠) -->
-      <button id="mobile-sidebar-toggle" aria-label="折叠/展开侧边栏" title="折叠/展开侧边栏">▼</button>
-      
+      <button
+        id="mobile-sidebar-toggle"
+        aria-label="折叠/展开侧边栏"
+        title="折叠/展开侧边栏"
+      >
+        ▼
+      </button>
+
       <!-- 主题切换按钮 -->
-      <button id="theme-toggle" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">🌙</button>
+      <button
+        id="theme-toggle"
+        aria-label="切换深色/浅色主题"
+        title="切换深色/浅色主题"
+      >
+        🌙
+      </button>
     </div>
 
     {% include analytics.html %}
-    
+
     <!-- 引入主题切换脚本 -->
     <script src="{{ site.baseurl }}/js/theme-switcher.js"></script>
-    
+
     <!-- 引入侧边栏折叠脚本 -->
     <script src="{{ site.baseurl }}/js/sidebar-toggle.js"></script>
-    
+
     <!-- 引入动画效果脚本 -->
     <script src="{{ site.baseurl }}/js/animation-loader.js"></script>
-    
+
     <!-- 引入阅读进度条脚本 -->
     <script src="{{ site.baseurl }}/js/reading-progress.js"></script>
-    
+
     <!-- 引入代码增强脚本 -->
     <script src="{{ site.baseurl }}/js/code-enhancements.js"></script>
-    
+
     <!-- 引入移动端增强脚本 -->
     <script src="{{ site.baseurl }}/js/mobile-enhancements.js"></script>
-    
+
     <!-- 引入现代化增强脚本 -->
     <script src="{{ site.baseurl }}/js/modern-enhancements.js" async></script>
-    
+
     <!-- 引入懒加载脚本 -->
     <script src="{{ site.baseurl }}/js/lazy-load.js" async></script>
-    
+
     <!-- 引入现代化搜索脚本 -->
     <script src="{{ site.baseurl }}/js/modern-search.js"></script>
-    
+
     <!-- 引入TOC折叠脚本 -->
     {% if page.toc==true %}
     <script src="{{ site.baseurl }}/js/toc-toggle.js"></script>
     {% endif %}
-    
+
     <!-- 动态调整目录区域脚本 -->
     {% if page.toc==true %}
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // 获取相关元素
-        const toc = document.querySelector('.toc');
-        const mainContent = document.querySelector('.wrapper-content');
-        const container = document.querySelector('.container');
-        
+        const toc = document.querySelector(".toc");
+        const mainContent = document.querySelector(".wrapper-content");
+        const container = document.querySelector(".container");
+
         // 自适应目录区域大小的函数
         function adjustTocSize() {
           // 获取内容区域的宽度
@@ -111,22 +135,22 @@
           const containerWidth = container.offsetWidth;
           // 计算内容区域的空白部分
           const availableSpace = contentWidth - containerWidth;
-          
+
           // 如果有足够的空白，增加目录区域的宽度
           if (availableSpace > 100) {
             // 计算可用的额外空间，最多增加100px
             const extraSpace = Math.min(availableSpace * 0.7, 100);
-            toc.style.width = (320 + extraSpace) + 'px';
+            toc.style.width = 320 + extraSpace + "px";
           } else {
             // 否则使用默认宽度
-            toc.style.width = '';
+            toc.style.width = "";
           }
         }
-        
+
         // 页面加载和窗口大小改变时调整
         adjustTocSize();
-        window.addEventListener('resize', adjustTocSize);
-        
+        window.addEventListener("resize", adjustTocSize);
+
         // 监听内容变化（如图片加载完成等）
         const observer = new MutationObserver(adjustTocSize);
         observer.observe(mainContent, { childList: true, subtree: true });
@@ -142,8 +166,6 @@
   {% endif %}
 
   <div class="wrapper-footer-mobile">
-    <footer class="footer">
-      {% include footer.html %}
-    </footer>
+    <footer class="footer">{% include footer.html %}</footer>
   </div>
 </html>
