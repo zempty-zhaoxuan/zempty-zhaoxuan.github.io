@@ -63,7 +63,7 @@
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
     a {
-      color: white;
+      color: white !important;
       text-decoration: none;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
@@ -76,13 +76,14 @@
 
   .site-description {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.95);
+    color: white !important;
     margin: 1rem 0 0;
-    font-weight: 300;
+    font-weight: 500 !important;
     position: relative;
     z-index: 2;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6) !important;
+    opacity: 1 !important;
   }
 }
 
@@ -97,13 +98,8 @@
     margin-bottom: 0.8rem;
     padding: 1rem 1.5rem;
     border-radius: 16px;
-    background: linear-gradient(
-      135deg,
-      var(--background-lighten-color) 0%,
-      rgba(var(--background-lighten-color-rgb), 0.8) 100%
-    );
-    border: 1px solid rgba(var(--divider-color-rgb), 0.3);
-    backdrop-filter: blur(10px);
+    background: var(--background-lighten-color);
+    border: 1px solid var(--divider-color);
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     text-decoration: none;
     color: var(--text-color);
@@ -112,11 +108,7 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
     &:hover {
-      background: linear-gradient(
-        135deg,
-        var(--accent-color) 0%,
-        var(--accent-color-light) 100%
-      );
+      background: var(--accent-color);
       color: white;
       transform: translateY(-4px) scale(1.02);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
@@ -129,14 +121,11 @@
     }
 
     &.active {
-      background: linear-gradient(
-        135deg,
-        var(--accent-color) 0%,
-        var(--accent-color-dark) 100%
-      );
-      color: white;
-      border-color: var(--accent-color-dark);
+      background: var(--accent-color);
+      color: white !important;
+      border-color: var(--accent-color);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      font-weight: 600;
 
       .nav-icon {
         transform: scale(1.1);
@@ -158,27 +147,23 @@
   gap: 1rem;
   padding: 2rem 1.5rem;
   margin: 0 1.5rem 2.5rem;
-  background: linear-gradient(
-    135deg,
-    var(--background-lighten-color) 0%,
-    rgba(var(--background-lighten-color-rgb), 0.8) 100%
-  );
+  background: var(--background-lighten-color);
   border-radius: 20px;
-  border: 1px solid rgba(var(--divider-color-rgb), 0.3);
-  backdrop-filter: blur(10px);
+  border: 1px solid var(--divider-color);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   .stat-item {
     text-align: center;
     padding: 0.5rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    background: var(--background-color);
+    border: 1px solid var(--divider-color);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border-color: var(--accent-color);
     }
 
     .stat-number {
@@ -192,7 +177,7 @@
 
     .stat-label {
       font-size: 0.8rem;
-      color: var(--muted-text-color);
+      color: var(--text-color);
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -385,15 +370,10 @@
     align-items: center;
     padding: 1rem 1.5rem 1rem 2.5rem;
     margin-bottom: 1rem;
-    background: linear-gradient(
-      135deg,
-      var(--background-lighten-color) 0%,
-      rgba(var(--background-lighten-color-rgb), 0.8) 100%
-    );
+    background: var(--background-lighten-color);
     border-radius: 16px;
-    border: 1px solid rgba(var(--divider-color-rgb), 0.3);
+    border: 1px solid var(--divider-color);
     text-decoration: none;
-    backdrop-filter: blur(10px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
@@ -405,21 +385,13 @@
       transform: translateY(-50%);
       width: 10px;
       height: 10px;
-      background: linear-gradient(
-        135deg,
-        var(--accent-color) 0%,
-        var(--accent-color-light) 100%
-      );
+      background: var(--accent-color);
       border-radius: 50%;
       box-shadow: 0 0 0 4px rgba(var(--accent-color-rgb), 0.2);
     }
 
     &:hover {
-      background: linear-gradient(
-        135deg,
-        var(--accent-color) 0%,
-        var(--accent-color-light) 100%
-      );
+      background: var(--accent-color);
       color: white;
       text-decoration: none;
       transform: translateY(-4px) scale(1.02);
@@ -431,8 +403,8 @@
       }
 
       .post-count {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        background: rgba(255, 255, 255, 0.9) !important;
+        color: var(--accent-color) !important;
       }
     }
 
@@ -443,12 +415,8 @@
     }
 
     .post-count {
-      background: linear-gradient(
-        135deg,
-        var(--accent-color-light) 0%,
-        var(--accent-color) 100%
-      );
-      color: white;
+      background: var(--accent-color) !important;
+      color: white !important;
       padding: 0.3rem 0.8rem;
       border-radius: 20px;
       font-size: 0.75rem;

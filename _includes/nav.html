@@ -14,9 +14,29 @@
       nav.url contains 'http://' or nav.url contains 'https://' %} {% assign
       is_external = true %} {% endif %} {% assign item_url = nav.url %} {%
       unless is_external %} {% assign item_url = nav.url | relative_url %} {%
-      endunless %} {% assign is_active = false %} {% if page.url == item_url %}
-      {% assign is_active = true %} {% endif %} {% if item_url == "/" and
-      page.url == "/index.html" %} {% assign is_active = true %} {% endif %}
+      endunless %} 
+      
+      {% assign is_active = false %} 
+      
+      {% comment %} Check for exact URL match {% endcomment %}
+      {% if page.url == item_url %}
+        {% assign is_active = true %} 
+      {% endif %} 
+      
+      {% comment %} Check for home page {% endcomment %}
+      {% if item_url == "/" and page.url == "/index.html" %} 
+        {% assign is_active = true %} 
+      {% endif %}
+      
+      {% comment %} Check for tags page {% endcomment %}
+      {% if nav.name == "标签" and page.url contains "/tags" %}
+        {% assign is_active = true %}
+      {% endif %}
+      
+      {% comment %} Check for archive page {% endcomment %}
+      {% if nav.name == "归档" and page.url contains "/archive" %}
+        {% assign is_active = true %}
+      {% endif %}
 
       <a
         href="{{ item_url }}"

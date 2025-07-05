@@ -1,45 +1,48 @@
 // 默认浅色主题
 :root {
-  --background-color: #fdfdfd; // 稍微柔和的白色背景
-  --background-lighten-color: #f1f3f5; // 浅灰
-  --text-color: #343a40; // 深灰色文本，提高对比度
-  --link-color: #1971c2; // 略微调整的蓝色链接色
-  --link-color-rgb: 25, 113, 194;
-  --link-lighten-color: #{$oc-blue-6};
-  --link-bghv-color: #{$oc-blue-0};
-  --divider-color: #e9ecef; // 稍浅的分隔线
-  --divider-color-light: #{rgba($oc-gray-2, 0.7)}; // 保持不变或微调
-  --blockquote-color: #868e96; // 引用文本颜色
-  --blockquote-border-color: #ced4da; // 引用边框颜色
+  --background-color: #ffffff; // Pure white for a clean look
+  --background-lighten-color: #f8f9fa; // Very light gray for cards/sidebars
+  --text-color: #212529; // Near-black for main text, high contrast
+  --text-color-muted: #495057; // A slightly lighter gray for secondary text
+  --heading-color: #212529; // Same as text color for headings
+  --muted-text-color: #6c757d; // For placeholder and secondary text
+  --link-color: #0056b3; // A strong, standard blue for links
+  --link-color-rgb: 0, 86, 179;
+  --link-lighten-color: #007bff; // A brighter blue for hover states
+  --link-bghv-color: rgba(0, 123, 255, 0.1);
+  --divider-color: #dee2e6; // A clear but not distracting divider color
+  --divider-color-light: #e9ecef;
+  --blockquote-color: #495057; // Readable text for blockquotes
+  --blockquote-border-color: #ced4da;
   --table-border-color: #dee2e6;
   --table-background-color: #f8f9fa;
   --footer-border-color: #dee2e6;
-  --footer-background-color: #f8f9fa;
-  --selection-background-color: #{$oc-blue-6}; // 深蓝色背景，与白色文字形成良好对比
+  --footer-background-color: #ffffff;
+  --selection-background-color: #007bff; // Standard blue selection
   --tag-index-label-background-color: #e9ecef;
-  --tag-index-count-background-color: #f1f3f5;
-  --accent-color: #{$accent-color}; // 引入强调色变量
+  --tag-index-count-background-color: #dee2e6;
+  --accent-color: #20c997; // Your existing accent color
   --accent-color-rgb: 32, 201, 151;
   
   // Modern Card Variables - 现代卡片变量
   --card-background: #ffffff;
   --card-background-hover: #ffffff;
   --card-border: rgba(0, 0, 0, 0.06);
-  --card-shadow: #{$card-shadow-light};
-  --card-shadow-hover: #{$card-shadow-hover};
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+  --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
   
   // Search Variables - 搜索相关变量
   --search-background: #ffffff;
-  --search-border: #e1e5e9;
-  --search-focus-border: #1971c2;
+  --search-border: #ced4da;
+  --search-focus-border: #0056b3;
   --search-placeholder: #6c757d;
-  --search-result-hover: #f8f9fa;
+  --search-result-hover: #e9ecef;
   
   // Button Variables - 按钮变量
   --button-primary-bg: #{$primary-600};
   --button-primary-hover: #{$primary-700};
-  --button-secondary-bg: #f8f9fa;
-  --button-secondary-hover: #e9ecef;
+  --button-secondary-bg: #e9ecef;
+  --button-secondary-hover: #dee2e6;
   
   // Status Colors - 状态颜色
   --success-color: #{$success-500};
@@ -50,14 +53,17 @@
 // 深色主题
 .dark-theme {
   --background-color: #212529; // 深灰色背景
-  --background-lighten-color: #343a40;
+  --background-lighten-color: #2c3136; // Slightly lighter than background
   --text-color: #e9ecef; // 浅灰色文本
-  --link-color: #74c0fc; // 调整后的亮蓝色链接色
-  --link-color-rgb: 116, 192, 252;
-  --link-lighten-color: #{$oc-blue-3};
-  --link-bghv-color: #{$oc-blue-9};
+  --text-color-muted: #adb5bd; // Muted text for dark theme
+  --heading-color: #f8f9fa; // Slightly brighter for headings in dark theme
+  --muted-text-color: #868e96; // For placeholder and secondary text
+  --link-color: #4dabf7; // A brighter blue for better visibility
+  --link-color-rgb: 77, 171, 247;
+  --link-lighten-color: #74c0fc; // Even lighter for hover
+  --link-bghv-color: rgba(77, 171, 247, 0.15);
   --divider-color: #495057; // 深色模式分隔线
-  --divider-color-light: #{rgba($oc-gray-7, 0.7)};
+  --divider-color-light: #373b41;
   --blockquote-color: #adb5bd; // 引用文本颜色
   --blockquote-border-color: #495057; // 引用边框颜色
   --table-border-color: #495057;
@@ -65,23 +71,23 @@
   --footer-border-color: #495057;
   --footer-background-color: #212529;
   --selection-background-color: #{$oc-blue-3}; // 亮蓝色背景，与深色文字形成良好对比
-  --tag-index-label-background-color: #495057;
-  --tag-index-count-background-color: #343a40;
+  --tag-index-label-background-color: #343a40;
+  --tag-index-count-background-color: #495057;
   --accent-color: #{$accent-color}; // 引入强调色变量
   --accent-color-rgb: 32, 201, 151;
   
   // Modern Card Variables - 深色主题卡片变量
-  --card-background: #2d3338;
-  --card-background-hover: #343a40;
+  --card-background: #282c30;
+  --card-background-hover: #2c3136;
   --card-border: rgba(255, 255, 255, 0.1);
-  --card-shadow: #{$card-shadow-dark};
-  --card-shadow-hover: #{$card-shadow-hover-dark};
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 8px 35px rgba(0, 0, 0, 0.45);
   
   // Search Variables - 深色主题搜索变量
-  --search-background: #2d3338;
+  --search-background: #2c3136;
   --search-border: #495057;
-  --search-focus-border: #74c0fc;
-  --search-placeholder: #adb5bd;
+  --search-focus-border: #4dabf7;
+  --search-placeholder: #868e96;
   --search-result-hover: #343a40;
   
   // Button Variables - 深色主题按钮变量
@@ -96,51 +102,4 @@
   --error-color: #{$error-500};
 }
 
-// 浅色主题（当用户显式切换时使用）
-.light-theme {
-  --background-color: #fdfdfd; // 同 :root
-  --background-lighten-color: #f1f3f5;
-  --text-color: #343a40;
-  --link-color: #1971c2;
-  --link-color-rgb: 25, 113, 194;
-  --link-lighten-color: #{$oc-blue-6};
-  --link-bghv-color: #{$oc-blue-0};
-  --divider-color: #e9ecef;
-  --divider-color-light: #{rgba($oc-gray-2, 0.7)};
-  --blockquote-color: #868e96;
-  --blockquote-border-color: #ced4da;
-  --table-border-color: #dee2e6;
-  --table-background-color: #f8f9fa;
-  --footer-border-color: #dee2e6;
-  --footer-background-color: #f8f9fa;
-  --selection-background-color: #{$oc-blue-6}; // 深蓝色背景，与白色文字形成良好对比
-  --tag-index-label-background-color: #e9ecef;
-  --tag-index-count-background-color: #f1f3f5;
-  --accent-color: #{$accent-color}; // 引入强调色变量
-  --accent-color-rgb: 32, 201, 151;
-  
-  // Modern Card Variables - 浅色主题卡片变量
-  --card-background: #ffffff;
-  --card-background-hover: #ffffff;
-  --card-border: rgba(0, 0, 0, 0.06);
-  --card-shadow: #{$card-shadow-light};
-  --card-shadow-hover: #{$card-shadow-hover};
-  
-  // Search Variables - 浅色主题搜索变量
-  --search-background: #ffffff;
-  --search-border: #e1e5e9;
-  --search-focus-border: #1971c2;
-  --search-placeholder: #6c757d;
-  --search-result-hover: #f8f9fa;
-  
-  // Button Variables - 浅色主题按钮变量
-  --button-primary-bg: #{$primary-600};
-  --button-primary-hover: #{$primary-700};
-  --button-secondary-bg: #f8f9fa;
-  --button-secondary-hover: #e9ecef;
-  
-  // Status Colors - 浅色主题状态颜色
-  --success-color: #{$success-500};
-  --warning-color: #{$warning-500};
-  --error-color: #{$error-500};
-} 
+// Redundant .light-theme class removed. The :root now serves as the single source of truth for the light theme. 
