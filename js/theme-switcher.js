@@ -26,8 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // 初始更新tooltip
-  updateTooltip();
+  // 根据当前主题设置正确的图标和tooltip
+  function setInitialIconAndTooltip() {
+    if (document.body.classList.contains('dark-theme')) {
+      themeToggle.innerHTML = '☀️'; // In dark mode, show sun to switch to light
+    } else {
+      themeToggle.innerHTML = '🌙'; // In light mode, show moon to switch to dark
+    }
+    updateTooltip();
+  }
+  
+  // 初始更新UI
+  setInitialIconAndTooltip();
   
   // 当点击切换按钮时
   themeToggle.addEventListener('click', function() {
@@ -47,11 +57,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新tooltip文本
     updateTooltip();
   });
-  
-  // 根据当前主题设置正确的图标
-  if (document.body.classList.contains('dark-theme')) {
-    themeToggle.innerHTML = '☀️';
-  } else {
-    themeToggle.innerHTML = '🌙';
-  }
 }); 

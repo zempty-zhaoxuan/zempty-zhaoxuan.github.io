@@ -1,21 +1,25 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const SCREEN_SM = 768; // Small screens and below
-  const SCREEN_MD_MIN = 768; // Medium screen (iPad) min-width
-  const SCREEN_MD_MAX = 1024; // Medium screen (iPad) max-width
-  const SCREEN_LG_MAX = 1200; // Large screen max-width for mobile-style sidebar
+// No longer need to wait for DOMContentLoaded as the script is at the end of the body.
+// Running it directly prevents the sidebar flicker.
+// document.addEventListener("DOMContentLoaded", function () {
+const SCREEN_SM = 768; // Small screens and below
+const SCREEN_MD_MIN = 768; // Medium screen (iPad) min-width
+const SCREEN_MD_MAX = 1024; // Medium screen (iPad) max-width
+const SCREEN_LG_MAX = 1200; // Large screen max-width for mobile-style sidebar
 
-  const sidebarToggle = document.getElementById("sidebar-toggle");
-  const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
-  const wrapper = document.querySelector(".wrapper-content");
-  const sidebar = document.querySelector(".wrapper-sidebar");
-  const themeToggle = document.getElementById("theme-toggle");
-  const homeButton = document.getElementById("home-button");
-  
-  // 检查关键元素是否存在
-  if (!wrapper || !sidebar) {
-    console.error("Essential elements (wrapper-content or wrapper-sidebar) not found");
-    return;
-  }
+const sidebarToggle = document.getElementById("sidebar-toggle");
+const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
+const wrapper = document.querySelector(".wrapper-content");
+const sidebar = document.querySelector(".wrapper-sidebar");
+const themeToggle = document.getElementById("theme-toggle");
+const homeButton = document.getElementById("home-button");
+
+// 检查关键元素是否存在
+if (!wrapper || !sidebar) {
+  console.error(
+    "Essential elements (wrapper-content or wrapper-sidebar) not found"
+  );
+  // return; // Can't return from top-level script, just stop execution if needed.
+} else {
   const currentState = localStorage.getItem("sidebar-state");
   const mobileSidebarState = localStorage.getItem("mobile-sidebar-state");
   const sidebarArchive = document.querySelector(".sidebar-archive");
@@ -35,14 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 移动版侧边栏状态应用
   if (mobileSidebarToggle) {
-    if (mobileSidebarState === "collapsed") {
-              sidebar.classList.add("mobile-collapsed");
-        document.body.classList.add("mobile-sidebar-collapsed");
-        if (mobileSidebarToggle) mobileSidebarToggle.innerHTML = "▼";
-      mobileSidebarToggle.setAttribute("title", "展开侧边栏");
-    } else {
+    // Default to collapsed on mobile if no state is saved
+    if (mobileSidebarState === "expanded") {
       mobileSidebarToggle.innerHTML = "▲";
       mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
+    } else {
+      sidebar.classList.add("mobile-collapsed");
+      document.body.classList.add("mobile-sidebar-collapsed");
+      if (mobileSidebarToggle) mobileSidebarToggle.innerHTML = "▼";
+      mobileSidebarToggle.setAttribute("title", "展开侧边栏");
     }
   }
 
@@ -143,7 +148,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 中等尺寸屏幕、移动设备、iPad Pro竖屏、iPhone横屏使用垂直折叠功能
-    if (windowWidth <= SCREEN_LG_MAX || isIPadProPortrait || isIPhoneLandscape) {
+    if (
+      windowWidth <= SCREEN_LG_MAX ||
+      isIPadProPortrait ||
+      isIPhoneLandscape
+    ) {
       // 强制重置桌面折叠状态，特别是对于手机横屏
       wrapper.classList.remove("sidebar-collapsed");
       sidebar.classList.remove("collapsed");
@@ -161,22 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
           mobileSidebarToggle.innerHTML = "▲";
         }
       }
-
-      // 默认折叠侧边栏以最大化内容区域
-      if (!sidebar.classList.contains("mobile-collapsed") && 
-          (isMediumScreen || isIPadProPortrait || isIPhoneLandscape || windowWidth <= SCREEN_SM)) {
-        
-        // Only update localStorage if the state actually changes to "collapsed"
-        const currentMobileSidebarState = localStorage.getItem("mobile-sidebar-state");
-        if (currentMobileSidebarState !== "collapsed") {
-          localStorage.setItem("mobile-sidebar-state", "collapsed");
-        }
-        
-        sidebar.classList.add("mobile-collapsed");
-        document.body.classList.add("mobile-sidebar-collapsed");
-        mobileSidebarToggle.innerHTML = "▼";
-        // No need to set localStorage again here if already set above based on state change
-      }
     } else {
       // 大屏幕桌面设备使用水平折叠功能
       sidebar.classList.remove("mobile-collapsed");
@@ -192,4 +185,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 初始化时运行一次
   handleResize();
-});
+}
+// });
