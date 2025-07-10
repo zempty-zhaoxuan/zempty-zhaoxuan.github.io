@@ -610,3 +610,10 @@ pre.highlight code .line:before {
 .pagination .pagination__page-number:first-child + .next {
   margin-left: auto !important;
 }
+
+pre[data-lang]::before,
+.code-block-wrapper::before,
+pre[data-lang="code"]::before {
+  display: none !important;
+  content: none !important;
+}

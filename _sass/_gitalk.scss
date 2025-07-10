@@ -716,6 +716,13 @@
   margin-bottom: 0.5em;
   font-size: 0.875em;
   position: relative;
+  padding-right: 3.5em; // 预留点赞/编辑/回复按钮空间，防止重叠
+}
+
+@media (max-width: 479px) {
+  .gt-container .gt-comment-header {
+    padding-right: 2.5em;
+  }
 }
 .gt-container .gt-comment-username {
   font-weight: 500;
