@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 188: 股票买卖 IV 深度解析 (Best Time to Buy and Sell Stock IV)"
 date: "2025-04-30" # 创建日期
+category: "算法题解"
 toc: true # 自动生成目录
 excerpt: "详细分析 LeetCode 188 股票买卖问题，对比其与系列问题 121、122、123 的区别，并深入解析两种动态规划解法及其优化。" # 必填，简要介绍文章内容
 tags: [Algorithm, java] # 从标签列表中选择

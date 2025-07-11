@@ -2020,11 +2020,30 @@ body.mobile-sidebar-collapsed {
 
 /* 移动端适配 */
 @include mobile {
+  .content-categories,
+  .popular-posts,
   .sidebar-tags,
   .popular-tags {
     padding: 0 15px;
     margin: 20px 0;
-    display: none;
+  }
+  
+  .content-categories .category-nav .category-item,
+  .popular-posts .popular-post-item a {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .content-categories .category-icon {
+    font-size: 1.3rem;
+    margin-right: 0.8rem;
+  }
+  
+  .popular-posts .post-rank {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.75rem;
+    margin-right: 0.8rem;
   }
 
   .tag-cloud {

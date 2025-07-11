@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 121 买卖股票的最佳时机详解"
 date: "2025-04-28"
+category: "算法题解"
 toc: true
 excerpt: "详细分析LeetCode 121买卖股票的最佳时机问题的四种解法，包括暴力法、一次遍历法和动态规划方法"
 tags: [Algorithm, DataStructure, 股票]

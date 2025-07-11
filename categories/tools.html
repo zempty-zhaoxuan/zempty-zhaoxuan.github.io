@@ -1,0 +1,146 @@
+---
+layout: default
+title: "工具教程"
+permalink: /categories/tools/
+---
+
+<div class="category-header">
+  <h1>🛠️ 工具教程</h1>
+  <p class="category-description">开发工具使用指南、配置技巧和效率提升方法</p>
+</div>
+
+<div class="category-stats">
+  {% assign tools_posts = site.posts | where: "category", "工具教程" %}
+  {% if tools_posts.size == 0 %}{% assign tools_posts = site.posts | where_exp: "post", "post.tags contains 'VSCode' or post.tags contains 'Git' or post.tags contains 'Tools' or post.tags contains 'Jenkins'" %}{% endif %}
+  <div class="stat-item">
+    <span class="stat-number">{{ tools_posts.size }}</span>
+    <span class="stat-label">工具教程</span>
+  </div>
+  <div class="stat-item">
+    {% assign tool_categories = tools_posts | map: 'tags' | flatten | where_exp: "tag", "tag contains 'Git' or tag contains 'VSCode' or tag contains 'Jenkins'" | uniq %}
+    <span class="stat-number">{{ tool_categories.size }}</span>
+    <span class="stat-label">工具类型</span>
+  </div>
+  <div class="stat-item">
+    {% assign avg_words = 0 %}
+    {% if tools_posts.size > 0 %}
+      {% assign total_words = 0 %}
+      {% for post in tools_posts %}
+        {% assign words = post.content | number_of_words %}
+        {% assign total_words = total_words | plus: words %}
+      {% endfor %}
+      {% assign avg_words = total_words | divided_by: tools_posts.size | divided_by: 100 %}
+    {% endif %}
+    <span class="stat-number">{{ avg_words }}百</span>
+    <span class="stat-label">平均字数</span>
+  </div>
+</div>
+
+<div class="posts-grid">
+  {% for post in tools_posts %}
+  <article class="post-card tools-card">
+    <div class="post-card-content">
+      <h2 class="post-card-title">
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+      </h2>
+
+      <div class="post-card-meta">
+        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        {% assign words = post.content | number_of_words %}
+        {% assign reading_time = words | divided_by: 200 %}
+        {% if reading_time == 0 %}{% assign reading_time = 1 %}{% endif %}
+        <span class="reading-time">{{ reading_time }} 分钟阅读</span>
+        {% if post.tags contains 'Git' %}
+        <span class="tool-badge git">Git</span>
+        {% elsif post.tags contains 'VSCode' %}
+        <span class="tool-badge vscode">VSCode</span>
+        {% elsif post.tags contains 'Jenkins' %}
+        <span class="tool-badge jenkins">Jenkins</span>
+        {% endif %}
+      </div>
+
+      {% if post.tags.size > 0 %}
+      <div class="post-card-tags">
+        {% for tag in post.tags limit:3 %}
+        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}" class="tag">
+          {{ tag }}
+        </a>
+        {% endfor %}
+        {% if post.tags.size > 3 %}
+        <span class="tag">+{{ post.tags.size | minus: 3 }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="post-card-excerpt">
+        {{ post.excerpt | strip_html | truncate: 120 }}
+      </div>
+      
+      <a href="{{ site.baseurl }}{{ post.url }}" class="post-card-read-more">查看教程</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+<style>
+.category-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.category-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.category-description {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.category-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.category-stats .stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--background-lighten-color);
+  border-radius: 12px;
+  border: 1px solid var(--divider-color);
+  transition: transform 0.3s ease;
+}
+
+.category-stats .stat-item:hover {
+  transform: translateY(-4px);
+}
+
+.tool-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tool-badge.git { background: #f05032; color: white; }
+.tool-badge.vscode { background: #007acc; color: white; }
+.tool-badge.jenkins { background: #d33833; color: white; }
+
+@media (max-width: 768px) {
+  .category-header h1 { font-size: 2rem; }
+  .category-description { font-size: 1rem; }
+  .category-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

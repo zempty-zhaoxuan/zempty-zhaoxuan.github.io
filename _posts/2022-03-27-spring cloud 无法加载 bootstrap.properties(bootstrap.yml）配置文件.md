@@ -2,6 +2,7 @@
 layout: post
 title: sping cloud 无法加载bootstrap.properties
 date: 2022-03-17
+category: "其它"
 toc: true
 excerpt: 问题排查方案解决
 tags: [java,棘手问题]

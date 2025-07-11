@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 283 Move Zeroes Analysis"
 date: "2025-05-06"
+category: "算法题解"
 toc: true
 excerpt: "详细分析LeetCode 283 Move Zeroes问题的三种解法，对比它们的时间和空间复杂度及算法优劣"
 tags: [Algorithm, DataStructure,快慢指针]

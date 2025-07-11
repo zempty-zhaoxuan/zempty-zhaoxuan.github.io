@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 123 买卖股票的最佳时机 III 详解"
 date: "2025-04-29"
+category: "算法题解"
 toc: true
 excerpt: "详细分析 LeetCode 123 买卖股票的最佳时机 III 的两种解法，对比与 121 和 122 的区别，并提供详细的解题思路和步骤。"
 tags: [Algorithm, java, 棘手问题]

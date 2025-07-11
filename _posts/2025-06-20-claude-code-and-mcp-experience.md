@@ -2,6 +2,7 @@
 layout: post
 title: "体验 Claude Code：终端丝滑编程新体验，AI 助力开发效率飞跃"
 date: 2025-06-20
+category: "AI与效率"
 toc: true
 excerpt: "本文结合官方资讯与个人实践，介绍 Anthropic 最新发布的 Claude Code 及其背后的 Model Context Protocol（MCP）开放标准，并分享在终端、Cursor 与 JetBrains IDE 中的丝滑体验与高效工作流配置指南。"
 tags: [AI, Claude, Anthropic, MCP, Coding, Productivity]

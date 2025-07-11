@@ -2,6 +2,7 @@
 layout: post
 title: "深入了解模型上下文协议 (MCP) 及其在 Cursor 中的意义"
 date: "2025-04-17"
+category: "其它"
 toc: true
 excerpt: "本文介绍了模型上下文协议 (MCP) 的概念、架构和优势，并探讨了 Cursor 支持 MCP 对开发者工作流程的意义。"
 tags: [软件,IDE,思考总结]

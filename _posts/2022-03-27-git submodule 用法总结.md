@@ -2,6 +2,7 @@
 layout: post
 title: git submodule 用法总结
 date: 2022-03-27
+category: "其它"
 toc: true
 excerpt: git submodule 的使用总结
 tags: [java,git,软件]

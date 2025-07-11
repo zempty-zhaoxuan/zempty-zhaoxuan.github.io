@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 13. Roman to Integer - 三种解法详细分析"
 date: "2025-05-27"
+category: "算法题解"
 toc: true
 excerpt: "深入分析LeetCode第13题罗马数字转整数问题，详细对比三种不同的解法思路，包括从左到右遍历、从右到左遍历和优化的字符数组方法，分析各自的时间复杂度和空间复杂度。"
 tags: [Algorithm, LeetCode, Java, 字符串处理]

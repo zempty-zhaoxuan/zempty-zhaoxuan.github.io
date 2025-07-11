@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 45 跳跃游戏 II 三种解法分析"
 date: "2025-05-05" # Set by script
+category: "算法题解"
 toc: true 
 excerpt: "详细分析 LeetCode 45 跳跃游戏 II 的三种不同解法：贪心（正向扫描）、贪心（反向扫描）和动态规划，比较它们的时间和空间复杂度。" # Added excerpt
 tags: [Algorithm, java, backend] # Added relevant tags

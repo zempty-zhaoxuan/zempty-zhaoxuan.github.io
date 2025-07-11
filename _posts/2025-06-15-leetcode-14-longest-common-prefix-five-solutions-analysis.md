@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 14 最长公共前缀：五种解法深度解析"
 date: "2025-06-15"
+category: "算法题解"
 toc: true
 excerpt: "深入分析 LeetCode 14 题最长公共前缀问题的五种经典解法：垂直扫描法、水平扫描法、indexOf优化法、二分查找法和分治法，详细解释每种方法的实现原理、时间复杂度和适用场景。"
 tags: [Algorithm, Java, LeetCode, 字符串]

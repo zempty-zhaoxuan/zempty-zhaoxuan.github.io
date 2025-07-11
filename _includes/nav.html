@@ -87,6 +87,100 @@
       </div>
     </div>
 
+    <!-- 内容分类导航 -->
+    <div class="content-categories">
+      <h3>📚 内容分类</h3>
+      <div class="category-nav">
+        {% assign algorithm_posts = site.posts | where: "category", "算法题解" %}
+        {% if algorithm_posts.size == 0 %}{% assign algorithm_posts = site.posts | where_exp: "post", "post.tags contains 'LeetCode' or post.tags contains 'Algorithm' or post.tags contains '算法'" %}{% endif %}
+        
+        {% assign development_posts = site.posts | where: "category", "开发技术" %}
+        {% if development_posts.size == 0 %}{% assign development_posts = site.posts | where_exp: "post", "post.tags contains 'Java' or post.tags contains 'Spring' or post.tags contains 'Docker' or post.tags contains 'Jenkins'" %}{% endif %}
+        
+        {% assign ai_posts = site.posts | where: "category", "AI与效率" %}
+        {% if ai_posts.size == 0 %}{% assign ai_posts = site.posts | where_exp: "post", "post.tags contains 'AI' or post.tags contains 'Claude' or post.tags contains 'MCP' or post.tags contains 'Cursor'" %}{% endif %}
+        
+        {% assign tools_posts = site.posts | where: "category", "工具教程" %}
+        {% if tools_posts.size == 0 %}{% assign tools_posts = site.posts | where_exp: "post", "post.tags contains 'VSCode' or post.tags contains 'Git' or post.tags contains 'Tools'" %}{% endif %}
+        
+        {% assign life_posts = site.posts | where: "category", "生活感悟" %}
+        {% if life_posts.size == 0 %}{% assign life_posts = site.posts | where_exp: "post", "post.tags contains '生活感悟' or post.tags contains '感悟' or post.tags contains '生活'" %}{% endif %}
+        
+        {% assign other_posts = site.posts | where: "category", "其它" %}
+        {% if other_posts.size == 0 %}{% assign other_posts = site.posts | where_exp: "post", "post.tags contains '其它' or post.tags contains '杂项' or post.tags contains 'Misc'" %}{% endif %}
+        
+        <a href="{{ site.baseurl }}/categories/algorithms" class="category-item">
+          <span class="category-icon">🧮</span>
+          <div class="category-info">
+            <span class="category-name">算法题解</span>
+            <span class="category-count">{{ algorithm_posts.size }}</span>
+          </div>
+        </a>
+        
+        <a href="{{ site.baseurl }}/categories/development" class="category-item">
+          <span class="category-icon">💻</span>
+          <div class="category-info">
+            <span class="category-name">开发技术</span>
+            <span class="category-count">{{ development_posts.size }}</span>
+          </div>
+        </a>
+        
+        <a href="{{ site.baseurl }}/categories/ai-productivity" class="category-item">
+          <span class="category-icon">🤖</span>
+          <div class="category-info">
+            <span class="category-name">AI与效率</span>
+            <span class="category-count">{{ ai_posts.size }}</span>
+          </div>
+        </a>
+        
+        <a href="{{ site.baseurl }}/categories/tools" class="category-item">
+          <span class="category-icon">🛠️</span>
+          <div class="category-info">
+            <span class="category-name">工具教程</span>
+            <span class="category-count">{{ tools_posts.size }}</span>
+          </div>
+        </a>
+        
+        <a href="{{ site.baseurl }}/categories/life-insights" class="category-item">
+          <span class="category-icon">🌱</span>
+          <div class="category-info">
+            <span class="category-name">生活感悟</span>
+            <span class="category-count">{{ life_posts.size }}</span>
+          </div>
+        </a>
+        
+        <a href="{{ site.baseurl }}/categories/others" class="category-item">
+          <span class="category-icon">📂</span>
+          <div class="category-info">
+            <span class="category-name">其它</span>
+            <span class="category-count">{{ other_posts.size }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 热门文章 -->
+    <div class="popular-posts">
+      <h3>🔥 热门文章</h3>
+      {% assign popular_posts = site.posts | sort: 'date' | reverse %}
+      {% for post in popular_posts limit:4 %}
+      <div class="popular-post-item">
+        <a href="{{ post.url }}">
+          <div class="post-rank">{{ forloop.index }}</div>
+          <div class="post-info">
+            <div class="post-title">{{ post.title | truncate: 28 }}</div>
+            <div class="post-meta">
+              <span class="post-date">{{ post.date | date: "%m-%d" }}</span>
+              {% if post.tags.size > 0 %}
+              <span class="post-tag">{{ post.tags.first }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
     <!-- 热门标签云 -->
     <div class="popular-tags">
       <h3>🏷️ 热门标签</h3>

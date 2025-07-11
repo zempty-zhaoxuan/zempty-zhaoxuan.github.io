@@ -3,6 +3,7 @@
 layout: post
 title: docker 问题排查
 date: 2022-03-27
+category: "其它"
 toc: true
 excerpt:  docker 遇到的问题
 tags: [java,棘手问题]

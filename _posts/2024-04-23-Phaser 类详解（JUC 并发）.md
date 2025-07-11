@@ -2,6 +2,7 @@
 layout: post
 title: Phaser 类详解（JUC 并发）
 date: 2024-04-23
+category: "其它"
 toc: true
 excerpt: juc 包中一个不好理解的类，提供了丰富的功能
 tags: [java,高并发]

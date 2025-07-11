@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 122 买卖股票的最佳时机 II 详细分析及与 121 对比"
 date: "2025-04-28" 
+category: "算法题解"
 toc: true
 excerpt: "详细分析 LeetCode 122 (买卖股票的最佳时机 II)，对比其与 LeetCode 121 的区别，解释贪心和动态规划解法，并包含 DP 表格推演过程。"
 tags: [Algorithm, java, DataStructure] 

@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 55 Jump Game 三种解法详细分析与对比"
 date: "2025-05-02"
+category: "算法题解"
 toc: true
 excerpt: "详细分析 LeetCode 55 Jump Game 的贪心、动态规划、反向贪心三种主流解法，含代码、复杂度、流程举例与方法对比。"
 tags: [Algorithm, DataStructure]

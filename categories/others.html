@@ -1,0 +1,125 @@
+---
+layout: default
+title: "其它"
+permalink: /categories/others/
+---
+
+<div class="category-header">
+  <h1>📂 其它</h1>
+  <p class="category-description">不属于其他分类的各种文章和内容</p>
+</div>
+
+<div class="category-stats">
+  {% assign other_posts = site.posts | where: "category", "其它" %}
+  {% if other_posts.size == 0 %}{% assign other_posts = site.posts | where_exp: "post", "post.tags contains '其它' or post.tags contains '杂项' or post.tags contains 'Misc'" %}{% endif %}
+  <div class="stat-item">
+    <span class="stat-number">{{ other_posts.size }}</span>
+    <span class="stat-label">文章数量</span>
+  </div>
+  <div class="stat-item">
+    {% assign other_topics = other_posts | map: 'tags' | flatten | uniq %}
+    <span class="stat-number">{{ other_topics.size }}</span>
+    <span class="stat-label">话题数量</span>
+  </div>
+  <div class="stat-item">
+    {% assign latest_post = other_posts | sort: 'date' | reverse | first %}
+    {% if latest_post %}
+    <span class="stat-number">{{ latest_post.date | date: "%m-%d" }}</span>
+    <span class="stat-label">最新更新</span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="posts-grid">
+  {% for post in other_posts %}
+  <article class="post-card others-card">
+    <div class="post-card-content">
+      <h2 class="post-card-title">
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+      </h2>
+
+      <div class="post-card-meta">
+        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        {% assign words = post.content | number_of_words %}
+        {% assign reading_time = words | divided_by: 200 %}
+        {% if reading_time == 0 %}{% assign reading_time = 1 %}{% endif %}
+        <span class="reading-time">{{ reading_time }} 分钟阅读</span>
+      </div>
+
+      {% if post.tags.size > 0 %}
+      <div class="post-card-tags">
+        {% for tag in post.tags limit:3 %}
+        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}" class="tag">
+          {{ tag }}
+        </a>
+        {% endfor %}
+        {% if post.tags.size > 3 %}
+        <span class="tag">+{{ post.tags.size | minus: 3 }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="post-card-excerpt">
+        {{ post.excerpt | strip_html | truncate: 120 }}
+      </div>
+      
+      <a href="{{ site.baseurl }}{{ post.url }}" class="post-card-read-more">阅读全文</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+<style>
+.category-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.category-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.category-description {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.category-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.category-stats .stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--background-lighten-color);
+  border-radius: 12px;
+  border: 1px solid var(--divider-color);
+  transition: transform 0.3s ease;
+}
+
+.category-stats .stat-item:hover {
+  transform: translateY(-4px);
+}
+
+.others-card {
+  border-left: 4px solid #6c757d;
+}
+
+@media (max-width: 768px) {
+  .category-header h1 { font-size: 2rem; }
+  .category-description { font-size: 1rem; }
+  .category-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

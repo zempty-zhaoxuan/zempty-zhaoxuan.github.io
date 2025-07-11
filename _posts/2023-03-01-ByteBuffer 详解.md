@@ -2,6 +2,7 @@
 layout: post
 title: ByteBuffer 详解
 date: 2023-03-01
+category: "其它"
 toc: true
 excerpt: Java NIO 学习，ByteBuffer 学习笔记
 tags: [backend,java]

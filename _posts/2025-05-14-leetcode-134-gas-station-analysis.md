@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 134 加油站问题详解 (Gas Station Problem Explained)"
 date: "2025-05-14"
+category: "算法题解"
 toc: true
 excerpt: "详细分析 LeetCode 134 题的三种解法，深入探讨解法2和解法3的原理，并比较各算法的优劣及给出建议。"
 tags: [Algorithm, LeetCode, Greedy, Array]

@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 274 H-Index 详解与多种解法分析"
 date: "2025-05-08"
+category: "算法题解"
 toc: true
 excerpt: "详细解析LeetCode 274 H-Index问题，包括问题理解、三种解法（排序法、计数法和二分查找）及其执行流程分析与优劣比较"
 tags: [Algorithm, DataStructure,排序,计数法,二分查找]

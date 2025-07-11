@@ -2,6 +2,7 @@
 layout: post
 title: "[LeetCode 301] 删除无效括号的两种解法分析"
 date: "2025-04-25"
+category: "算法题解"
 toc: true
 excerpt: "本文详细解析 LeetCode 301 题删除无效括号的 BFS 和 DFS 解法，重点讲解 DFS 回溯机制的工作原理。"
 tags: [Algorithm, DataStructure]

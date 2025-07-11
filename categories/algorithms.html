@@ -1,0 +1,136 @@
+---
+layout: default
+title: "算法题解"
+permalink: /categories/algorithms/
+---
+
+<div class="category-header">
+  <h1>🧮 算法题解</h1>
+  <p class="category-description">LeetCode 题解与算法分析，包含多种解法对比和复杂度分析</p>
+</div>
+
+<div class="category-stats">
+  {% assign algorithm_posts = site.posts | where: "category", "算法题解" %}
+  {% if algorithm_posts.size == 0 %}
+    {% assign algorithm_posts = site.posts | where_exp: "post", "post.tags contains 'LeetCode' or post.tags contains 'Algorithm' or post.tags contains '算法'" %}
+  {% endif %}
+  <div class="stat-item">
+    <span class="stat-number">{{ algorithm_posts.size }}</span>
+    <span class="stat-label">题解数量</span>
+  </div>
+  <div class="stat-item">
+    {% assign difficulties = algorithm_posts | map: 'difficulty' | compact | uniq %}
+    <span class="stat-number">{{ difficulties.size }}</span>
+    <span class="stat-label">难度等级</span>
+  </div>
+  <div class="stat-item">
+    {% assign topics = algorithm_posts | map: 'topics' | compact | flatten | uniq %}
+    <span class="stat-number">{{ topics.size }}</span>
+    <span class="stat-label">算法主题</span>
+  </div>
+</div>
+
+<div class="posts-grid">
+  {% for post in algorithm_posts %}
+  <article class="post-card algorithm-card">
+    <div class="post-card-content">
+      <h2 class="post-card-title">
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+      </h2>
+
+      <div class="post-card-meta">
+        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        {% if post.difficulty %}
+        <span class="difficulty difficulty-{{ post.difficulty | downcase }}">{{ post.difficulty }}</span>
+        {% endif %}
+        {% assign words = post.content | number_of_words %}
+        {% assign reading_time = words | divided_by: 200 %}
+        {% if reading_time == 0 %}{% assign reading_time = 1 %}{% endif %}
+        <span class="reading-time">{{ reading_time }} 分钟阅读</span>
+      </div>
+
+      {% if post.tags.size > 0 %}
+      <div class="post-card-tags">
+        {% for tag in post.tags limit:3 %}
+        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}" class="tag">
+          {{ tag }}
+        </a>
+        {% endfor %}
+        {% if post.tags.size > 3 %}
+        <span class="tag">+{{ post.tags.size | minus: 3 }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="post-card-excerpt">
+        {{ post.excerpt | strip_html | truncate: 120 }}
+      </div>
+      
+      <a href="{{ site.baseurl }}{{ post.url }}" class="post-card-read-more">查看题解</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+<style>
+.category-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-light) 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.category-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.category-description {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.category-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.category-stats .stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--background-lighten-color);
+  border-radius: 12px;
+  border: 1px solid var(--divider-color);
+  transition: transform 0.3s ease;
+}
+
+.category-stats .stat-item:hover {
+  transform: translateY(-4px);
+}
+
+.algorithm-card .difficulty {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.difficulty-easy { background: #d4edda; color: #155724; }
+.difficulty-medium { background: #fff3cd; color: #856404; }
+.difficulty-hard { background: #f8d7da; color: #721c24; }
+
+@media (max-width: 768px) {
+  .category-header h1 { font-size: 2rem; }
+  .category-description { font-size: 1rem; }
+  .category-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

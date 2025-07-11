@@ -2,6 +2,7 @@
 layout: post
 title: Final Cut Pro 学习笔记
 date: 2023-03-26
+category: "其它"
 toc: true
 excerpt: 总结了Final Cut Pro 学习笔记的过程
 tags: [生活,软件,思考总结,问题]

@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 12 - Integer to Roman 详细分析：三种解法深度对比"
 date: "2025-05-27"
+category: "算法题解"
 toc: true
 excerpt: "深入分析LeetCode第12题Integer to Roman的三种不同解法：贪心算法、分位处理和预构建数组法，详细对比各自的优缺点和适用场景"
 tags: [Algorithm, LeetCode, Java, 贪心算法]

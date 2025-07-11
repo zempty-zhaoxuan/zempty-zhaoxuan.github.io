@@ -2,6 +2,7 @@
 layout: post
 title: "postman,浏览器测试接口正常，HttpClient 调用就报错"
 date: 2022-10-14
+category: "其它"
 toc: true
 excerpt: 事情是这样的：第三方提供了一个接口需要对接，我就对接了，测试环节的时候怎么都调不通，各种排查，各方人员都动员了起来，就是没有找到问题，下面把问题报错的原因呈上...
 tags: [backend,java]

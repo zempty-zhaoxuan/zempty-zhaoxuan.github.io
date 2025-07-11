@@ -2,6 +2,7 @@
 layout: post
 title: "Cursor 或者 VSCode 中无法运行 java单元测试"
 date: 2024-04-03
+category: "其它"
 toc: true
 excerpt: "解决Cursor和VSCode中Java单元测试无法运行的问题，涉及配置和构建过程"
 tags: [backend,java,IDE]

@@ -4,6 +4,7 @@ title: "博客封面图功能演示"
 toc: true
 excerpt: 博客新功能介绍：封面图-代码高亮-阅读进度条
 date: 2025-05-06
+category: "其它"
 tags: [博客, 功能更新]
 cover_image: tesla.jpg
 toc: true
@@ -27,6 +28,7 @@ toc: true
 layout: post
 title: "文章标题"
 date: 2023-01-01
+category: "其它"
 tags: [标签1, 标签2]
 cover_image: your-image.jpg
 ---

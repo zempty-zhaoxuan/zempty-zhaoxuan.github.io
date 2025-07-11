@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 6 Zigzag Conversion - 三种解法深度分析"
 date: "2025-06-24"
+category: "算法题解"
 toc: true
 excerpt: "深入分析LeetCode第6题Zigzag Conversion的三种解法：模拟法、按行遍历法和数学公式法，重点解释数学公式法的推导过程"
 tags: [Algorithm, LeetCode, Java, 字符串处理]

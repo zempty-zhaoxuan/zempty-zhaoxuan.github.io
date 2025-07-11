@@ -2,6 +2,7 @@
 layout: post
 title: "LeetCode 189 旋转数组：三种解法分析"
 date: "2025-04-25"
+category: "算法题解"
 toc: true
 excerpt: "详细分析 LeetCode 189 题旋转数组的三种常见解法：使用额外数组、数组反转、循环替换，并比较其优劣和时空复杂度。"
 tags: [Algorithm, Java, 问题]
