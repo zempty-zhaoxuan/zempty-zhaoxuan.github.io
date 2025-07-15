@@ -57,6 +57,16 @@ class Solution {
 
 ### 算法分析
 
+这里的条件 `i <= n - m` 是因为我们要在 `haystack` 中寻找 `needle` 的完整匹配。假设 `haystack` 长度为 `n`，`needle` 长度为 `m`，那么从 `haystack` 的第 `i` 个位置开始，只有当 `i + m - 1 < n`（即 `i <= n - m`）时，`haystack` 剩余的子串长度才足够与 `needle` 进行完整比较。如果 `i > n - m`，那么从这个位置开始，`haystack` 剩下的字符已经不足以容纳一个完整的 `needle`，所以无需再尝试匹配。
+
+举例说明：  
+- `haystack = "abcde"`，长度 `n = 5`  
+- `needle = "cd"`，长度 `m = 2`  
+- 最后一次合法的起点是 `i = 3`，因为 `haystack[3..4] = "de"`，再往后就不够 2 个字符了。
+
+因此，循环条件写作 `i <= n - m`，确保每一次匹配尝试都不会越界，并且不会做无意义的比较。
+
+
 - **执行流程**:
     1. 外层循环 `i` 控制 `haystack` 的起始匹配点。
     2. 内层循环 `j` 负责逐个字符地比较 `haystack.substring(i, i+m)` 与 `needle`。
@@ -75,6 +85,9 @@ class Solution {
 ## 解法二：KMP 算法
 
 KMP (Knuth-Morris-Pratt) 算法是一种高效的字符串匹配算法，它通过预处理 `needle` 字符串来避免在匹配过程中进行不必要的回溯。其核心思想是，当发生字符不匹配时，能够利用已经匹配过的信息，将 `needle` 字符串向右“滑动”尽可能远的距离，而不是仅仅移动一位。
+
+> **推荐阅读：** [KMP 算法详解：从 LPS 数组到 LeetCode 28 实战 (2025-07-14)]({% post_url 2025-07-14-kmp-algorithm-explained-in-detail %})
+
 
 ### KMP 核心：LPS 数组
 
