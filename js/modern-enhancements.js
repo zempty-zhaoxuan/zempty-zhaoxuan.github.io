@@ -197,16 +197,28 @@
 
   // Smooth scroll enhancements - 平滑滚动增强
   function initSmoothScrolling() {
-    // Add smooth scrolling to all anchor links
+    // Add smooth scrolling to in-page anchors; only intercept when target exists
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute("href"));
+        const href = this.getAttribute("href");
+        if (!href || href === "#") return;
+
+        // Use getElementById to support IDs starting with numbers or containing non-ASCII chars
+        const id = decodeURIComponent(href.slice(1));
+        const target = document.getElementById(id);
+
         if (target) {
+          e.preventDefault();
           target.scrollIntoView({
             behavior: "smooth",
             block: "start"
           });
+          // Keep URL hash in sync without causing default jump
+          if (history && history.replaceState) {
+            history.replaceState(null, "", href);
+          } else {
+            location.hash = href;
+          }
         }
       });
     });
