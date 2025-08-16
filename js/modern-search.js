@@ -23,7 +23,6 @@ class ModernSearch {
     if (this.isInitialized) return;
 
     try {
-      await this.loadPosts();
       this.bindEvents();
       this.isInitialized = true;
       console.log("Modern search initialized successfully");
@@ -34,7 +33,8 @@ class ModernSearch {
 
   async loadPosts() {
     try {
-      const response = await fetch("/search.json");
+      const base = document.querySelector('meta[name="base-url"]').getAttribute('content') || '';
+      const response = await fetch(`${base}/search.json`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -110,16 +110,19 @@ class ModernSearch {
   bindSearchEvents(searchObj, type) {
     // 输入框事件
     searchObj.input.addEventListener(
-      "input",
-      this.debounce((e) => {
-        const query = e.target.value.trim();
-        if (query.length >= 1) {
-          this.performSearch(query, searchObj, type);
-        } else {
-          this.hideResults(searchObj);
-        }
-      }, 300)
-    );
+             "input",
+       this.debounce(async (e) => {
+         const query = e.target.value.trim();
+         if (query.length >= 1) {
+           if (!this.posts.length) {
+             await this.loadPosts();
+           }
+           this.performSearch(query, searchObj, type);
+         } else {
+           this.hideResults(searchObj);
+         }
+       }, 300)
+     );
 
     // 回车键搜索
     searchObj.input.addEventListener("keydown", (e) => {
@@ -127,7 +130,11 @@ class ModernSearch {
         e.preventDefault();
         const query = searchObj.input.value.trim();
         if (query.length >= 1) {
-          this.performSearch(query, searchObj, type);
+          if (!this.posts.length) {
+            this.loadPosts().then(() => this.performSearch(query, searchObj, type));
+          } else {
+            this.performSearch(query, searchObj, type);
+          }
         }
       }
 

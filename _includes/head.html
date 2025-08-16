@@ -4,21 +4,19 @@
     site.description }}
   </title>
 
-  {% include meta.html %} {% include fonts.html %}
+  {% include meta.html %}
   
   <!-- Base URL for JavaScript -->
   <meta name="base-url" content="{{ site.baseurl }}" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+
 
   <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
-  <link
-    rel="stylesheet"
-    type="text/css"
-    href="{{ site.baseurl }}/assets/css/animations.css"
-  />
+  <link rel="preload" as="style" href="{{ site.baseurl }}/assets/css/animations.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ site.baseurl }}/assets/css/animations.css"></noscript>
   <link
     rel="alternate"
     type="application/rss+xml"
@@ -27,47 +25,14 @@
   />
   <link rel="shortcut icon" href="{{ site.favicon }}" />
   <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"> -->
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script>
-    (function (d) {
-      var config = {
-          kitId: "vbt3gjx",
-          scriptTimeout: 3000,
-          async: true
-        },
-        h = d.documentElement,
-        t = setTimeout(function () {
-          h.className =
-            h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
-        }, config.scriptTimeout),
-        tk = d.createElement("script"),
-        f = false,
-        s = d.getElementsByTagName("script")[0],
-        a;
-      h.className += " wf-loading";
-      tk.src = "https://use.typekit.net/" + config.kitId + ".js";
-      tk.async = true;
-      tk.onload = tk.onreadystatechange = function () {
-        a = this.readyState;
-        if (f || (a && a != "complete" && a != "loaded")) return;
-        f = true;
-        clearTimeout(t);
-        try {
-          Typekit.load(config);
-        } catch (e) {}
-      };
-      s.parentNode.insertBefore(tk, s);
-    })(document);
-  </script>
+
+
 
   <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
 
   <!-- 添加自定义CSS文件用于隐藏代码行号 -->
-  <link
-    rel="stylesheet"
-    type="text/css"
-    href="{{ '/assets/css/custom.css' | relative_url }}"
-  />
+  <link rel="preload" as="style" href="{{ '/assets/css/custom.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}"></noscript>
 
   <!-- 内联样式以确保行号被隐藏和代码适应移动设备 -->
   <style>
