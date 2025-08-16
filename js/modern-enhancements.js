@@ -256,7 +256,8 @@
 
             if (src) {
               img.src = src;
-              img.classList.add("loaded");
+              img.classList.remove("lazy");
+              img.classList.add("lazy-loaded");
               imageObserver.unobserve(img);
             }
           }
@@ -269,15 +270,8 @@
       });
     }
 
-    // Preload critical resources
-    const preloadLinks = ["/search.json", "/js/simple-jekyll-search.min.js"];
-
-    preloadLinks.forEach((href) => {
-      const link = document.createElement("link");
-      link.rel = "prefetch";
-      link.href = href;
-      document.head.appendChild(link);
-    });
+    // Preload critical resources (limit to search index lazily via modern-search.js)
+    // Removed generic prefetches to reduce unnecessary network work.
   }
 
   // Theme transition enhancements - 主题切换增强

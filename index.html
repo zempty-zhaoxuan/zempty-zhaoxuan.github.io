@@ -27,7 +27,7 @@ layout: default
       {% if post.cover_image %}
       <div class="post-card-cover">
         <a href="{{ site.baseurl }}{{ post.url }}">
-          <img src="{{ site.baseurl }}/images/placeholder.png" data-src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image" class="lazy" onerror="this.onerror=null; this.src='{{ site.baseurl }}/images/{{ post.cover_image }}';">
+          <img src="{{ site.baseurl }}/images/placeholder.png" data-src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image" class="lazy" loading="lazy" onerror="this.onerror=null; this.src='{{ site.baseurl }}/images/{{ post.cover_image }}';">
         </a>
       </div>
       {% endif %}
@@ -88,7 +88,13 @@ layout: default
 </div>
 
 <!--不算子网站访客统计-->
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var s = document.createElement('script');
+    s.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+    s.async = true;
+    document.body.appendChild(s);
+  });
 </script>
 <!-- pv的方式，单个用户连续点击n篇文章，记录n次访问量 -->
 <div align="center">

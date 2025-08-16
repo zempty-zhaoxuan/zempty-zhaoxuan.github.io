@@ -18,14 +18,16 @@ layout: null
 
 // Custom Font Definitions
 
-// Lxgw WenKai (霞鹜文楷)
+// Lxgw WenKai (disabled to reduce TTF size)
+/*
 @font-face {
   font-family: "Lxgw WenKai";
   src: url("assets/fonts/LxgwWenKai/LXGWWenKai-Regular.ttf") format("truetype");
-  font-weight: normal; // 400
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
+*/
 
 // JetBrains Mono - Regular
 @font-face {
