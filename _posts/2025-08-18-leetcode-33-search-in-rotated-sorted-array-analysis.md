@@ -16,7 +16,7 @@ author: zempty
 核心事实：在任何时刻的 `[left, right]` 区间内，至少有一侧是“有序的半边”。利用这一性质判断目标是否落在有序半边，否则转向另一半。
 
 实现要点（通用）：
-- 中点计算推荐 `mid = left + (right - left) / 2`，避免 `left + right` 溢出；题解中使用的 `(left + right) >>> 1` 在极端大索引下存在溢出风险（虽在面试常规范围安全）。
+- 中点计算可使用 `mid = left + (right - left) / 2` 或 `(left + right) >>> 1`；后者使用无符号右移，即使 `left + right` 溢出为负数也能正确计算中点，因此实际上是溢出安全的。
 - 闭区间语义与循环条件配套：`while (left <= right)`。
 - 更新指针必须排除 `mid`，以确保收敛：`left = mid + 1` 或 `right = mid - 1`。
 
@@ -34,7 +34,7 @@ class Solution {
     public int search(int[] nums, int target) {
         int left = 0, right = nums.length - 1;
         while(left <= right){
-            int mid = (left + right) >>> 1; // 中点（注意极大索引时可改用 left + (right-left)/2）
+            int mid = (left + right) >>> 1; 
             if(nums[mid] == target){
                 return mid; // 命中
             }
