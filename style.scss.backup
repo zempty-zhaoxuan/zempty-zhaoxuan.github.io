@@ -1,0 +1,2846 @@
+---
+layout: null
+---
+
+//
+// IMPORTS
+//
+
+@import "reset";
+@import "open-color";
+@import "variables";
+@import "themes"; // 导入主题文件
+@import "enhancements"; // 导入新的增强功能样式
+@import "mobile-enhancements"; // 导入移动端增强样式
+@import "modern-cards"; // 导入现代化卡片样式
+@import "modern-search"; // 导入现代化搜索样式
+@import "modern-sidebar"; // 导入现代化侧边栏样式
+
+// Custom Font Definitions
+
+// Lxgw WenKai (disabled to reduce TTF size)
+/*
+@font-face {
+  font-family: "Lxgw WenKai";
+  src: url("assets/fonts/LxgwWenKai/LXGWWenKai-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+// JetBrains Mono - Regular
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Regular.woff2")
+    format("woff2");
+  font-weight: normal; // 400
+  font-style: normal;
+  font-display: swap;
+}
+
+// JetBrains Mono - Bold
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Bold.woff2")
+    format("woff2");
+  font-weight: bold; // 700
+  font-style: normal;
+  font-display: swap;
+}
+
+// JetBrains Mono - Italic
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Italic.woff2")
+    format("woff2");
+  font-weight: normal; // 400
+  font-style: italic;
+  font-display: swap;
+}
+
+// JetBrains Mono - Bold Italic
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-BoldItalic.woff2")
+    format("woff2");
+  font-weight: bold; // 700
+  font-style: italic;
+  font-display: swap;
+}
+
+// Syntax highlighting @import is at the bottom of this file
+
+/**************/
+/* BASE RULES */
+/**************/
+
+html {
+  font-size: $base-font-size;
+}
+
+body {
+  font-family: $base-font;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.9em;
+  letter-spacing: 0.03em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+// 深色主题文本渲染优化
+.dark-theme {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  @include ipad-pro-portrait {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  @include mobile {
+    padding: 0 15px;
+    max-width: 100%;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $base-font;
+  line-height: 1.6;
+  margin-top: 1.8em;
+  margin-bottom: 0.8em;
+  padding: 0;
+
+  @include mobile {
+    line-height: 1.4;
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
+  }
+}
+
+h1,
+h2,
+h3,
+h5 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--divider-color);
+  a {
+    color: inherit;
+  }
+}
+
+h2 {
+  font-size: 1.8em;
+  border-bottom: 1px dashed var(--divider-color-light);
+  padding-bottom: 0.2em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--blockquote-color);
+}
+
+h6 {
+  font-size: 1em;
+  font-weight: normal;
+  color: var(--blockquote-color);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  color: var(--text-color);
+  margin: 1.2em 0;
+  text-align: justify;
+  hyphens: auto;
+  widows: 2;
+  orphans: 2;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:active {
+    color: var(--accent-color);
+    text-decoration: underline;
+  }
+
+  // Adding focus style for better accessibility
+  &:focus {
+    outline: 2px solid var(--accent-color, #007bff); // Use accent color or a fallback blue
+    outline-offset: 2px;
+    text-decoration: underline; // Consistent with hover/active
+  }
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+strong,
+b {
+  font-weight: bold;
+}
+
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--divider-color);
+  margin: 1.5em auto;
+}
+
+// Yeun's list style
+// https://gist.github.com/yeun/d824fc7b04b756508f4b0143535cec30
+
+ol,
+ul {
+  > li {
+    &:before {
+      position: absolute;
+      width: $li-bullets-width;
+      margin-left: -$li-bullets-width;
+      display: inline-block;
+      box-sizing: border-box;
+      text-align: right;
+    }
+  }
+}
+
+ul {
+  > li:before {
+    content: "\2022";
+    padding-right: $ul-bullets-right-space;
+    font-family: $ul-bullets-font;
+    font-size: $ul-bullets-font-size;
+    line-height: $ul-bullets-font-line-height;
+  }
+}
+
+ol {
+  counter-reset: section;
+
+  > li:before {
+    counter-increment: section;
+    content: counter(section) ".";
+    padding-right: $ol-bullets-right-space;
+    font-family: $ol-bullets-font;
+    font-size: $ol-bullets-font-size;
+    line-height: $ol-bullets-font-line-height;
+  }
+}
+
+ol,
+ul {
+  > li {
+    margin: 0 auto $li-bottom-space $li-bullets-width;
+    line-height: $li-line-height;
+
+    > ol,
+    > ul {
+      margin-top: $li-bottom-space;
+    }
+  }
+}
+
+li {
+  > ol,
+  > ul {
+    > li {
+      font-size: ($li-child-size-ratio * 1em);
+      margin: 0 auto ($li-bottom-space * $li-child-size-ratio)
+        ($li-bullets-width * $li-child-size-ratio);
+    }
+  }
+}
+
+// Definition list
+dt {
+  float: left;
+  width: $dt-width;
+  overflow: auto;
+  clear: left;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
+  margin-bottom: $li-bottom-space;
+
+  @include mobile {
+    width: 120px;
+  }
+}
+
+dd {
+  margin-left: $dd-position;
+  margin-bottom: $li-bottom-space;
+
+  @include mobile {
+    margin-left: 140px;
+  }
+}
+
+// Table
+table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid var(--table-border-color);
+  border-collapse: collapse;
+}
+
+td,
+th {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--table-border-color);
+}
+
+tbody tr:nth-child(odd) td,
+tbody tr:nth-child(odd) th {
+  background-color: var(--table-background-color);
+}
+
+// Dark theme specific table improvements
+.dark-theme table {
+  border-color: var(--table-border-color);
+
+  th {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    font-weight: bold;
+  }
+
+  td {
+    color: var(--text-color);
+  }
+
+  // Improve visibility of alternating rows
+  tbody tr:nth-child(odd) td,
+  tbody tr:nth-child(odd) th {
+    background-color: #323232;
+  }
+
+  tbody tr:nth-child(even) td,
+  tbody tr:nth-child(even) th {
+    background-color: #262626;
+  }
+
+  code {
+    padding: 2px 5px;
+    color: #56c8ff;
+    background-color: #333;
+    border-radius: 3px;
+  }
+}
+
+// Blockquote
+blockquote {
+  font-weight: 300;
+  padding: 0 0 0 1.4rem;
+  margin: 0 2rem 1rem 0;
+  border-left: 0.2em solid $blockquote-border-color;
+
+  p {
+    color: $blockquote-color;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Footnote
+a.footnote {
+  &,
+  .post p &,
+  .post ol &,
+  .post ul & {
+    margin: 0 3px;
+    padding: 0 2px;
+    font-size: $small-font-size;
+    text-align: center;
+    border: 1px solid $footnote-link-border-color;
+    border-radius: 2px;
+    -webkit-text-stroke: 0.25px;
+    -webkit-transition: 0.2s ease-out all;
+    text-decoration: none;
+
+    &:hover {
+      background: $footnote-link-background-over-color;
+    }
+  }
+}
+
+.footnotes {
+  border-top: 1px solid $divider-color;
+  font-size: $small-font-size;
+}
+
+// Image
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-radius: 5px;
+}
+
+// Fixes images in popup boxes from Google Translate
+.gmnoprint img {
+  max-width: none;
+}
+
+// Specify the color of the selection
+::-moz-selection {
+  color: #ffffff;
+  background: var(--selection-background-color);
+}
+::selection {
+  color: #ffffff;
+  background: var(--selection-background-color);
+}
+
+// 深色主题下的文字选中优化
+.dark-theme {
+  ::-moz-selection {
+    color: #1a1a1a;
+    background: var(--selection-background-color);
+  }
+
+  ::selection {
+    color: #1a1a1a;
+    background: var(--selection-background-color);
+  }
+}
+
+// Nicolas Gallagher's micro clearfix hack
+// http://nicolasgallagher.com/micro-clearfix-hack/
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/* 在竖屏模式下禁用clearfix，防止产生水平线 */
+@media screen and (orientation: portrait) {
+  .clearfix:before,
+  .clearfix:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    height: 0 !important;
+  }
+
+  .sidebar.clearfix {
+    display: block !important;
+    background: var(--background-color) !important;
+  }
+}
+
+// Alignment
+.center {
+  text-align: center;
+
+  &-image {
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+.right {
+  text-align: right;
+}
+
+/*********************/
+/* LAYOUT / SECTIONS */
+/*********************/
+
+//
+// .sidebar
+//
+
+.wrapper-sidebar {
+  width: 250px;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: var(--background-lighten-color);
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 4;
+  border-right: 1px solid var(--divider-color);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  padding-bottom: 45px; // 为底部固定的footer留出空间（优化后更紧凑）
+
+  // 在小屏幕设备上使用相对定位 (768px以下)
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    padding-bottom: 0;
+    position: relative;
+    border-bottom: none;
+    border-right: 0;
+    transform: none !important; // 确保移动端不会被折叠
+    background-color: var(--background-lighten-color);
+  }
+
+  // iPad Pro portrait模式下不需要底部间距
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    padding-bottom: 0;
+  }
+
+  @include ipad-pro-portrait {
+    &.mobile-collapsed {
+      width: 0;
+      height: auto;
+      overflow: hidden;
+    }
+  }
+}
+
+.sidebar {
+  padding: 20px 0;
+  background-color: transparent;
+
+  // 只在真正的小屏幕设备上调整样式 (768px以下)
+  @media screen and (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.site-info {
+  text-align: center;
+  margin: 100px auto 0;
+
+  @include mobile {
+    float: none;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .site-avatar {
+    margin: 0 auto;
+    display: block;
+    max-width: 200px;
+    max-height: 200px;
+
+    @include mobile {
+      max-width: 120px;
+      max-height: 120px;
+    }
+
+    img {
+      display: inline-block;
+      border-radius: 2px;
+    }
+  }
+}
+
+.site-name {
+  margin: 0 auto;
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: $base-font;
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent-color), var(--link-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+  }
+
+  @include mobile {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+}
+
+.site-description {
+  margin: 20px auto;
+  color: var(--text-color);
+  opacity: 1;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 280px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  padding: 12px 20px;
+  background: var(--background-lighten-color);
+  border-radius: 25px;
+  border: 1px solid var(--divider-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent-color);
+  }
+
+  @include mobile {
+    margin: 15px auto;
+    font-size: 16px;
+    max-width: 90%;
+    padding: 10px 16px;
+    border-radius: 20px;
+  }
+}
+
+.navlist {
+  text-align: center;
+  padding: 0 15px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  /* 移除导航列表底部边框 */
+  border-bottom: none;
+  padding-bottom: 15px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  font-family: $base-font;
+  font-weight: 500;
+  font-size: 16px;
+
+  @include mobile {
+    margin-top: 0;
+    font-size: 15px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+    border-bottom: none;
+    border-top: none;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  a {
+    margin: 0;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+    background-color: var(--background-lighten-color);
+
+    &:hover,
+    &:active {
+      color: #fff;
+      background-color: var(--link-color);
+    }
+
+    // Style for the active navigation link
+    &.active {
+      color: #fff;
+      background-color: var(--accent-color); // Use accent color for active link
+      font-weight: 600; // Make it bolder
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); // Subtle inner shadow
+    }
+
+    @include mobile {
+      margin: 5px; // Slightly more space
+      display: block; // Make links block level for better spacing
+      padding: 10px 15px; // Increase padding
+      border-radius: 5px; // Less rounding for block links
+      font-size: 16px; // Larger font size on mobile
+      text-align: left; // Align text left
+      background-color: transparent; // Remove default light background
+      border-bottom: 1px solid var(--divider-color-light); // Add separator
+
+      &:last-child {
+        border-bottom: none; // Remove border from last item
+      }
+
+      &:hover,
+      &:active {
+        color: var(--accent-color); // Accent color on hover
+        background-color: rgba(
+          var(--accent-color),
+          0.1
+        ); // Light accent background
+      }
+
+      // Active style specific to mobile
+      &.active {
+        color: var(--accent-color); // Accent color
+        background-color: rgba(
+          var(--accent-color),
+          0.15
+        ); // Slightly darker accent background
+        font-weight: 600;
+        box-shadow: none; // Remove inner shadow on mobile
+        border-left: 3px solid var(--accent-color); // Add left border indicator
+        padding-left: 12px; // Adjust padding for border
+      }
+    }
+  }
+}
+
+// content
+
+.wrapper-content {
+  float: right;
+  width: calc(100% - 250px);
+  margin-left: 250px;
+
+  // 只在真正的小屏幕设备上调整布局 (768px以下)
+  @media screen and (max-width: 768px) {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+// iPad Pro portrait mode optimization - 恢复垂直折叠功能
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .wrapper-sidebar {
+    width: 100%;
+    height: auto;
+    padding-bottom: 0;
+    position: relative;
+    border-bottom: none;
+    border-right: 0;
+    transform: none !important;
+    background-color: var(--background-lighten-color);
+  }
+
+  .wrapper-content {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sidebar {
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .site-info {
+    margin: 20px auto 0;
+  }
+
+  nav {
+    padding: 10px 0;
+    box-shadow: none;
+  }
+}
+
+// Posts
+
+.posts {
+  .tag {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 300;
+    font-size: $small-font-size;
+
+    li:before {
+      content: "";
+    }
+
+    li {
+      display: inline-block;
+      margin: 0 5px 0 0;
+
+      > a {
+        margin: 0;
+        padding: 3px 8px;
+        color: var(--accent-color);
+        background-color: rgba(var(--accent-color), 0.1);
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: white;
+          background-color: var(--accent-color);
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.posts > .post {
+  padding: 1.8em;
+  margin-bottom: 2em;
+  border: 1px solid var(--divider-color);
+  border-radius: 8px;
+  background-color: var(--background-lighten-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.posts > .post:last-child {
+  padding-bottom: 1.8em;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.date {
+  font-weight: 300;
+  font-size: $small-font-size;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-right: 4px;
+}
+
+.post {
+  h1 {
+    margin-bottom: 0.1em;
+  }
+
+  .comments {
+    margin-top: 48px;
+    padding: 0; // 移除内部padding，让comments-area控制
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
+    .giscus, .giscus-frame {
+      width: 100%;
+    }
+
+    h2, h3 {
+      color: var(--heading-color);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+  }
+
+  .comments-area {
+    --comments-gap: 16px;
+    display: block;
+  }
+
+  .read-more {
+    font-size: 15px;
+  }
+
+  @include ipad-pro-portrait {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.posts .entry {
+  /* 增加正文和评论区之间的呼吸感 */
+  margin-bottom: 28px;
+}
+
+/* =============================================== */
+/* 评论区样式优化 - 实现完美居中效果 */
+/* =============================================== */
+
+.comments-area {
+  /* 基础布局 - 确保完全居中 */
+  width: 100%;
+  max-width: 900px; /* 限制最大宽度，与文章内容保持一致 */
+  margin: 60px auto 0 auto !important; /* 强制居中对齐 */
+  padding: 0 20px; /* 适当内边距 */
+  
+  /* 视觉设计 */
+  background: transparent;
+  border: none;
+  
+  /* 动画效果 */
+  opacity: 0;
+  animation: commentsFadeIn 0.8s ease-out 0.5s forwards;
+  
+  /* 确保box-sizing一致性 */
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  
+  /* 响应式调整 */
+  @include mobile {
+    margin: 40px auto 0 auto !important;
+    padding: 0 15px;
+    max-width: calc(100vw - 30px);
+  }
+}
+
+/* 评论区头部样式优化 */
+.comments-header {
+  margin: 0 0 32px 0;
+  padding: 0 20px; /* 默认内边距，侧边栏展开时会被重写 */
+  box-sizing: border-box;
+  
+  h3#comments-title {
+    margin: 0 0 16px 0;
+    padding: 0;
+    font-size: 1.4em;
+    font-weight: 700;
+    color: var(--heading-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: -0.01em;
+    
+    .comments-icon {
+      font-size: 1.2em;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    
+    .comments-text {
+      flex: 1;
+    }
+    
+    /* 悬停效果 */
+    &:hover .comments-icon {
+      opacity: 1;
+    }
+  }
+  
+  .comments-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--link-color) 0%, var(--link-color-hover) 100%);
+    border-radius: 2px;
+    width: 80px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    
+    .dark-theme & {
+      opacity: 0.8;
+    }
+  }
+}
+
+.giscus-container {
+  /* 简洁的居中布局 */
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto !important;
+  padding: 0;
+  box-sizing: border-box;
+  
+  /* 确保Giscus完美居中显示 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  
+  /* 背景和边框 */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  
+  /* 响应式适配 */
+  @include mobile {
+    padding: 0;
+  }
+}
+
+.giscus-container .giscus,
+.giscus-container iframe.giscus-frame {
+  width: 100% !important;
+  max-width: 100% !important;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  min-height: 150px;
+}
+
+/* 动画定义 */
+@keyframes commentsFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page {
+  //  margin: 40px;
+
+  @include mobile {
+    //    margin: 24px;
+  }
+}
+
+/*********************/
+/* TABLE OF CONTENTS */
+/*********************/
+
+.toc {
+  // General container styles (position, size, background, border etc.)
+  position: fixed;
+  right: 20px; /* Adjusted from 2% */
+  top: 100px; /* Adjust based on header height */
+  width: 320px; /* Default width, can be adjusted by JS */
+  max-height: calc(100vh - 120px); /* Adjust top/bottom margins */
+  padding: 15px;
+  background-color: var(
+    --toc-bg-color,
+    var(--background-color)
+  ); /* Use theme variable or fallback */
+  border: 1px solid var(--divider-color); /* Changed from border-left */
+  border-radius: 5px; /* Added */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added */
+  overflow-y: auto;
+  scrollbar-width: thin; /* Kept */
+  z-index: 999; /* Kept, updated value */
+  transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease; /* Added padding */
+  font-family: "Roboto", "Noto Sans SC", sans-serif; /* Kept */
+
+  /* Styling for the NEW toggle button */
+  #toc-toggle-button {
+      padding: 32px 40px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 40px !important;
+      
+      h3#comments-title {
+        font-size: 1.4em !important;
+      }
+      
+      .comments-divider {
+        width: 100px !important;
+      }
+    }
+  }
+  
+  /* 不同屏幕尺寸下的优化 */
+  @media (max-width: 1600px) {
+    max-width: 1000px !important;
+    width: 85% !important;
+    
+    .giscus-container {
+      padding: 36px 50px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 50px !important;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    max-width: 900px !important;
+    width: 90% !important;
+    
+    .giscus-container {
+      padding: 32px 40px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 40px !important;
+      
+      h3#comments-title {
+        font-size: 1.4em !important;
+      }
+    }
+  }
+  
+  @media (max-width: 900px) {
+    max-width: 100% !important;
+    width: 95% !important;
+    
+    .giscus-container {
+      padding: 28px 32px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 32px !important;
+      
+      h3#comments-title {
+        font-size: 1.3em !important;
+      }
+      
+      .comments-divider {
+        width: 80px !important;
+      }
+    }
+  }
+}
+
+/* 侧边栏展开时 - 评论区独立居中布局 */
+.wrapper-content:not(.sidebar-collapsed) .comments-area {
+  /* 创建独立的居中布局，不紧贴文章内容 */
+  max-width: 800px !important; /* 适中的宽度，视觉上更舒适 */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  
+  .giscus-container {
+    padding: 32px !important; /* 四周内边距 */
+    margin: 0 24px !important; /* 左右外边距，增加居中效果 */
+  }
+  
+  .comments-header {
+    padding: 0 32px !important; /* 标题区域内边距 */
+    text-align: center; /* 标题居中 */
+    
+    h3#comments-title {
+      font-size: 1.3em;
+      justify-content: center; /* flex容器居中 */
+    }
+    
+    .comments-divider {
+      margin: 0 auto; /* 分割线居中 */
+    }
+  }
+  
+  /* 响应式适配 - 保持居中效果 */
+  @include ipad-pro-portrait {
+    max-width: 90% !important;
+    
+    .giscus-container {
+      padding: 28px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 28px !important;
+    }
+  }
+  
+  @include mobile {
+    max-width: 95% !important;
+    
+    .giscus-container {
+      padding: 20px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 20px !important;
+    }
+  }
+  
+  /* 不同屏幕宽度下的优化 */
+  @media (max-width: 1200px) {
+    max-width: 700px !important;
+    
+    .giscus-container {
+      padding: 28px !important;
+      margin: 0 auto !important;
+    }
+  }
+  
+  @media (max-width: 1000px) {
+    max-width: 600px !important;
+    
+    .giscus-container {
+      padding: 24px !important;
+      margin: 0 16px !important;
+    }
+  }
+  
+  @media (max-width: 800px) {
+    max-width: 100% !important;
+    
+    .giscus-container {
+      padding: 20px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 20px !important;
+      
+      h3#comments-title {
+        font-size: 1.25em;
+      }
+    }
+  }
+}
+
+/* =============================================== */
+/* 超大屏幕和特殊设备优化 */
+/* =============================================== */
+
+/* 超大屏幕 - 区分折叠和展开状态 */
+@media (min-width: 1920px) {
+  /* 侧边栏折叠时 - 充分利用超大屏幕空间 */
+  .wrapper-content.sidebar-collapsed .comments-area,
+  .mobile-sidebar-collapsed .wrapper-content .comments-area {
+    max-width: 1400px !important; /* 超大屏幕上使用更大的宽度 */
+    width: 85% !important;
+    
+    .giscus-container {
+      padding: 50px 80px !important; /* 更大的内边距 */
+      margin: 0 auto !important; /* 完全居中对齐 */
+    }
+    
+    .comments-header {
+      padding: 0 80px !important;
+      text-align: center;
+      
+      h3#comments-title {
+        font-size: 1.6em !important; /* 更大的标题 */
+        justify-content: center;
+      }
+      
+      .comments-divider {
+        margin: 0 auto;
+        width: 140px !important; /* 更长的分割线 */
+      }
+    }
+  }
+  
+  /* 侧边栏展开时 - 保持适中的宽度 */
+  .wrapper-content:not(.sidebar-collapsed) .comments-area {
+    max-width: 900px !important; /* 展开时保持适中宽度 */
+    
+    .giscus-container {
+      padding: 40px 50px !important;
+      margin: 0 auto !important;
+    }
+    
+    .comments-header {
+      padding: 0 50px !important;
+      text-align: center;
+      
+      h3#comments-title {
+        font-size: 1.4em !important;
+        justify-content: center;
+      }
+      
+      .comments-divider {
+        margin: 0 auto;
+        width: 100px !important;
+      }
+    }
+  }
+}
+
+/* 小屏手机特殊处理 - 保持居中效果 */
+@media (max-width: 480px) {
+  .comments-area {
+    margin: 40px 0 0 0;
+    max-width: 100% !important; /* 小屏幕使用全宽 */
+    
+    .comments-header {
+      margin-bottom: 24px;
+      padding: 0 12px !important;
+      text-align: center; /* 标题居中 */
+      
+      h3#comments-title {
+        font-size: 1.2em;
+        gap: 8px;
+        justify-content: center; /* flex容器居中 */
+        
+        .comments-icon {
+          font-size: 1.1em;
+        }
+      }
+      
+      .comments-divider {
+        width: 60px;
+        height: 2px;
+        margin: 0 auto; /* 分割线居中 */
+      }
+    }
+    
+    .giscus-container {
+      padding: 16px 12px !important;
+      border-radius: 10px;
+      margin: 0 auto !important; /* 给边缘留点空间，保持居中效果 */
+    }
+  }
+}
+
+/* 评论区渐现动画 */
+@keyframes commentsFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 评论区文字对比度优化 */
+.comments-area {
+  /* 确保文字在两种主题下都有良好的对比度 */
+  color: var(--text-color);
+  
+  /* 链接颜色继承主题 */
+  a {
+    color: var(--link-color);
+    
+    &:hover {
+      color: var(--link-color-hover);
+    }
+  }
+  
+  /* 代码块样式继承 */
+  code, pre {
+    background-color: var(--background-lighten-color);
+    color: var(--text-color);
+    border: 1px solid var(--divider-color);
+  }
+}
+
+/* 
+ * 关键修复：确保评论区在文章页面(.posts)中的正确定位
+ * 这个规则确保评论区继承文章内容的布局约束
+ */
+.posts .comments-area {
+  /* 在文章页面中，评论区默认应该跟随文章内容的宽度 */
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* 侧边栏展开状态下的评论区居中显示 */
+.wrapper-content:not(.sidebar-collapsed) .posts .comments-area {
+  /* 设计独立的居中布局，而非紧贴文章边缘 */
+  max-width: 800px !important; /* 设置合适的最大宽度 */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  
+  .comments-header {
+    padding: 0 32px !important; /* 给标题添加适当的内边距 */
+    text-align: center; /* 标题居中 */
+    
+    h3#comments-title {
+      justify-content: center; /* flex容器居中对齐 */
+    }
+    
+    .comments-divider {
+      margin: 0 auto; /* 分割线居中 */
+    }
+  }
+  
+  .giscus-container {
+    padding: 32px !important; /* 四周添加内边距 */
+    margin: 0 auto !important; /* 完全居中对齐 */
+  }
+  
+  /* 在不同屏幕尺寸下调整 */
+  @media (max-width: 1200px) {
+    max-width: 700px !important;
+    
+    .giscus-container {
+      padding: 28px !important;
+      margin: 0 auto !important;
+    }
+  }
+  
+  @media (max-width: 1000px) {
+    max-width: 600px !important;
+    
+    .giscus-container {
+      padding: 24px !important;
+      margin: 0 auto !important;
+    }
+  }
+}
+
+.page {
+  //  margin: 40px;
+
+  @include mobile {
+    //    margin: 24px;
+  }
+}
+
+/*********************/
+/* TABLE OF CONTENTS */
+/*********************/
+
+.toc {
+  // General container styles (position, size, background, border etc.)
+  position: fixed;
+  right: 20px; /* Adjusted from 2% */
+  top: 100px; /* Adjust based on header height */
+  width: 320px; /* Default width, can be adjusted by JS */
+  max-height: calc(100vh - 120px); /* Adjust top/bottom margins */
+  padding: 15px;
+  background-color: var(
+    --toc-bg-color,
+    var(--background-color)
+  ); /* Use theme variable or fallback */
+  border: 1px solid var(--divider-color); /* Changed from border-left */
+  border-radius: 5px; /* Added */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added */
+  overflow-y: auto;
+  scrollbar-width: thin; /* Kept */
+  z-index: 999; /* Kept, updated value */
+  transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease; /* Added padding */
+  font-family: "Roboto", "Noto Sans SC", sans-serif; /* Kept */
+
+  /* Styling for the NEW toggle button */
+  #toc-toggle-button {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 10px; /* Only shown when expanded */
+    background-color: var(--button-bg, #f0f0f0);
+    color: var(--button-text, #333);
+    border: 1px solid var(--divider-color);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--button-hover-bg, #e0e0e0);
+    }
+  }
+
+  /* Styles for the NEW content wrapper */
+  #toc-content {
+    // transition: max-height 0.3s ease-out, opacity 0.3s ease-out; // Optional animation
+    overflow: hidden;
+  }
+
+  /* Existing list and item styling (slightly adapted) */
+  ul {
+    padding-left: 10px;
+    margin-top: 5px;
+    list-style: none; /* Ensure no default bullets */
+  }
+
+  li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    list-style: none; /* Ensure no default bullets */
+    &:before {
+      content: ""; /* Override default list style */
+      padding-right: 0;
+    }
+  }
+
+  // 一级目录项
+  > #toc-content > ul > li > a {
+    /* Target links inside the content div */
+    color: #4285f4;
+    font-weight: 500;
+  }
+
+  // 二级目录项
+  > #toc-content > ul > li > ul > li > a {
+    color: #5c9ce6;
+    font-weight: 400;
+  }
+
+  // 三级及以下目录项
+  > #toc-content > ul > li > ul > li > ul li a {
+    color: #7baaf7;
+    font-weight: 400;
+  }
+
+  a {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+    font-weight: 400;
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
+
+  code {
+    background-color: rgba(0, 0, 0, 0.07);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: $code-font;
+    font-size: 90%;
+    margin: 0 2px;
+    color: #039be5;
+  }
+
+  /* Styles for the NEW collapsed state */
+  &.collapsed {
+    width: auto !important; /* Override original width */
+    padding: 5px !important; /* Override original padding */
+    max-height: none !important; /* Allow height to fit button */
+    overflow: visible !important; /* Allow button shadow if any */
+
+    #toc-toggle-button {
+      margin-bottom: 0;
+    }
+    #toc-content {
+      display: none; // Hide content explicitly
+    }
+  }
+
+  /* Dark theme adjustments (kept, adapted selectors) */
+  .dark-theme & {
+    a {
+      /* color: #5c9ce6; // Handled by hierarchy */
+      &:hover {
+        background-color: rgba(92, 156, 230, 0.2);
+        color: #7baaf7;
+      }
+    }
+
+    code {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #7baaf7;
+    }
+
+    // 深色主题下的目录层级颜色
+    > #toc-content > ul > li > a {
+      color: #4285f4;
+    }
+
+    > #toc-content > ul > li > ul > li > a {
+      color: #5c9ce6;
+    }
+
+    > #toc-content > ul > li > ul > li > ul li a {
+      color: #7baaf7;
+    }
+
+    #toc-toggle-button {
+      // Style button for dark theme if needed
+      background-color: var(--dark-button-bg, #444);
+      color: var(--dark-button-text, #eee);
+      border-color: var(--dark-divider-color, #555);
+      &:hover {
+        background-color: var(--dark-button-hover-bg, #555);
+      }
+    }
+  }
+
+  /* Mobile adjustments (kept) */
+  @include mobile {
+    display: none;
+  }
+}
+
+// Adjust main content padding when TOC is present and expanded
+#main.withtoc {
+  padding-right: 370px; /* Adjust this value based on original .toc width + gap */
+  transition: padding-right 0.3s ease;
+
+  &.toc-collapsed {
+    // Class added by JS
+    padding-right: 0 !important; /* Override padding when collapsed */
+  }
+
+  @include mobile {
+    padding-right: 0 !important; // Ensure no padding on mobile
+  }
+}
+
+// 动态适配不同屏幕宽度下的目录宽度和内容区域宽度
+@media screen and (min-width: 2200px) {
+  .toc {
+    width: 380px;
+  }
+
+  .withtoc {
+    padding-right: 400px;
+  }
+}
+
+@media screen and (max-width: 2199px) and (min-width: 1800px) {
+  .toc {
+    width: 350px;
+  }
+
+  .withtoc {
+    padding-right: 370px;
+  }
+}
+
+@media screen and (max-width: 1799px) and (min-width: 1400px) {
+  .toc {
+    width: 320px;
+  }
+
+  .withtoc {
+    padding-right: 340px;
+  }
+}
+
+@media screen and (max-width: 1399px) and (min-width: 1200px) {
+  .toc {
+    width: 280px;
+  }
+
+  .withtoc {
+    padding-right: 300px;
+  }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 1000px) {
+  .toc {
+    width: 250px;
+  }
+
+  .withtoc {
+    padding-right: 270px;
+  }
+}
+
+.pagination {
+  border-top: 1px solid var(--divider-color);
+  font-weight: 300;
+  padding: 40px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include mobile {
+    font-size: $small-font-size;
+    padding: 24px 0;
+  }
+
+  // 页码数字居中显示
+  .page_num,
+  .pagination__page-number {
+    flex: 0 0 auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 10px 20px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+
+    @include mobile {
+      font-size: $small-font-size;
+      padding: 8px 16px;
+    }
+  }
+
+  > .prev {
+    flex: 0 0 auto;
+
+    a {
+      color: var(--text-color);
+      opacity: 0.8;
+      border: 1px solid var(--divider-color);
+      padding: 10px 20px;
+      background: var(--background-color);
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s ease;
+
+      &:hover,
+      &:focus {
+        color: var(--link-lighten-color);
+        border: 1px solid var(--link-lighten-color);
+        background-color: var(--link-bghv-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      @include mobile {
+        padding: 8px 16px;
+        font-size: $small-font-size;
+      }
+    }
+  }
+
+  > .next {
+    flex: 0 0 auto;
+
+    a {
+      color: var(--text-color);
+      opacity: 0.8;
+      border: 1px solid var(--divider-color);
+      padding: 10px 20px;
+      background: var(--background-color);
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s ease;
+
+      &:hover,
+      &:focus {
+        color: var(--link-lighten-color);
+        border: 1px solid var(--link-lighten-color);
+        background-color: var(--link-bghv-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      @include mobile {
+        padding: 8px 16px;
+        font-size: $small-font-size;
+      }
+    }
+  }
+}
+
+// Archive
+.archive {
+  a {
+    color: var(--text-color);
+  }
+  time {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: $small-font-size;
+    font-weight: 300;
+    margin-left: 3px;
+  }
+}
+
+// Tags
+.tags > .label {
+  > li:before {
+    content: "";
+  }
+
+  > li {
+    margin: 0 5px 8px 0;
+    font-size: $small-font-size;
+    font-weight: 300;
+    display: inline-block;
+
+    > a {
+      display: inline-block;
+      margin: 0;
+      color: var(--text-color);
+      background-color: var(--tag-index-label-background-color);
+      border-radius: 4px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--accent-color);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
+
+      span {
+        float: left;
+        padding: 4px 8px;
+
+        &.count {
+          margin-left: 4px;
+          padding: 4px 6px;
+          background-color: rgba(var(--accent-color), 0.15);
+          border-radius: 0 4px 4px 0;
+          color: var(--accent-color);
+        }
+      }
+    }
+  }
+}
+
+.tags > .tag {
+  a {
+    color: var(--text-color);
+  }
+  time {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: $small-font-size;
+    font-weight: 300;
+    margin-left: 3px;
+  }
+}
+
+// Footer - 固定在侧边栏底部（桌面端）
+.wrapper-footer-desktop {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 250px;
+  background-color: var(--background-lighten-color);
+  border-top: 1px solid var(--divider-color);
+  padding: 4px 0;
+  z-index: 5;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+
+  // 在真正的移动设备上隐藏 (手机端，767px以下)
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  // iPad Pro portrait模式下隐藏桌面端footer，使用移动端footer
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    display: none !important;
+  }
+
+  // iPad Pro landscape模式下隐藏桌面端footer，使用移动端footer
+  @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (max-height: 1024px) {
+    display: none;
+  }
+
+  // 对于中等屏幕设备（小尺寸笔记本等），在宽度不足时隐藏
+  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+    display: none;
+  }
+
+  // 固定footer内的内容更紧凑
+  footer {
+    padding: 4px 0 !important;
+    margin: 0 !important;
+
+    .svg-icon {
+      margin: 0;
+
+      li {
+        margin: 3px !important;
+      }
+
+      svg {
+        height: 16px !important;
+        width: 16px !important;
+      }
+    }
+  }
+}
+
+.wrapper-footer-mobile {
+  display: none;
+
+  // 在手机端显示 (767px以下)
+  @media screen and (max-width: 767px) {
+    display: block;
+    width: 100%;
+    border-top: none;
+    margin-top: 20px;
+    background-color: var(--background-color);
+  }
+
+  // 在iPad Pro landscape模式下显示
+  @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (max-height: 1024px) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
+
+  // 在iPad Pro竖屏模式下显示
+  @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
+
+  // 在中等屏幕设备上显示 (1025px-1199px)
+  @media screen and (min-width: 1025px) and (max-width: 1199px) {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--divider-color);
+    margin-top: 30px;
+    background-color: var(--background-color);
+    padding: 10px 0;
+  }
+}
+
+footer {
+  padding: 8px 0;
+  text-align: center;
+
+  // 在手机端调整样式 (767px以下)
+  @media screen and (max-width: 767px) {
+    padding: 15px 0;
+  }
+
+  // 在平板和中等屏幕设备上调整样式 (768px-1199px)
+  @media screen and (min-width: 768px) and (max-width: 1199px) {
+    padding: 12px 0;
+  }
+
+  p {
+    font-size: $small-font-size;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin: 0.3em 0;
+  }
+
+  .svg-icon {
+    display: block;
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    text-align: center;
+
+    li {
+      display: inline-block;
+      margin: 5px;
+
+      // 在手机端增加图标间距 (767px以下)
+      @media screen and (max-width: 767px) {
+        margin: 8px;
+      }
+
+      // 在平板和中等屏幕设备上调整间距 (768px-1199px)
+      @media screen and (min-width: 768px) and (max-width: 1199px) {
+        margin: 6px;
+      }
+    }
+
+    svg {
+      height: 18px;
+      width: 18px;
+      fill: var(--text-color);
+      opacity: 0.8;
+      transition: all 0.3s ease;
+
+      &:hover {
+        fill: var(--accent-color);
+        opacity: 1;
+        transform: scale(1.15) translateY(-1px);
+      }
+
+      // 在手机端调整图标大小 (767px以下)
+      @media screen and (max-width: 767px) {
+        height: 20px;
+        width: 20px;
+      }
+
+      // 在平板和中等屏幕设备上调整大小 (768px-1199px)
+      @media screen and (min-width: 768px) and (max-width: 1199px) {
+        height: 18px;
+        width: 18px;
+      }
+    }
+  }
+}
+
+/* 右下角按钮组 - 强制对齐样式 */
+.floating-buttons {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  z-index: 1000;
+}
+
+#theme-toggle,
+#sidebar-toggle,
+#home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 22px;
+  line-height: 1;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 移动端侧边栏按钮默认隐藏 */
+#mobile-sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  border: 1px solid var(--divider-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 22px;
+  line-height: 1;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+#sidebar-toggle,
+#mobile-sidebar-toggle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 移动端适配 */
+@include mobile {
+  .floating-buttons {
+    bottom: 20px;
+    right: 20px;
+    gap: 12px;
+  }
+
+  #theme-toggle,
+  #sidebar-toggle,
+  #home-button,
+  #mobile-sidebar-toggle {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  /* 在中等屏幕和移动端隐藏桌面端侧边栏切换按钮，显示移动端按钮 */
+  #sidebar-toggle {
+    display: none !important;
+  }
+
+  #mobile-sidebar-toggle {
+    display: flex !important;
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* 侧边栏切换状态 */
+.wrapper-sidebar.collapsed {
+  transform: translateX(-100%);
+  border-right: none;
+}
+
+/* 移动端侧边栏折叠状态 - 上下折叠 */
+.wrapper-sidebar.mobile-collapsed {
+  height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* 移动端UI优化 */
+@include mobile {
+  .navlist {
+    margin-top: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .wrapper-sidebar {
+    box-shadow: none;
+  }
+
+  .wrapper-footer-mobile {
+    border-top: none;
+    margin-top: 20px;
+    background-color: var(--background-color);
+  }
+
+  .mobile-sidebar-collapsed .wrapper-content {
+    margin-top: 10px;
+  }
+}
+
+.wrapper-content.sidebar-collapsed {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapper-content.sidebar-collapsed .container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 侧边栏折叠时文章列表的特殊布局优化 */
+.wrapper-content.sidebar-collapsed .posts,
+.wrapper-content.sidebar-collapsed .posts-grid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapper-content.sidebar-collapsed .posts > .post,
+.wrapper-content.sidebar-collapsed .posts-grid > .post-card {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* 侧边栏折叠时优化网格布局 - 保持卡片式多列布局 */
+.wrapper-content.sidebar-collapsed .posts-grid {
+  display: grid;
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 2rem;
+  /* 小屏幕默认单列 */
+  grid-template-columns: 1fr;
+}
+
+/* 中等屏幕：2列布局 */
+@media (min-width: 768px) {
+  .wrapper-content.sidebar-collapsed .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1100px;
+    gap: 2rem;
+  }
+}
+
+/* 大屏幕：3列布局 */
+@media (min-width: 1200px) {
+  .wrapper-content.sidebar-collapsed .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1300px;
+    gap: 2.5rem;
+  }
+}
+
+/* 超大屏幕：4列布局 */
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed .posts-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1600px;
+    gap: 3rem;
+  }
+}
+
+/* 侧边栏折叠时搜索框居中 */
+.wrapper-content.sidebar-collapsed .modern-search-container {
+  max-width: 1000px;
+  margin: 0 auto 2rem auto;
+}
+
+@media (min-width: 768px) {
+  .wrapper-content.sidebar-collapsed .modern-search-container {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wrapper-content.sidebar-collapsed .modern-search-container {
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed .modern-search-container {
+    max-width: 1600px;
+  }
+}
+
+/* 侧边栏折叠时分页器居中 */
+.wrapper-content.sidebar-collapsed .pagination {
+  max-width: 1000px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .wrapper-content.sidebar-collapsed .pagination {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wrapper-content.sidebar-collapsed .pagination {
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed .pagination {
+    max-width: 1600px;
+  }
+}
+
+/* 桌面端按钮显示逻辑 - 与JavaScript逻辑保持一致 */
+@media (min-width: 1201px) {
+  #mobile-sidebar-toggle {
+    display: none !important;
+  }
+
+  #sidebar-toggle {
+    display: flex !important;
+  }
+
+  /* 大屏幕下侧边栏折叠时的响应式优化 */
+  .wrapper-content.sidebar-collapsed {
+    padding-left: 3%;
+    padding-right: 3%;
+  }
+
+  .wrapper-content.sidebar-collapsed .container {
+    max-width: 1400px;
+  }
+}
+
+/* 超大屏幕优化 */
+@media (min-width: 1600px) {
+  .wrapper-content.sidebar-collapsed {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .wrapper-content.sidebar-collapsed .container {
+    max-width: 1600px;
+  }
+}
+
+/* 中等屏幕优化 */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .wrapper-content.sidebar-collapsed {
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+
+  .wrapper-content.sidebar-collapsed .container {
+    max-width: 1100px;
+  }
+}
+
+/* 中等屏幕和移动端使用移动端按钮 */
+@media (max-width: 1200px) {
+  #sidebar-toggle {
+    display: none !important;
+  }
+
+  #mobile-sidebar-toggle {
+    display: flex !important;
+  }
+
+  /* 移动端和平板端侧边栏折叠时的布局优化 */
+  .mobile-sidebar-collapsed .wrapper-content {
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mobile-sidebar-collapsed .wrapper-content .container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  /* 移动端侧边栏折叠时文章列表的布局优化 */
+  .mobile-sidebar-collapsed .wrapper-content .posts,
+  .mobile-sidebar-collapsed .wrapper-content .posts-grid {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mobile-sidebar-collapsed .wrapper-content .posts > .post,
+  .mobile-sidebar-collapsed .wrapper-content .posts-grid > .post-card {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* 移动端侧边栏折叠时优化网格布局 - 保持卡片式布局 */
+  .mobile-sidebar-collapsed .wrapper-content .posts-grid {
+    display: grid;
+    max-width: 100%;
+    margin: 0 auto;
+    gap: 1.5rem;
+    /* 手机默认单列 */
+    grid-template-columns: 1fr;
+  }
+
+  /* 平板设备：2列布局 */
+  @media (min-width: 768px) and (max-width: 1200px) {
+    .mobile-sidebar-collapsed .wrapper-content .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 100%;
+      gap: 2rem;
+    }
+  }
+
+  /* 移动端侧边栏折叠时搜索框居中 */
+  .mobile-sidebar-collapsed .wrapper-content .modern-search-container {
+    max-width: 100%;
+    margin: 0 auto 1.5rem auto;
+  }
+
+  /* 移动端侧边栏折叠时分页器居中 */
+  .mobile-sidebar-collapsed .wrapper-content .pagination {
+    max-width: 100%;
+    margin: 1.5rem auto;
+    text-align: center;
+  }
+}
+
+/* 响应式处理 */
+@media (max-width: 1200px) {
+  .mobile-sidebar-collapsed .wrapper-sidebar {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+/* 过渡效果 */
+.wrapper-sidebar,
+.wrapper-content {
+  transition: all 0.3s ease;
+}
+
+/* 移动端优化 */
+body.mobile-sidebar-collapsed {
+  .wrapper-content {
+    margin-top: 10px;
+  }
+}
+
+/* 确保侧边栏展开/折叠平滑过渡 */
+.wrapper-sidebar.mobile-collapsed {
+  transition: height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* 手机横屏时的特殊处理 - 强制使用上下折叠 */
+@media screen and (max-width: 950px) and (orientation: landscape) and (max-height: 500px) {
+  /* 强制重置所有可能的水平折叠样式 */
+  .wrapper-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+  }
+
+  .wrapper-sidebar.collapsed {
+    /* 禁用桌面端的水平折叠 */
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .wrapper-sidebar.mobile-collapsed {
+    height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    height: auto !important;
+    padding: 20px 0 !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  /* 确保内容区域在手机横屏时的正确布局 */
+  .wrapper-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    float: none !important;
+  }
+
+  .mobile-sidebar-collapsed .wrapper-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+  }
+
+  /* 强制桌面端按钮隐藏，移动端按钮显示 */
+  #sidebar-toggle {
+    display: none !important;
+  }
+
+  #mobile-sidebar-toggle {
+    display: flex !important;
+  }
+}
+
+// Settled on moving the import of syntax highlighting to the bottom of the CSS
+// ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
+@import "highlights";
+@import "gitalk";
+
+/* 标签云样式 */
+.sidebar-tags {
+  padding: 0 20px;
+  margin: 30px 0;
+}
+
+.sidebar-tags h3 {
+  color: var(--text-color);
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+}
+
+.tag-cloud-item {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 18px;
+  background-color: var(--background-lighten-color);
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+  text-align: center;
+  position: relative;
+  font-size: 15px;
+  border: 1px solid transparent;
+}
+
+.tag-cloud-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.tag-count {
+  font-size: 0.75em;
+  vertical-align: super;
+  opacity: 0.8;
+  margin-left: 3px;
+  background-color: rgba(var(--accent-color), 0.15);
+  color: var(--accent-color);
+  padding: 1px 4px;
+  border-radius: 8px;
+}
+
+/* 适配深色主题的标签云 */
+.dark-theme .tag-cloud-item {
+  background-color: #343a40;
+  color: #ced4da;
+}
+
+.dark-theme .tag-cloud-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.dark-theme .tag-count {
+  background-color: rgba(var(--accent-color), 0.25);
+  color: var(--accent-color);
+}
+
+/* 移动端适配 */
+@include mobile {
+  .sidebar-tags,
+  .popular-tags {
+    padding: 0 15px;
+    margin: 20px 0;
+    display: none;
+  }
+
+  .tag-cloud {
+    gap: 6px;
+  }
+
+  .tag-cloud-item,
+  .tag-item {
+    padding: 3px 8px;
+    font-size: 14px !important;
+  }
+
+  /* 现代化侧边栏移动端优化 */
+  .site-branding {
+    padding: 1.5rem 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .modern-nav {
+    padding: 0 1rem !important;
+  }
+
+  .blog-stats {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .sidebar-search,
+  .popular-tags,
+  .recent-posts,
+  .archive-timeline {
+    padding: 0 1rem !important;
+  }
+
+  /* 小屏幕设备侧边栏折叠时的特殊优化 */
+  .mobile-sidebar-collapsed .wrapper-content {
+    padding-left: 1% !important;
+    padding-right: 1% !important;
+  }
+
+  .mobile-sidebar-collapsed .wrapper-content .container {
+    max-width: 100% !important;
+    padding: 0 10px !important;
+  }
+}
+
+/* iPad Pro specific fixes */
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .sidebar-archive {
+    display: none;
+  }
+}
+
+/* 修复竖屏模式下sidebar和文章内容之间的横线 - 但排除手机横屏 */
+@media screen and (orientation: portrait) and (min-width: 951px) {
+  .wrapper-sidebar {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
+    margin-bottom: 0 !important;
+  }
+
+  .wrapper-content {
+    border-top: none !important;
+    box-shadow: none !important;
+    margin-top: 0 !important;
+    background-image: none !important;
+  }
+
+  /* 移除任何可能出现在两个容器之间的分隔线 */
+  .wrapper-sidebar:after,
+  .wrapper-sidebar:before,
+  .wrapper-content:before,
+  .wrapper-content:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+    height: 0 !important;
+  }
+
+  /* 确保容器之间没有空隙 */
+  .wrapper-sidebar + .wrapper-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* 特别处理iPad Pro和移动设备上的竖屏模式 */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  /* 确保侧边栏没有底部边框 */
+  .wrapper-sidebar {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* 确保内容区域没有顶部边框 */
+  .wrapper-content {
+    border-top: none !important;
+    padding-top: 0 !important;
+  }
+
+  /* 移除侧边栏展开状态下的边框 */
+  .wrapper-sidebar:not(.mobile-collapsed) {
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+}
+
+button,
+input[type="submit"] {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: rgba(var(--text-color), 0.6);
+  background-color: rgba(var(--background-lighten-color), 0.5);
+  border: 1px solid var(--divider-color);
+  border-radius: $base-radius;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--accent-color);
+    background-color: rgba(var(--accent-color), 0.1);
+    border-color: var(--accent-color);
+  }
+}
+
+// General focus styles for other interactive elements
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex^="-"]) {
+  &:focus {
+    outline: 2px solid var(--accent-color, #007bff); // Use accent color or a fallback blue
+    outline-offset: 2px;
+    // You might want to add other focus styling here, e.g., a subtle box-shadow
+    // box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); // Example shadow
+  }
+}
+
+// 返回顶部按钮在桌面强制隐藏
+@media screen and (min-width: 1201px) {
+  .back-to-top {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+// 返回顶部按钮在移动端强制显示
+@media screen and (max-width: 1200px) {
+  .back-to-top {
+    display: flex !important;
+  }
+  .back-to-top.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+// Article card styling
+.post {
+  background-color: var(--background-lighten-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    // More specific selectors might be needed depending on post structure
+    color: var(
+      --text-color-strong
+    ); // Assuming a variable for stronger text color
+    a {
+      color: var(
+        --text-color-strong
+      ); // Ensure links within titles also have strong contrast
+      &:hover {
+        color: var(--accent-color); // Keep hover effect for links
+      }
+    }
+  }
+
+  // Ensure the post title (typically h1 or h2 in the list) is prominent
+  > h1 a,
+  > h2 a {
+    // Targeting direct children h1/h2 of .post for the main title
+    color: var(
+      --text-color-title,
+      var(--text-color-strong)
+    ); // Use a specific title color or fallback
+    font-weight: bold; // Ensure it's bold
+  }
+  > h1 a:hover,
+  > h2 a:hover {
+    color: var(--accent-color);
+  }
+
+  .entry p,
+  .entry {
+    // Assuming post content is within a div with class 'entry'
+    color: var(
+      --text-color-muted
+    ); // Assuming a variable for muted/less prominent text
+    font-size: 0.95em; // Slightly smaller font for body
+  }
+}
+
+// Cover image standardization
+.post-preview-cover {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; // 16:9 Aspect Ratio (9 / 16 * 100)
+  overflow: hidden;
+  margin-bottom: 1.5em; // Add some space below the cover image
+  border-radius: 6px; // Optional: match post card border radius
+  background-color: rgba(
+    var(--link-color-rgb),
+    0.1
+  ); // Add placeholder background
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // This will cover the area, cropping if necessary
+    border-radius: 6px; // Optional: match container's border radius
+    transition: transform 0.3s ease; // For a subtle hover effect
+  }
+
+  img.lazy {
+    opacity: 0; // Hide lazy images until loaded
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  img.lazy-loaded {
+    opacity: 1; // Show images when loaded
+  }
+
+  a:hover img {
+    transform: scale(1.05); // Slight zoom on hover
+  }
+}
+
+/* Mobile optimization for images */
+@media screen and (max-width: 767px) {
+  .post-preview-cover {
+    padding-top: 60%; // Slightly taller on mobile
+    margin-bottom: 1em;
+  }
+}

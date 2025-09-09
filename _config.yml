@@ -56,12 +56,19 @@ footer-links:
 # You can find your shortname on the Settings page of your Disqus account
 disqus: # fromendworld
 
-# Gitalk
-gitalk:
-  clientID: 135ef7d20bcf3a9e92aa
-  clientSecret: b78e238865e60f5897fc6a604ab4cd1622df3261
-  repo: blog_comments
-  owner: zempty-zhaoxuan
+# Giscus (GitHub Discussions-based comments)
+giscus:
+  enabled: true
+  repo: "zempty-zhaoxuan/zempty-zhaoxuan.github.io" # e.g.zempty-zhaoxuan/zempty-zhaoxuan.github.io
+  repo_id: "MDEwOlJlcG9zaXRvcnkzNjc3NzM0MTA=" # fill from giscus setup
+  category: "blog_comment" # or your chosen category
+  category_id: "DIC_kwDOFevG4s4CvKpa" # fill from giscus setup
+  mapping: "pathname" # url | title | pathname | og:title | specific
+  reactions_enabled: "1" # 1 to enable, 0 to disable
+  emit_metadata: "0"
+  input_position: "bottom" # top | bottom
+  theme: "preferred_color_scheme" # light | dark | preferred_color_scheme
+  lang: "zh-CN"
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
 google_analytics: G-FXHE2HXDMM

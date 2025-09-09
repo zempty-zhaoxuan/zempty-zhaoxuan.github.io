@@ -6,8 +6,8 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '{{ site.google_analytics }}', {
-      'page_path': '{{ site.baseurl }}{{ page.url }}',
-      'page_title': '{{ page.title | replace: "'", "\\'" }}'
+      page_path: {{ (site.baseurl | append: page.url) | jsonify }},
+      page_title: {{ page.title | default: '' | jsonify }}
     });
   </script>
 {% endif %}

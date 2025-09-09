@@ -23,7 +23,7 @@ layout: default
     <ul class="tag">
       {% for tag in page.tags %}
       <li>
-        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
+        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag | url_encode }}">
           {{ tag }}
         </a>
       </li>
@@ -38,7 +38,7 @@ layout: default
   </div>
 
   {% include disqus.html %}
-  {% include gitalk.html %}
+  {% include giscus.html %}
 </article>
 
 <div class="pagination">

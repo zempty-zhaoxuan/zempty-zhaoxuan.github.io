@@ -6,6 +6,9 @@
 
   {% include meta.html %}
   
+  <!-- Basic Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://giscus.app; style-src 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net data:; frame-src https://giscus.app; connect-src 'self' https://www.google-analytics.com; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  
   <!-- Base URL for JavaScript -->
   <meta name="base-url" content="{{ site.baseurl }}" />
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -14,7 +17,7 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css?v={{ site.time | date: '%s' }}" />
   <link rel="preload" as="style" href="{{ site.baseurl }}/assets/css/animations.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ site.baseurl }}/assets/css/animations.css"></noscript>
   <link

@@ -1,0 +1,90 @@
+{% if page.comments != false and site.giscus.enabled %}
+<div class="comments-area">
+  <div class="giscus-container">
+    <script src="https://giscus.app/client.js"
+        data-repo="{{ site.giscus.repo }}"
+        data-repo-id="{{ site.giscus.repo_id }}"
+        data-category="{{ site.giscus.category }}"
+        data-category-id="{{ site.giscus.category_id }}"
+        data-mapping="{{ site.giscus.mapping }}"
+        data-strict="0"
+        data-reactions-enabled="{{ site.giscus.reactions_enabled }}"
+        data-emit-metadata="{{ site.giscus.emit_metadata }}"
+        data-input-position="{{ site.giscus.input_position }}"
+        data-theme="preferred_color_scheme"
+        data-lang="{{ site.giscus.lang }}"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Function to get current theme
+  function getCurrentTheme() {
+    if (document.body.classList.contains('dark-theme')) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  // Function to update Giscus theme
+  function updateGiscusTheme(theme) {
+    const giscusFrame = document.querySelector('.giscus-frame');
+    if (giscusFrame) {
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'light' } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  // Initial theme sync after Giscus loads
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.addedNodes.length > 0) {
+        mutation.addedNodes.forEach(function(node) {
+          if (node.classList && node.classList.contains('giscus-frame')) {
+            // Wait a moment for the frame to fully load
+            setTimeout(() => {
+              updateGiscusTheme(getCurrentTheme());
+            }, 150);
+          }
+        });
+      }
+    });
+  });
+
+  observer.observe(document.querySelector('.giscus-container'), {
+    childList: true,
+    subtree: true
+  });
+
+  // Listen for theme changes
+  document.addEventListener('themeChanged', function(e) {
+    updateGiscusTheme(e.detail.theme);
+  });
+  
+  // Monitor theme toggle button clicks
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      // Wait for theme to be applied
+      setTimeout(() => {
+        updateGiscusTheme(getCurrentTheme());
+      }, 100);
+    });
+  }
+});
+</script>
+<style>
+/* 兜底样式，确保立即看到间距与卡片感；最终样式由 compiled CSS 覆盖 */
+.comments-area{margin-top:60px;padding-top:40px;border-top:1px solid rgba(0,0,0,.08)}
+.dark-theme .comments-area{border-top-color:rgba(255,255,255,.12)}
+.giscus-frame{width:100%!important;border:none!important;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.dark-theme .giscus-frame{box-shadow:0 2px 8px rgba(0,0,0,.25)}
+@media (max-width:600px){.comments-area{margin-top:40px;padding-top:30px}.giscus-frame{border-radius:6px}}
+</style>
+{% endif %}

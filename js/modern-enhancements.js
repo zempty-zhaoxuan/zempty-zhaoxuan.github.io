@@ -406,3 +406,18 @@ const modernStyles = `
 
 // Inject styles
 document.head.insertAdjacentHTML("beforeend", modernStyles);
+
+// 安全增强：为新窗口外链增加 rel="noopener noreferrer"
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    const links = document.querySelectorAll('a[target="_blank"]');
+    links.forEach((a) => {
+      const rel = (a.getAttribute('rel') || '').split(/\s+/);
+      if (!rel.includes('noopener')) rel.push('noopener');
+      if (!rel.includes('noreferrer')) rel.push('noreferrer');
+      a.setAttribute('rel', rel.join(' ').trim());
+    });
+  } catch (e) {
+    console.error('Failed to set rel on external links', e);
+  }
+});

@@ -56,5 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 更新tooltip文本
     updateTooltip();
+    
+    // 触发自定义主题切换事件，供其他组件使用
+    const themeEvent = new CustomEvent('themeChanged', {
+      detail: { theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light' }
+    });
+    document.dispatchEvent(themeEvent);
   });
 }); 
