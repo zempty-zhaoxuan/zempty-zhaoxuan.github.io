@@ -1,0 +1,243 @@
+// Article Sharing Styles
+// 文章底部分享功能样式
+
+.article-share-container {
+  margin: $space-xl 0 $space-lg 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  position: static; // 使用静态定位，避免位置变化
+  text-align: left; // 强制左对齐
+  width: 100%;
+  box-sizing: border-box;
+
+  .share-header {
+    margin-bottom: $space-sm;
+    text-align: left; // 标题左对齐
+
+    .share-title {
+      display: flex;
+      align-items: center;
+      gap: $space-xs;
+      color: var(--muted-text-color);
+      font-size: $font-size-sm;
+      font-weight: 500;
+      justify-content: flex-start; // 确保左对齐
+
+      svg {
+        opacity: 0.6;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  .share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-sm;
+    align-items: flex-start;
+    justify-content: flex-start; // 按钮左对齐
+    text-align: left; // 按钮容器左对齐
+  }
+
+  .share-btn {
+    display: flex;
+    align-items: center;
+    gap: $space-xs;
+    padding: $space-sm $space-md;
+    background: var(--background-lighten-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-size: $font-size-xs;
+    font-weight: 500;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus {
+      outline: 2px solid var(--focus-color, var(--link-color));
+      outline-offset: 2px;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .text {
+      font-weight: 500;
+    }
+
+    // 平台特定颜色
+    &[data-platform="wechat"]:hover {
+      background: #07c160;
+      color: white;
+      border-color: #07c160;
+    }
+
+    &[data-platform="weibo"]:hover {
+      background: #e6162d;
+      color: white;
+      border-color: #e6162d;
+    }
+
+    &[data-platform="twitter"]:hover {
+      background: #000000;
+      color: white;
+      border-color: #000000;
+    }
+
+    &[data-platform="facebook"]:hover {
+      background: #1877f2;
+      color: white;
+      border-color: #1877f2;
+    }
+  }
+
+  .copy-link-btn {
+    display: flex;
+    align-items: center;
+    gap: $space-xs;
+    padding: $space-sm $space-md;
+    background: var(--background-lighten-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-size: $font-size-xs;
+    font-weight: 500;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+
+    &:focus {
+      outline: 2px solid var(--focus-color, var(--link-color));
+      outline-offset: 2px;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .text {
+      font-weight: 500;
+    }
+  }
+}
+
+// WeChat QR Popup (no CSS needed as it's a separate window)
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Toast Notifications
+.toast {
+  font-family: $base-font;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  font-size: $font-size-sm;
+
+  &.toast-warning {
+    background-color: #ff9800;
+  }
+}
+
+// Mobile Optimizations
+@media (max-width: 768px) {
+  .article-share-container {
+    margin: $space-lg 0 $space-md 0;
+    text-align: left; // 移动端也强制左对齐
+
+    .share-buttons {
+      gap: $space-xs;
+      justify-content: flex-start; // 移动端按钮左对齐
+
+      .share-btn,
+      .copy-link-btn {
+        padding: $space-xs $space-sm;
+        font-size: $font-size-xs;
+
+        .icon {
+          width: 14px;
+          height: 14px;
+
+          svg {
+            width: 12px;
+            height: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark Theme Adjustments
+.dark-theme {
+  .qr-modal {
+    backdrop-filter: blur(8px);
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+
+  .share-btn,
+  .copy-link-btn {
+    border-width: 2px;
+  }
+
+  .qr-modal-content {
+    border: 2px solid var(--divider-color);
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+
+  .share-btn,
+  .copy-link-btn,
+  .toast {
+    transition: none;
+  }
+}

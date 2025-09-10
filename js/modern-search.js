@@ -116,24 +116,24 @@ class ModernSearch {
 
   bindSearchEvents(searchObj, type) {
     if (!searchObj || !searchObj.input) return;
-    
+
     // 输入框事件
     searchObj.input.addEventListener(
-             "input",
-       this.debounce(async (e) => {
-         const query = e.target.value.trim();
-         // 验证和清理输入
-         const validation = SecurityUtils.validateInput(query, 200);
-         if (validation.isValid && query.length >= 1) {
-           if (!this.posts.length) {
-             await this.loadPosts();
-           }
-           this.performSearch(query, searchObj, type);
-         } else {
-           this.hideResults(searchObj);
-         }
-       }, 300)
-     );
+      "input",
+      this.debounce(async (e) => {
+        const query = e.target.value.trim();
+        // 验证和清理输入
+        const validation = SecurityUtils.validateInput(query, 200);
+        if (validation.isValid && query.length >= 1) {
+          if (!this.posts.length) {
+            await this.loadPosts();
+          }
+          this.performSearch(query, searchObj, type);
+        } else {
+          this.hideResults(searchObj);
+        }
+      }, 300)
+    );
 
     // 回车键搜索
     searchObj.input.addEventListener("keydown", (e) => {
@@ -229,23 +229,23 @@ class ModernSearch {
   displayResults(results, query, searchObj, type) {
     // 清空并重新创建结果容器
     searchObj.results.innerHTML = ''; // 安全: 清空容器
-    
+
     if (results.length === 0) {
       const noResultsDiv = document.createElement('div');
       noResultsDiv.className = 'search-no-results';
-      
+
       const messageP = document.createElement('p');
       const escapedQuery = SecurityUtils ? SecurityUtils.escapeHtml(query) : this.escapeHtml(query);
       messageP.innerHTML = `😕 没有找到包含 "<strong>${escapedQuery}</strong>" 的文章`; // 安全: 使用已转义的内容
       noResultsDiv.appendChild(messageP);
-      
+
       if (type !== "sidebar") {
         const tipP = document.createElement('p');
         tipP.className = 'search-tip';
         tipP.textContent = '试试其他关键词或者检查拼写';
         noResultsDiv.appendChild(tipP);
       }
-      
+
       searchObj.results.appendChild(noResultsDiv);
     } else {
       const headerDiv = document.createElement('div');
@@ -254,7 +254,7 @@ class ModernSearch {
       headerSpan.textContent = `找到 ${results.length} 篇相关文章`;
       headerDiv.appendChild(headerSpan);
       searchObj.results.appendChild(headerDiv);
-      
+
       results.forEach(post => {
         const resultElement = this.createResultElement(post, query, type);
         searchObj.results.appendChild(resultElement);
@@ -268,10 +268,10 @@ class ModernSearch {
     const resultDiv = document.createElement('div');
     resultDiv.className = type === "sidebar" ? 'search-result-item sidebar-result' : 'search-result-item';
     resultDiv.setAttribute('data-score', post.score);
-    
+
     const contentDiv = document.createElement('div');
     contentDiv.className = 'search-result-content';
-    
+
     // 创建标题
     const titleElement = document.createElement(type === "sidebar" ? 'h4' : 'h3');
     titleElement.className = 'search-result-title';
@@ -281,7 +281,7 @@ class ModernSearch {
     titleLink.innerHTML = highlightedTitle; // 安全: 使用已转义的内容
     titleElement.appendChild(titleLink);
     contentDiv.appendChild(titleElement);
-    
+
     // 创建摘要
     const excerptP = document.createElement('p');
     excerptP.className = 'search-result-excerpt';
@@ -289,11 +289,11 @@ class ModernSearch {
     const excerptContent = this.createExcerpt(post.content, query, excerptLength);
     excerptP.innerHTML = excerptContent; // 安全: 使用已转义的内容
     contentDiv.appendChild(excerptP);
-    
+
     // 创建元数据
     const metaDiv = document.createElement('div');
     metaDiv.className = 'search-result-meta';
-    
+
     const dateSpan = document.createElement('span');
     dateSpan.className = 'search-result-date';
     try {
@@ -307,7 +307,7 @@ class ModernSearch {
       dateSpan.textContent = '📅 日期未知';
     }
     metaDiv.appendChild(dateSpan);
-    
+
     // 添加标签（仅非侧边栏）
     if (type !== "sidebar" && post.tags && Array.isArray(post.tags)) {
       const tagsSpan = document.createElement('span');
@@ -320,16 +320,16 @@ class ModernSearch {
       });
       metaDiv.appendChild(tagsSpan);
     }
-    
+
     contentDiv.appendChild(metaDiv);
     resultDiv.appendChild(contentDiv);
-    
+
     return resultDiv;
   }
 
   createExcerpt(content, query, maxLength = 150) {
     if (!content || typeof content !== 'string') return "";
-    
+
     // 移除HTML标签和多余空白
     const cleanContent = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
     if (!cleanContent) return "";
@@ -359,13 +359,13 @@ class ModernSearch {
     if (!text || !query || typeof text !== 'string' || typeof query !== 'string') {
       return SecurityUtils ? SecurityUtils.escapeHtml(text || '') : this.escapeHtml(text || '');
     }
-    
+
     const safeText = SecurityUtils ? SecurityUtils.escapeHtml(text) : this.escapeHtml(text);
     const safeQuery = (SecurityUtils ? SecurityUtils.escapeHtml(query.trim()) : this.escapeHtml(query.trim()));
     const escapedQuery = SecurityUtils ? SecurityUtils.escapeRegExp(safeQuery) : this.escapeRegExp(safeQuery);
-    
+
     if (!escapedQuery) return safeText;
-    
+
     try {
       const regex = new RegExp(`(${escapedQuery})`, "gi");
       return safeText.replace(regex, '<span class="search-highlight">$1</span>');
@@ -374,7 +374,7 @@ class ModernSearch {
       return safeText;
     }
   }
-  
+
   // 备用HTML转义函数
   escapeHtml(text) {
     if (!text || typeof text !== 'string') return '';
@@ -382,7 +382,7 @@ class ModernSearch {
     div.textContent = text;
     return div.innerHTML;
   }
-  
+
   // 备用正则转义函数
   escapeRegExp(string) {
     if (!string || typeof string !== 'string') return '';
@@ -545,7 +545,7 @@ class ModernSearch {
 function addSearchStyles() {
   const styleId = 'modern-search-styles';
   if (document.getElementById(styleId)) return;
-  
+
   const style = document.createElement('style');
   style.id = styleId;
   style.textContent = `
@@ -694,6 +694,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // 添加样式
   addSearchStyles();
 
-  // 初始化搜索
-  new ModernSearch();
+  // 检查是否有增强搜索可用
+  if (typeof EnhancedSearch !== 'undefined') {
+    console.log('Using enhanced search system');
+    // Enhanced search will be initialized by search-enhancements.js
+  } else {
+    // 回退到基础搜索
+    console.log('Using basic modern search');
+    new ModernSearch();
+  }
 });
