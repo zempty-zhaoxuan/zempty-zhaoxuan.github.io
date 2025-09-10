@@ -24,11 +24,40 @@
   <!-- Security utilities - load first -->
   <script src="{{ site.baseurl }}/js/security-utils.js?v={{ site.time | date: '%s' }}" integrity="" crossorigin="anonymous"></script>
 
+  <!-- Performance utilities - critical loading -->
+  <script>
+    // Inline critical performance utilities for immediate execution
+    window.siteVersion = '{{ site.time | date: "%s" }}';
+    
+    // Prevent FOUC by hiding content initially
+    document.documentElement.style.visibility = 'hidden';
+    
+    // Critical CSS will be injected by performance utils
+    // Non-critical CSS will be loaded asynchronously
+  </script>
+  <script src="{{ site.baseurl }}/js/css-optimizer.js?v={{ site.time | date: '%s' }}"></script>
+  <script src="{{ site.baseurl }}/js/performance-utils.js?v={{ site.time | date: '%s' }}"></script>
+  <script src="{{ site.baseurl }}/js/debug-check.js?v={{ site.time | date: '%s' }}"></script>
+  <script src="{{ site.baseurl }}/js/image-optimizer.js?v={{ site.time | date: '%s' }}" defer></script>
+  <script src="{{ site.baseurl }}/js/sw-register.js?v={{ site.time | date: '%s' }}" defer></script>
 
-
-  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css?v={{ site.time | date: '%s' }}" />
-  <link rel="preload" as="style" href="{{ site.baseurl }}/assets/css/animations.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ site.baseurl }}/assets/css/animations.css"></noscript>
+  <!-- Fallback CSS for no-JS users -->
+  <noscript>
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css?v={{ site.time | date: '%s' }}" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/animations.css?v={{ site.time | date: '%s' }}">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css?v={{ site.time | date: '%s' }}">
+  </noscript>
+  
+  <!-- Show content after critical resources are ready -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Show content after critical CSS is loaded
+      setTimeout(function() {
+        document.documentElement.style.visibility = 'visible';
+        document.documentElement.classList.add('loading-visible');
+      }, 100);
+    });
+  </script>
   <link
     rel="alternate"
     type="application/rss+xml"
@@ -45,6 +74,10 @@
   <!-- 添加自定义CSS文件用于隐藏代码行号 -->
   <link rel="preload" as="style" href="{{ '/assets/css/custom.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}"></noscript>
+  
+  <!-- Image optimization styles -->
+  <link rel="preload" as="style" href="{{ '/assets/css/image-optimization.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ '/assets/css/image-optimization.css' | relative_url }}"></noscript>
 
   <!-- 内联样式以确保行号被隐藏和代码适应移动设备 -->
   <style>
