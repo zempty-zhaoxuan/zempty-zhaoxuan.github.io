@@ -68,7 +68,7 @@
     </div>
 
     <!-- 博客统计 -->
-    <div class="blog-stats">
+      <div class="blog-stats">
       <div class="stat-item">
         <span class="stat-number">{{ site.posts.size }}</span>
         <span class="stat-label">文章</span>
@@ -78,11 +78,14 @@
         <span class="stat-label">标签</span>
       </div>
       <div class="stat-item">
-        {% assign total_words = 0 %} {% for post in site.posts %} {% assign
-        words = post.content | number_of_words %} {% assign total_words =
-        total_words | plus: words %} {% endfor %} {% assign avg_words =
-        total_words | divided_by: site.posts.size %}
-        <span class="stat-number">{{ avg_words }}k</span>
+        {% assign total_words = 0 %}
+        {% for post in site.posts %}
+          {% assign words = post.content | number_of_words %}
+          {% assign total_words = total_words | plus: words %}
+        {% endfor %}
+        {% assign avg_words = total_words | divided_by: site.posts.size %}
+        {% assign avg_k = avg_words | plus: 500 | divided_by: 1000 %}
+        <span class="stat-number">{{ avg_k }}k</span>
         <span class="stat-label">字数</span>
       </div>
     </div>
@@ -93,7 +96,7 @@
       <div class="tag-cloud">
         {% assign sorted_tags = site.tags | sort %} {% for tag in sorted_tags
         limit:12 %}
-        <a href="/tags#{{ tag[0] }}" class="tag-item">
+        <a href="{{ site.baseurl }}/tags#{{ tag[0] | url_encode }}" class="tag-item">
           <span class="tag-name">{{ tag[0] }}</span>
           <span class="tag-count">{{ tag[1].size }}</span>
         </a>
@@ -106,7 +109,7 @@
       <h3>📄 最新文章</h3>
       {% for post in site.posts limit:5 %}
       <div class="recent-post-item">
-        <a href="{{ post.url }}">
+        <a href="{{ site.baseurl }}{{ post.url }}">
           <div class="post-title">{{ post.title | truncate: 32 }}</div>
           <div class="post-date">{{ post.date | date: "%m-%d" }}</div>
         </a>

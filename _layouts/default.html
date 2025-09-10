@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   {% include head.html %}
   <body>
     <script>
       // Set theme on body right away to prevent FOUC
-      (function() {
-        var theme = localStorage.getItem('theme');
-        if (theme) {
-          document.body.className = theme;
-        } else {
-          document.body.className = 'dark-theme';
-          localStorage.setItem('theme', 'dark-theme');
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var cls = document.body.classList;
+          // Ensure we don't wipe other classes
+          cls.remove('dark-theme', 'light-theme');
+
+          if (stored === 'dark-theme' || stored === 'light-theme') {
+            cls.add(stored);
+          } else {
+            // Keep previous behavior: default to dark when not set
+            cls.add('dark-theme');
+            localStorage.setItem('theme', 'dark-theme');
+          }
+        } catch (e) {
+          // Fallback to dark theme if storage unavailable
+          document.body.classList.add('dark-theme');
         }
       })();
     </script>

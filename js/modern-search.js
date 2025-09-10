@@ -33,16 +33,23 @@ class ModernSearch {
 
   async loadPosts() {
     try {
-      const base = document.querySelector('meta[name="base-url"]').getAttribute('content') || '';
+      const baseMeta = document.querySelector('meta[name="base-url"]');
+      const base = baseMeta ? baseMeta.getAttribute('content') || '' : '';
       const response = await fetch(`${base}/search.json`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      this.posts = await response.json();
+      const data = await response.json();
+      // 验证数据格式
+      if (Array.isArray(data)) {
+        this.posts = data.filter(post => post && typeof post === 'object');
+      } else {
+        this.posts = [];
+      }
       console.log(`Loaded ${this.posts.length} posts for search`);
     } catch (error) {
       console.error("Error loading posts:", error);
-      throw error;
+      this.posts = [];
     }
   }
 
@@ -108,12 +115,15 @@ class ModernSearch {
   }
 
   bindSearchEvents(searchObj, type) {
+    if (!searchObj || !searchObj.input) return;
+    
     // 输入框事件
     searchObj.input.addEventListener(
              "input",
        this.debounce(async (e) => {
          const query = e.target.value.trim();
-         if (query.length >= 1) {
+         // 限制查询长度防止过长输入
+         if (query.length >= 1 && query.length <= 100) {
            if (!this.posts.length) {
              await this.loadPosts();
            }
@@ -215,120 +225,156 @@ class ModernSearch {
   }
 
   displayResults(results, query, searchObj, type) {
+    // 清空并重新创建结果容器
+    searchObj.results.innerHTML = '';
+    
     if (results.length === 0) {
-      const isSidebar = type === "sidebar";
-      searchObj.results.innerHTML = `
-        <div class="search-no-results">
-          <p>😕 没有找到包含 "<strong>${this.escapeHtml(
-            query
-          )}</strong>" 的文章</p>
-          ${
-            !isSidebar
-              ? '<p class="search-tip">试试其他关键词或者检查拼写</p>'
-              : ""
-          }
-        </div>
-      `;
+      const noResultsDiv = document.createElement('div');
+      noResultsDiv.className = 'search-no-results';
+      
+      const messageP = document.createElement('p');
+      messageP.innerHTML = `😕 没有找到包含 "<strong></strong>" 的文章`;
+      messageP.querySelector('strong').textContent = query;
+      noResultsDiv.appendChild(messageP);
+      
+      if (type !== "sidebar") {
+        const tipP = document.createElement('p');
+        tipP.className = 'search-tip';
+        tipP.textContent = '试试其他关键词或者检查拼写';
+        noResultsDiv.appendChild(tipP);
+      }
+      
+      searchObj.results.appendChild(noResultsDiv);
     } else {
-      const resultsHtml = results
-        .map((post) => this.createResultItem(post, query, type))
-        .join("");
-      searchObj.results.innerHTML = `
-        <div class="search-results-header">
-          <span>找到 ${results.length} 篇相关文章</span>
-        </div>
-        ${resultsHtml}
-      `;
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'search-results-header';
+      const headerSpan = document.createElement('span');
+      headerSpan.textContent = `找到 ${results.length} 篇相关文章`;
+      headerDiv.appendChild(headerSpan);
+      searchObj.results.appendChild(headerDiv);
+      
+      results.forEach(post => {
+        const resultElement = this.createResultElement(post, query, type);
+        searchObj.results.appendChild(resultElement);
+      });
     }
 
     this.showResults(searchObj);
   }
 
-  createResultItem(post, query, type) {
-    const highlightedTitle = this.highlightText(post.title, query);
+  createResultElement(post, query, type) {
+    const resultDiv = document.createElement('div');
+    resultDiv.className = type === "sidebar" ? 'search-result-item sidebar-result' : 'search-result-item';
+    resultDiv.setAttribute('data-score', post.score);
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'search-result-content';
+    
+    // 创建标题
+    const titleElement = document.createElement(type === "sidebar" ? 'h4' : 'h3');
+    titleElement.className = 'search-result-title';
+    const titleLink = document.createElement('a');
+    titleLink.href = this.sanitizeUrl(post.url);
+    titleLink.innerHTML = this.highlightText(this.escapeHtml(post.title || ''), query);
+    titleElement.appendChild(titleLink);
+    contentDiv.appendChild(titleElement);
+    
+    // 创建摘要
+    const excerptP = document.createElement('p');
+    excerptP.className = 'search-result-excerpt';
     const excerptLength = type === "sidebar" ? 100 : 150;
-    const excerpt = this.createExcerpt(post.content, query, excerptLength);
-    const date = new Date(post.date).toLocaleDateString("zh-CN", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-
-    // 侧边栏搜索结果更紧凑
-    if (type === "sidebar") {
-      return `
-        <div class="search-result-item sidebar-result" data-score="${post.score}">
-          <div class="search-result-content">
-            <h4 class="search-result-title">
-              <a href="${post.url}">${highlightedTitle}</a>
-            </h4>
-            <p class="search-result-excerpt">${excerpt}</p>
-            <div class="search-result-meta">
-              <span class="search-result-date">📅 ${date}</span>
-            </div>
-          </div>
-        </div>
-      `;
+    excerptP.innerHTML = this.createExcerpt(post.content, query, excerptLength);
+    contentDiv.appendChild(excerptP);
+    
+    // 创建元数据
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'search-result-meta';
+    
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'search-result-date';
+    try {
+      const date = new Date(post.date).toLocaleDateString("zh-CN", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+      dateSpan.textContent = `📅 ${date}`;
+    } catch (e) {
+      dateSpan.textContent = '📅 日期未知';
     }
-
-    return `
-      <div class="search-result-item" data-score="${post.score}">
-        <div class="search-result-content">
-          <h3 class="search-result-title">
-            <a href="${post.url}">${highlightedTitle}</a>
-          </h3>
-          <p class="search-result-excerpt">${excerpt}</p>
-          <div class="search-result-meta">
-            <span class="search-result-date">📅 ${date}</span>
-            ${
-              post.tags
-                ? `<span class="search-result-tags">${this.formatTags(
-                    post.tags
-                  )}</span>`
-                : ""
-            }
-          </div>
-        </div>
-      </div>
-    `;
+    metaDiv.appendChild(dateSpan);
+    
+    // 添加标签（仅非侧边栏）
+    if (type !== "sidebar" && post.tags && Array.isArray(post.tags)) {
+      const tagsSpan = document.createElement('span');
+      tagsSpan.className = 'search-result-tags';
+      post.tags.slice(0, 3).forEach(tag => {
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'search-tag';
+        tagSpan.textContent = tag;
+        tagsSpan.appendChild(tagSpan);
+      });
+      metaDiv.appendChild(tagsSpan);
+    }
+    
+    contentDiv.appendChild(metaDiv);
+    resultDiv.appendChild(contentDiv);
+    
+    return resultDiv;
   }
 
   createExcerpt(content, query, maxLength = 150) {
-    if (!content) return "";
+    if (!content || typeof content !== 'string') return "";
+    
+    // 移除HTML标签和多余空白
+    const cleanContent = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    if (!cleanContent) return "";
 
     const searchTerm = query.toLowerCase();
-    const contentLower = content.toLowerCase();
+    const contentLower = cleanContent.toLowerCase();
     const index = contentLower.indexOf(searchTerm);
 
     let excerpt = "";
     if (index !== -1) {
       // 找到关键词，以关键词为中心创建摘要
       const start = Math.max(0, index - 50);
-      const end = Math.min(content.length, index + 100);
-      excerpt = content.slice(start, end);
+      const end = Math.min(cleanContent.length, index + 100);
+      excerpt = cleanContent.slice(start, end);
       if (start > 0) excerpt = "..." + excerpt;
-      if (end < content.length) excerpt = excerpt + "...";
+      if (end < cleanContent.length) excerpt = excerpt + "...";
     } else {
       // 没找到关键词，使用开头部分
-      excerpt = content.slice(0, maxLength);
-      if (content.length > maxLength) excerpt += "...";
+      excerpt = cleanContent.slice(0, maxLength);
+      if (cleanContent.length > maxLength) excerpt += "...";
     }
 
-    return this.highlightText(excerpt, query);
+    return this.highlightText(this.escapeHtml(excerpt), query);
   }
 
   highlightText(text, query) {
-    if (!text || !query) return text;
-    const regex = new RegExp(`(${this.escapeRegExp(query)})`, "gi");
+    if (!text || !query || typeof text !== 'string' || typeof query !== 'string') return text;
+    const escapedQuery = this.escapeRegExp(query.trim());
+    if (!escapedQuery) return text;
+    
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
     return text.replace(regex, '<span class="search-highlight">$1</span>');
   }
 
-  formatTags(tags) {
-    if (!tags || !Array.isArray(tags)) return "";
-    return tags
-      .slice(0, 3)
-      .map((tag) => `<span class="search-tag">${this.escapeHtml(tag)}</span>`)
-      .join("");
+  sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') return '#';
+    // 只允许相对路径和安全的绝对路径
+    if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
+      return url;
+    }
+    if (url.match(/^https?:\/\//)) {
+      try {
+        const urlObj = new URL(url);
+        return urlObj.href;
+      } catch (e) {
+        return '#';
+      }
+    }
+    return '#';
   }
 
   escapeHtml(text) {

@@ -28,6 +28,8 @@
   }
 
   // Enhanced card interactions - 增强卡片交互
+  const RIPPLE_DURATION = 600; // 定义常量避免硬编码
+  
   function initCardInteractions() {
     document.querySelectorAll(".post-card").forEach((card) => {
       let tiltTimeout;
@@ -75,8 +77,10 @@
         card.appendChild(ripple);
 
         setTimeout(() => {
-          ripple.remove();
-        }, 600);
+          if (ripple.parentNode) {
+            ripple.remove();
+          }
+        }, RIPPLE_DURATION);
       });
     });
   }
@@ -85,114 +89,6 @@
   function initEnhancedSearch() {
     // 此函数已被禁用，搜索功能现在由modern-search.js统一处理
     return;
-
-    let searchHistory = JSON.parse(
-      localStorage.getItem("blog-search-history") || "[]"
-    );
-    let currentQuery = "";
-
-    // Save search to history
-    function saveToHistory(query) {
-      if (!query || query.length < 1) return; // 改为支持单字符搜索历史
-
-      // Remove duplicates and add to beginning
-      searchHistory = searchHistory.filter((item) => item !== query);
-      searchHistory.unshift(query);
-
-      // Keep only last 10 searches
-      searchHistory = searchHistory.slice(0, 10);
-
-      localStorage.setItem(
-        "blog-search-history",
-        JSON.stringify(searchHistory)
-      );
-    }
-
-    // Show search history
-    function showSearchHistory() {
-      if (searchHistory.length === 0) return;
-
-      const historyHTML = `
-        <div class="search-history">
-          <div class="search-history-title">最近搜索</div>
-          ${searchHistory
-            .map(
-              (query) => `
-            <div class="search-history-item" data-query="${query}">
-              <span class="history-text">${query}</span>
-              <span class="history-remove" data-query="${query}">×</span>
-            </div>
-          `
-            )
-            .join("")}
-        </div>
-      `;
-
-      searchResults.innerHTML = historyHTML;
-      searchResults.classList.add("show");
-    }
-
-    // Handle search history interactions
-    searchResults.addEventListener("click", (e) => {
-      if (
-        e.target.classList.contains("history-text") ||
-        e.target.classList.contains("search-history-item")
-      ) {
-        const query =
-          e.target.dataset.query ||
-          e.target.querySelector(".history-text").textContent;
-        searchInput.value = query;
-        searchInput.dispatchEvent(new Event("input"));
-      } else if (e.target.classList.contains("history-remove")) {
-        e.stopPropagation();
-        const query = e.target.dataset.query;
-        searchHistory = searchHistory.filter((item) => item !== query);
-        localStorage.setItem(
-          "blog-search-history",
-          JSON.stringify(searchHistory)
-        );
-        showSearchHistory();
-      }
-    });
-
-    // Show history when input is focused and empty
-    searchInput.addEventListener("focus", () => {
-      if (!searchInput.value.trim()) {
-        showSearchHistory();
-      }
-    });
-
-    // Save search when user presses enter or clicks a result
-    searchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && searchInput.value.trim()) {
-        saveToHistory(searchInput.value.trim());
-      }
-    });
-
-    // Add debounced search
-    let searchTimeout;
-    const originalInput = searchInput.addEventListener;
-
-    searchInput.addEventListener("input", (e) => {
-      clearTimeout(searchTimeout);
-      currentQuery = e.target.value;
-
-      if (!currentQuery.trim()) {
-        showSearchHistory();
-        return;
-      }
-
-      searchTimeout = setTimeout(() => {
-        // Add loading state
-        searchResults.innerHTML = `
-          <div class="search-loading">
-            <div class="loading-spinner"></div>
-            <div>搜索中...</div>
-          </div>
-        `;
-        searchResults.classList.add("show");
-      }, 300);
-    });
   }
 
   // Smooth scroll enhancements - 平滑滚动增强
@@ -203,22 +99,29 @@
         const href = this.getAttribute("href");
         if (!href || href === "#") return;
 
-        // Use getElementById to support IDs starting with numbers or containing non-ASCII chars
-        const id = decodeURIComponent(href.slice(1));
-        const target = document.getElementById(id);
+        try {
+          // Use getElementById to support IDs starting with numbers or containing non-ASCII chars
+          const id = decodeURIComponent(href.slice(1));
+          const target = document.getElementById(id);
 
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-          // Keep URL hash in sync without causing default jump
-          if (history && history.replaceState) {
-            history.replaceState(null, "", href);
-          } else {
-            location.hash = href;
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+            // Keep URL hash in sync without causing default jump
+            try {
+              if (history && history.replaceState) {
+                history.replaceState(null, "", href);
+              }
+            } catch (historyError) {
+              // Fallback for restricted contexts
+              console.warn('Cannot update history state:', historyError);
+            }
           }
+        } catch (error) {
+          console.warn('Error in smooth scrolling:', error);
         }
       });
     });
@@ -229,6 +132,8 @@
     const progressBar = document.querySelector(".reading-progress-bar");
     if (!progressBar) return;
 
+    let ticking = false;
+    
     function updateProgress() {
       const windowHeight = window.innerHeight;
       const documentHeight =
@@ -237,10 +142,18 @@
       const progress = Math.min((scrollPosition / documentHeight) * 100, 100);
 
       progressBar.style.width = progress + "%";
+      ticking = false;
     }
 
-    window.addEventListener("scroll", updateProgress);
-    window.addEventListener("resize", updateProgress);
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    window.addEventListener("resize", requestTick, { passive: true });
     updateProgress();
   }
 
@@ -305,6 +218,7 @@
       initReadingProgress();
       initPerformanceOptimizations();
       initThemeEnhancements();
+      initSecurityEnhancements();
     } catch (error) {
       console.warn("Some modern enhancements failed to initialize:", error);
     }
@@ -408,16 +322,18 @@ const modernStyles = `
 document.head.insertAdjacentHTML("beforeend", modernStyles);
 
 // 安全增强：为新窗口外链增加 rel="noopener noreferrer"
-document.addEventListener("DOMContentLoaded", () => {
+function initSecurityEnhancements() {
   try {
     const links = document.querySelectorAll('a[target="_blank"]');
     links.forEach((a) => {
-      const rel = (a.getAttribute('rel') || '').split(/\s+/);
+      const rel = (a.getAttribute('rel') || '').split(/\s+/).filter(Boolean);
       if (!rel.includes('noopener')) rel.push('noopener');
       if (!rel.includes('noreferrer')) rel.push('noreferrer');
-      a.setAttribute('rel', rel.join(' ').trim());
+      a.setAttribute('rel', rel.join(' '));
     });
   } catch (e) {
     console.error('Failed to set rel on external links', e);
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", initSecurityEnhancements);
