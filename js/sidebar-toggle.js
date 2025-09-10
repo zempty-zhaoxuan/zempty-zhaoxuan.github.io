@@ -66,6 +66,11 @@ if (!wrapper || !sidebar) {
         sidebarToggle.setAttribute("title", "折叠侧边栏");
         sidebarToggle.innerHTML = "«";
       }
+
+      // 触发布局重算，确保评论区(Giscus)在折叠/展开后自适应宽度
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 50);
     });
   }
 
@@ -84,6 +89,11 @@ if (!wrapper || !sidebar) {
         mobileSidebarToggle.innerHTML = "▲";
         mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
       }
+
+      // 触发布局重算，确保评论区(Giscus)在移动端折叠/展开后自适应宽度
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 50);
     });
   }
 

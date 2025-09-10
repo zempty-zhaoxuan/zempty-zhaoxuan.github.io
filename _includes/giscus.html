@@ -1,82 +1,77 @@
 {% if page.comments != false and site.giscus.enabled %}
 <div class="comments-area">
-  <div class="giscus-container">
-    <script src="https://giscus.app/client.js"
-        data-repo="{{ site.giscus.repo }}"
-        data-repo-id="{{ site.giscus.repo_id }}"
-        data-category="{{ site.giscus.category }}"
-        data-category-id="{{ site.giscus.category_id }}"
-        data-mapping="{{ site.giscus.mapping }}"
-        data-strict="0"
-        data-reactions-enabled="{{ site.giscus.reactions_enabled }}"
-        data-emit-metadata="{{ site.giscus.emit_metadata }}"
-        data-input-position="{{ site.giscus.input_position }}"
-        data-theme="preferred_color_scheme"
-        data-lang="{{ site.giscus.lang }}"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
-    </script>
-  </div>
+  <div class="giscus-container"></div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Function to get current theme
+  const container = document.querySelector('.giscus-container');
+  if (!container) return;
+
+  // Get current theme from body class
   function getCurrentTheme() {
-    if (document.body.classList.contains('dark-theme')) {
-      return 'dark';
-    }
-    return 'light';
+    return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
   }
 
-  // Function to update Giscus theme
-  function updateGiscusTheme(theme) {
-    const giscusFrame = document.querySelector('.giscus-frame');
-    if (giscusFrame) {
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'light' } } },
-        'https://giscus.app'
-      );
-    }
+  // Inject Giscus with correct initial theme to avoid dark flash in light mode  
+  const initialTheme = getCurrentTheme() === 'dark' ? 'dark' : 'noborder_light';
+  const el = document.createElement('script');
+  el.src = 'https://giscus.app/client.js';
+  el.async = true;
+  el.setAttribute('data-repo', '{{ site.giscus.repo }}');
+  el.setAttribute('data-repo-id', '{{ site.giscus.repo_id }}');
+  el.setAttribute('data-category', '{{ site.giscus.category }}');
+  el.setAttribute('data-category-id', '{{ site.giscus.category_id }}');
+  el.setAttribute('data-mapping', '{{ site.giscus.mapping }}');
+  el.setAttribute('data-strict', '0');
+  el.setAttribute('data-reactions-enabled', '{{ site.giscus.reactions_enabled }}');
+  el.setAttribute('data-emit-metadata', '{{ site.giscus.emit_metadata }}');
+  el.setAttribute('data-input-position', '{{ site.giscus.input_position }}');
+  el.setAttribute('data-theme', initialTheme);
+  el.setAttribute('data-lang', '{{ site.giscus.lang }}');
+  el.setAttribute('data-loading', 'lazy');
+  el.setAttribute('crossorigin', 'anonymous');
+  container.appendChild(el);
+
+  // Update theme for all giscus iframes
+  function applyGiscusTheme(theme) {
+    const frames = document.querySelectorAll('.giscus-frame');
+    if (!frames || frames.length === 0) return false;
+    frames.forEach((frame) => {
+      try {
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'noborder_light' } } },
+          'https://giscus.app'
+        );
+      } catch (e) {}
+    });
+    return true;
   }
 
-  // Initial theme sync after Giscus loads
+  // Observe iframe insertion to sync theme as soon as it loads
   const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach(function(node) {
-          if (node.classList && node.classList.contains('giscus-frame')) {
-            // Wait a moment for the frame to fully load
-            setTimeout(() => {
-              updateGiscusTheme(getCurrentTheme());
-            }, 150);
-          }
-        });
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node && node.classList && node.classList.contains('giscus-frame')) {
+          setTimeout(() => applyGiscusTheme(getCurrentTheme()), 150);
+        }
       }
-    });
+    }
   });
+  observer.observe(container, { childList: true, subtree: true });
 
-  observer.observe(document.querySelector('.giscus-container'), {
-    childList: true,
-    subtree: true
-  });
+  // Poll a few times as a fallback for slower loads
+  let attempts = 0;
+  const poller = setInterval(() => {
+    attempts++;
+    const ok = applyGiscusTheme(getCurrentTheme());
+    if (ok || attempts > 20) clearInterval(poller);
+  }, 500);
 
-  // Listen for theme changes
+  // Sync on theme change events
   document.addEventListener('themeChanged', function(e) {
-    updateGiscusTheme(e.detail.theme);
+    applyGiscusTheme(e.detail.theme);
   });
-  
-  // Monitor theme toggle button clicks
-  const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function() {
-      // Wait for theme to be applied
-      setTimeout(() => {
-        updateGiscusTheme(getCurrentTheme());
-      }, 100);
-    });
-  }
 });
 </script>
 <style>
