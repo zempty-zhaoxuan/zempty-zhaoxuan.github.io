@@ -12,19 +12,10 @@
      * @returns {string} - 转义后的安全文本
      */
     escapeHtml: function(text) {
-      if (typeof text !== 'string') return '';
-      
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;',
-        '/': '&#x2F;'
-      };
+      if (!text || typeof text !== 'string') return '';
       
       return text.replace(/[&<>"'\/]/g, function(s) {
-        return map[s];
+        return SecurityUtils._HTML_ESCAPE_MAP[s];
       });
     },
 
@@ -46,11 +37,9 @@
     sanitizeUrl: function(url) {
       if (!url || typeof url !== 'string') return '#';
       
-      // 移除危险的协议
-      const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:'];
       const lowerUrl = url.toLowerCase().trim();
       
-      for (const protocol of dangerousProtocols) {
+      for (const protocol of SecurityUtils._DANGEROUS_PROTOCOLS) {
         if (lowerUrl.startsWith(protocol)) {
           return '#';
         }
@@ -77,23 +66,21 @@
      * 输入验证函数
      * @param {string} input - 用户输入
      * @param {number} maxLength - 最大长度
-     * @returns {boolean} - 是否有效
+     * @returns {Object} - 验证结果和清理后的输入
      */
-    validateInput: function(input, maxLength = 100) {
-      if (typeof input !== 'string') return false;
-      if (input.length === 0 || input.length > maxLength) return false;
+    validateInput: function(input, maxLength = 1000) {
+      if (!input || typeof input !== 'string') {
+        return { isValid: true, sanitized: '' };
+      }
       
-      // 检查是否包含危险字符
-      const dangerousPatterns = [
-        /<script/i,
-        /javascript:/i,
-        /on\w+\s*=/i,
-        /<iframe/i,
-        /<object/i,
-        /<embed/i
-      ];
+      if (input.length > maxLength) {
+        return { isValid: false, sanitized: input.substring(0, maxLength) };
+      }
       
-      return !dangerousPatterns.some(pattern => pattern.test(input));
+      const isValid = !SecurityUtils._DANGEROUS_PATTERNS.some(pattern => pattern.test(input));
+      const sanitized = this.escapeHtml(input);
+      
+      return { isValid, sanitized };
     },
 
     /**
@@ -198,15 +185,57 @@
       }
       
       try {
+        const passiveEvents = ['scroll', 'wheel', 'touchstart', 'touchmove'];
         element.addEventListener(event, handler, {
-          passive: true,
+          passive: passiveEvents.includes(event),
           ...options
         });
       } catch (e) {
         console.warn('Failed to add event listener:', e);
       }
+    },
+
+    /**
+     * 安全的innerHTML设置
+     * @param {Element} element - DOM元素
+     * @param {string} content - HTML内容
+     */
+    setInnerHTMLSafe: function(element, content) {
+      if (!element) return;
+      if (!content) {
+        element.textContent = '';
+        return;
+      }
+      
+      const validation = this.validateInput(content);
+      element.innerHTML = validation.sanitized;
     }
   };
+
+  // 静态常量
+  SecurityUtils._HTML_ESCAPE_MAP = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+    '/': '&#x2F;'
+  };
+
+  SecurityUtils._DANGEROUS_PROTOCOLS = [
+    'javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'
+  ];
+
+  SecurityUtils._DANGEROUS_PATTERNS = [
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    /javascript:/gi,
+    /on\w+\s*=/gi,
+    /<iframe/gi,
+    /<object/gi,
+    /<embed/gi,
+    /eval\s*\(/gi,
+    /expression\s*\(/gi
+  ];
 
   // 将SecurityUtils暴露到全局作用域
   window.SecurityUtils = SecurityUtils;

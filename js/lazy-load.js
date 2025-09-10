@@ -10,16 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // For iOS or mobile devices, load all images immediately
   if (isIOS || isMobile) {
     console.log("Mobile device detected, loading images immediately");
-    lazyImages.forEach(function(lazyImage) {
-      if (lazyImage.dataset.src) {
-        lazyImage.src = lazyImage.dataset.src;
-      }
-      if (lazyImage.dataset.srcset) {
-        lazyImage.srcset = lazyImage.dataset.srcset;
-      }
-      lazyImage.classList.remove("lazy");
-      lazyImage.classList.add("lazy-loaded");
-    });
+    lazyImages.forEach(loadImage);
     return; // Exit early for mobile devices
   }
 
@@ -28,14 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           let lazyImage = entry.target;
-          if (lazyImage.dataset.src) { // Check for data-src for regular images
-            lazyImage.src = lazyImage.dataset.src;
-          }
-          if (lazyImage.dataset.srcset) { // Check for data-srcset for responsive images
-            lazyImage.srcset = lazyImage.dataset.srcset;
-          }
-          lazyImage.classList.remove("lazy");
-          lazyImage.classList.add("lazy-loaded"); // Optional: for styling loaded images
+          loadImage(lazyImage);
           observer.unobserve(lazyImage);
         }
       });
@@ -55,14 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
           lazyImages.forEach(function(lazyImage) {
             if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
-              if (lazyImage.dataset.src) {
-                lazyImage.src = lazyImage.dataset.src;
-              }
-              if (lazyImage.dataset.srcset) {
-                lazyImage.srcset = lazyImage.dataset.srcset;
-              }
-              lazyImage.classList.remove("lazy");
-              lazyImage.classList.add("lazy-loaded");
+              loadImage(lazyImage);
 
               lazyImages = lazyImages.filter(function(image) {
                 return image !== lazyImage;
@@ -89,32 +66,49 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // Backup - load all images that might have been missed after 3 seconds
   setTimeout(function() {
-    document.querySelectorAll("img.lazy").forEach(function(lazyImage) {
-      if (lazyImage.dataset.src) {
-        lazyImage.src = lazyImage.dataset.src;
-      }
-      if (lazyImage.dataset.srcset) {
-        lazyImage.srcset = lazyImage.dataset.srcset;
-      }
-      lazyImage.classList.remove("lazy");
-      lazyImage.classList.add("lazy-loaded");
-    });
+    loadRemainingImages();
   }, 3000);
   
   // Special handling for orientation changes on mobile
   window.addEventListener("orientationchange", function() {
     // Reload all lazy images after orientation change
     setTimeout(function() {
-      document.querySelectorAll("img.lazy").forEach(function(lazyImage) {
-        if (lazyImage.dataset.src && !lazyImage.src.includes(lazyImage.dataset.src)) {
-          lazyImage.src = lazyImage.dataset.src;
-        }
-        if (lazyImage.dataset.srcset && !lazyImage.srcset) {
-          lazyImage.srcset = lazyImage.dataset.srcset;
-        }
-        lazyImage.classList.remove("lazy");
-        lazyImage.classList.add("lazy-loaded");
-      });
+      loadRemainingImages();
     }, 200); // Small delay to let the orientation change complete
   });
+  
+  // 提取公共的图片加载逻辑
+  function loadImage(img) {
+    if (img.dataset.src) {
+      // 验证URL安全性
+      const src = SecurityUtils ? SecurityUtils.sanitizeUrl(img.dataset.src) : sanitizeUrl(img.dataset.src);
+      img.src = src;
+    }
+    if (img.dataset.srcset) {
+      img.srcset = img.dataset.srcset;
+    }
+    img.classList.remove('lazy');
+    img.classList.add('lazy-loaded');
+  }
+  
+  function loadRemainingImages() {
+    document.querySelectorAll('img.lazy').forEach(loadImage);
+  }
+  
+  // 安全工具函数（如果SecurityUtils不可用）
+  function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') return '';
+    if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
+      return url;
+    }
+    if (url.match(/^https?:\/\//)) {
+      try {
+        const urlObj = new URL(url);
+        return urlObj.href;
+      } catch (e) {
+        return '';
+      }
+    }
+    return '';
+  }
 }); 

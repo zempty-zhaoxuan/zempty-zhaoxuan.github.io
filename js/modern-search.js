@@ -122,8 +122,9 @@ class ModernSearch {
              "input",
        this.debounce(async (e) => {
          const query = e.target.value.trim();
-         // 限制查询长度防止过长输入
-         if (query.length >= 1 && query.length <= 100) {
+         // 验证和清理输入
+         const validation = SecurityUtils.validateInput(query, 200);
+         if (validation.isValid && query.length >= 1) {
            if (!this.posts.length) {
              await this.loadPosts();
            }
@@ -139,7 +140,8 @@ class ModernSearch {
       if (e.key === "Enter") {
         e.preventDefault();
         const query = searchObj.input.value.trim();
-        if (query.length >= 1) {
+        const validation = SecurityUtils.validateInput(query, 200);
+        if (validation.isValid && query.length >= 1) {
           if (!this.posts.length) {
             this.loadPosts().then(() => this.performSearch(query, searchObj, type));
           } else {
@@ -233,8 +235,8 @@ class ModernSearch {
       noResultsDiv.className = 'search-no-results';
       
       const messageP = document.createElement('p');
-      messageP.innerHTML = `😕 没有找到包含 "<strong></strong>" 的文章`;
-      messageP.querySelector('strong').textContent = query;
+      const escapedQuery = SecurityUtils.escapeHtml(query);
+      messageP.innerHTML = `😕 没有找到包含 "<strong>${escapedQuery}</strong>" 的文章`;
       noResultsDiv.appendChild(messageP);
       
       if (type !== "sidebar") {
@@ -274,8 +276,8 @@ class ModernSearch {
     const titleElement = document.createElement(type === "sidebar" ? 'h4' : 'h3');
     titleElement.className = 'search-result-title';
     const titleLink = document.createElement('a');
-    titleLink.href = this.sanitizeUrl(post.url);
-    titleLink.innerHTML = this.highlightText(this.escapeHtml(post.title || ''), query);
+    titleLink.href = SecurityUtils.sanitizeUrl(post.url);
+    titleLink.innerHTML = this.highlightText(post.title || '', query);
     titleElement.appendChild(titleLink);
     contentDiv.appendChild(titleElement);
     
@@ -348,49 +350,26 @@ class ModernSearch {
       if (cleanContent.length > maxLength) excerpt += "...";
     }
 
-    return this.highlightText(this.escapeHtml(excerpt), query);
+    return this.highlightText(excerpt, query);
   }
 
   highlightText(text, query) {
-    if (!text || !query || typeof text !== 'string' || typeof query !== 'string') return text;
-    const escapedQuery = this.escapeRegExp(query.trim());
-    if (!escapedQuery) return text;
+    if (!text || !query || typeof text !== 'string' || typeof query !== 'string') return SecurityUtils.escapeHtml(text);
+    
+    const safeText = SecurityUtils.escapeHtml(text);
+    const safeQuery = SecurityUtils.escapeHtml(query.trim());
+    const escapedQuery = SecurityUtils.escapeRegExp(safeQuery);
+    if (!escapedQuery) return safeText;
     
     const regex = new RegExp(`(${escapedQuery})`, "gi");
-    return text.replace(regex, '<span class="search-highlight">$1</span>');
+    return safeText.replace(regex, '<span class="search-highlight">$1</span>');
   }
 
-  sanitizeUrl(url) {
-    if (!url || typeof url !== 'string') return '#';
-    // 只允许相对路径和安全的绝对路径
-    if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
-      return url;
-    }
-    if (url.match(/^https?:\/\//)) {
-      try {
-        const urlObj = new URL(url);
-        return urlObj.href;
-      } catch (e) {
-        return '#';
-      }
-    }
-    return '#';
-  }
 
-  escapeHtml(text) {
-    const map = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    };
-    return text.replace(/[&<>"']/g, (m) => map[m]);
-  }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
+
+
+
 
   showResults(searchObj) {
     searchObj.results.style.display = "block";

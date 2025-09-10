@@ -21,7 +21,7 @@
     }, observerOptions);
 
     // Observe post cards
-    document.querySelectorAll(".post-card").forEach((card) => {
+    getPostCards().forEach((card) => {
       card.classList.add("animate-ready");
       observer.observe(card);
     });
@@ -31,7 +31,7 @@
   const RIPPLE_DURATION = 600; // 定义常量避免硬编码
   
   function initCardInteractions() {
-    document.querySelectorAll(".post-card").forEach((card) => {
+    getPostCards().forEach((card) => {
       let tiltTimeout;
 
       // Add subtle tilt effect on mouse move
@@ -76,6 +76,12 @@
 
         card.appendChild(ripple);
 
+        // 清理波纹效果并限制数量
+        const existingRipples = card.querySelectorAll('.ripple-effect');
+        if (existingRipples.length > 3) {
+          existingRipples[0].remove();
+        }
+        
         setTimeout(() => {
           if (ripple.parentNode) {
             ripple.remove();
@@ -102,6 +108,12 @@
         try {
           // Use getElementById to support IDs starting with numbers or containing non-ASCII chars
           const id = decodeURIComponent(href.slice(1));
+          // 验证ID的安全性
+          if (SecurityUtils && !SecurityUtils.validateInput(id).isValid) {
+            console.warn('不安全的锤点链接:', href);
+            return;
+          }
+          
           const target = document.getElementById(id);
 
           if (target) {
@@ -139,7 +151,7 @@
       const documentHeight =
         document.documentElement.scrollHeight - windowHeight;
       const scrollPosition = window.scrollY;
-      const progress = Math.min((scrollPosition / documentHeight) * 100, 100);
+      const progress = documentHeight > 0 ? Math.min((scrollPosition / documentHeight) * 100, 100) : 0;
 
       progressBar.style.width = progress + "%";
       ticking = false;
@@ -200,6 +212,16 @@
         document.body.style.transition = "";
       }, 300);
     });
+  }
+
+  // 缓存DOM元素
+  let cachedPostCards = null;
+  
+  function getPostCards() {
+    if (!cachedPostCards) {
+      cachedPostCards = document.querySelectorAll('.post-card');
+    }
+    return cachedPostCards;
   }
 
   // Initialize all enhancements
@@ -336,4 +358,4 @@ function initSecurityEnhancements() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", initSecurityEnhancements);
+// 移除重复的事件监听器

@@ -269,21 +269,23 @@
       results.slice(0, limit).forEach(result => {
         const post = result.post;
         
-        // 高亮标题
+        // 安全地高亮标题
         let highlightedTitle = escapeHtml(post.title);
         result.matchedTerms.forEach(match => {
           if (match.field === 'title') {
-            const regex = new RegExp(`(${escapeRegExp(match.term)})`, 'gi');
-            highlightedTitle = highlightedTitle.replace(regex, '<mark>$1</mark>');
+            const escapedTerm = escapeHtml(match.term);
+            const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
+            highlightedTitle = highlightedTitle.replace(regex, `<mark>${escapedTerm}</mark>`);
           }
         });
 
-        // 高亮摘要
+        // 安全地高亮摘要
         let highlightedExcerpt = escapeHtml(post.excerpt || '');
         result.matchedTerms.forEach(match => {
           if (match.field === 'excerpt') {
-            const regex = new RegExp(`(${escapeRegExp(match.term)})`, 'gi');
-            highlightedExcerpt = highlightedExcerpt.replace(regex, '<mark>$1</mark>');
+            const escapedTerm = escapeHtml(match.term);
+            const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
+            highlightedExcerpt = highlightedExcerpt.replace(regex, `<mark>${escapedTerm}</mark>`);
           }
         });
 
@@ -313,14 +315,17 @@
           tagsHtml += '</div>';
         }
 
+        const safeUrl = sanitizeUrl(post.url);
+        const safeDate = escapeHtml(post.date);
+        
         html += 
-          `<div class="search-result-item enhanced" data-url="${post.url}">` +
+          `<div class="search-result-item enhanced" data-url="${safeUrl}">` +
           `<div class="result-header">` +
           `<h3 class="result-title">` +
-          `<a href="${post.url}">${highlightedTitle}</a>` +
+          `<a href="${safeUrl}">${highlightedTitle}</a>` +
           `</h3>` +
           `<div class="result-meta">` +
-          `<span class="result-date">📅 ${post.date}</span>` +
+          `<span class="result-date">📅 ${safeDate}</span>` +
           `<span class="result-score">${getRelevanceLabel(result.score)}</span>` +
           `</div>` +
           `</div>` +
@@ -361,6 +366,22 @@
 
     function escapeRegExp(string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    function sanitizeUrl(url) {
+      if (!url || typeof url !== 'string') return '#';
+      if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
+        return url;
+      }
+      if (url.match(/^https?:\/\//)) {
+        try {
+          const urlObj = new URL(url);
+          return urlObj.href;
+        } catch (e) {
+          return '#';
+        }
+      }
+      return '#';
     }
   }
 })(); 

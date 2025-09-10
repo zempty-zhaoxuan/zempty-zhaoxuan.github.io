@@ -14,19 +14,46 @@ var _$JSONLoader_2 = {
 }
 
 function load (location, callback) {
+  // 验证URL安全性
+  if (!isValidUrl(location)) {
+    callback(new Error('Invalid URL'), null);
+    return;
+  }
+  
   var xhr = getXHR()
   xhr.open('GET', location, true)
   xhr.onreadystatechange = createStateChangeListener(xhr, callback)
   xhr.send()
 }
 
+function isValidUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  
+  // 只允许相对路径和安全的绝对路径
+  if (url.startsWith('/') || url.startsWith('./')) {
+    return true;
+  }
+  
+  // 检查是否为安全的HTTP/HTTPS URL
+  try {
+    var urlObj = new URL(url);
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+  } catch (e) {
+    return false;
+  }
+}
+
 function createStateChangeListener (xhr, callback) {
   return function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      try {
-        callback(null, JSON.parse(xhr.responseText))
-      } catch (err) {
-        callback(err, null)
+    if (xhr.readyState === 4) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          callback(null, JSON.parse(xhr.responseText))
+        } catch (err) {
+          callback(err, null)
+        }
+      } else {
+        callback(new Error('HTTP ' + xhr.status), null)
       }
     }
   }
@@ -227,8 +254,14 @@ function isExcluded (term, excludedTerms) {
   excludedTerms = excludedTerms || []
   for (var i = 0, len = excludedTerms.length; i < len; i++) {
     var excludedTerm = excludedTerms[i]
-    if (!excluded && new RegExp(term).test(excludedTerm)) {
-      excluded = true
+    try {
+      var escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      if (!excluded && new RegExp(escapedTerm).test(excludedTerm)) {
+        excluded = true
+      }
+    } catch (e) {
+      // 如果正则表达式创建失败，跳过这个项
+      continue;
     }
   }
   return excluded
@@ -398,9 +431,35 @@ var _$src_8 = {};
       return appendToResultsContainer(options.noResultsText)
     }
     for (var i = 0; i < len; i++) {
-      results[i].query = query
-      appendToResultsContainer(_$Templater_7.compile(results[i]))
+      // 对结果进行安全处理
+      var safeResult = sanitizeSearchResult(results[i]);
+      safeResult.query = escapeHtml(query);
+      appendToResultsContainer(_$Templater_7.compile(safeResult))
     }
+  }
+  
+  function sanitizeSearchResult(item) {
+    if (!item || typeof item !== 'object') return item;
+    
+    var safeItem = {};
+    for (var key in item) {
+      if (item.hasOwnProperty(key)) {
+        var value = item[key];
+        if (typeof value === 'string') {
+          safeItem[key] = escapeHtml(value);
+        } else {
+          safeItem[key] = value;
+        }
+      }
+    }
+    return safeItem;
+  }
+  
+  function escapeHtml(text) {
+    if (!text || typeof text !== 'string') return '';
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   function isValidQuery (query) {

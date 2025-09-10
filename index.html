@@ -27,7 +27,7 @@ layout: default
       {% if post.cover_image %}
       <div class="post-card-cover">
         <a href="{{ site.baseurl }}{{ post.url }}">
-          <img src="{{ site.baseurl }}/images/placeholder.png" data-src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image" class="lazy" loading="lazy" onerror="this.onerror=null; this.src='{{ site.baseurl }}/images/{{ post.cover_image }}';">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" data-src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image" class="lazy" loading="lazy" onerror="this.onerror=null; this.src='{{ site.baseurl }}/images/blog.jpg';">
         </a>
       </div>
       {% endif %}
