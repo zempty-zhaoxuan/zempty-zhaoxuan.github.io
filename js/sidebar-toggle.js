@@ -29,7 +29,7 @@ if (!wrapper || !sidebar) {
     if (currentState === "collapsed") {
       wrapper.classList.add("sidebar-collapsed");
       sidebar.classList.add("collapsed");
-      sidebarToggle.innerHTML = "≡";
+      sidebarToggle.innerHTML = "≡"; // 安全: 设置图标
       sidebarToggle.setAttribute("title", "展开侧边栏");
     } else {
       sidebarToggle.innerHTML = "«";

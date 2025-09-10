@@ -228,15 +228,15 @@ class ModernSearch {
 
   displayResults(results, query, searchObj, type) {
     // 清空并重新创建结果容器
-    searchObj.results.innerHTML = '';
+    searchObj.results.innerHTML = ''; // 安全: 清空容器
     
     if (results.length === 0) {
       const noResultsDiv = document.createElement('div');
       noResultsDiv.className = 'search-no-results';
       
       const messageP = document.createElement('p');
-      const escapedQuery = SecurityUtils.escapeHtml(query);
-      messageP.innerHTML = `😕 没有找到包含 "<strong>${escapedQuery}</strong>" 的文章`;
+      const escapedQuery = SecurityUtils ? SecurityUtils.escapeHtml(query) : this.escapeHtml(query);
+      messageP.innerHTML = `😕 没有找到包含 "<strong>${escapedQuery}</strong>" 的文章`; // 安全: 使用已转义的内容
       noResultsDiv.appendChild(messageP);
       
       if (type !== "sidebar") {
@@ -277,7 +277,8 @@ class ModernSearch {
     titleElement.className = 'search-result-title';
     const titleLink = document.createElement('a');
     titleLink.href = SecurityUtils.sanitizeUrl(post.url);
-    titleLink.innerHTML = this.highlightText(post.title || '', query);
+    const highlightedTitle = this.highlightText(post.title || '', query);
+    titleLink.innerHTML = highlightedTitle; // 安全: 使用已转义的内容
     titleElement.appendChild(titleLink);
     contentDiv.appendChild(titleElement);
     
@@ -285,7 +286,8 @@ class ModernSearch {
     const excerptP = document.createElement('p');
     excerptP.className = 'search-result-excerpt';
     const excerptLength = type === "sidebar" ? 100 : 150;
-    excerptP.innerHTML = this.createExcerpt(post.content, query, excerptLength);
+    const excerptContent = this.createExcerpt(post.content, query, excerptLength);
+    excerptP.innerHTML = excerptContent; // 安全: 使用已转义的内容
     contentDiv.appendChild(excerptP);
     
     // 创建元数据
@@ -354,15 +356,37 @@ class ModernSearch {
   }
 
   highlightText(text, query) {
-    if (!text || !query || typeof text !== 'string' || typeof query !== 'string') return SecurityUtils.escapeHtml(text);
+    if (!text || !query || typeof text !== 'string' || typeof query !== 'string') {
+      return SecurityUtils ? SecurityUtils.escapeHtml(text || '') : this.escapeHtml(text || '');
+    }
     
-    const safeText = SecurityUtils.escapeHtml(text);
-    const safeQuery = SecurityUtils.escapeHtml(query.trim());
-    const escapedQuery = SecurityUtils.escapeRegExp(safeQuery);
+    const safeText = SecurityUtils ? SecurityUtils.escapeHtml(text) : this.escapeHtml(text);
+    const safeQuery = (SecurityUtils ? SecurityUtils.escapeHtml(query.trim()) : this.escapeHtml(query.trim()));
+    const escapedQuery = SecurityUtils ? SecurityUtils.escapeRegExp(safeQuery) : this.escapeRegExp(safeQuery);
+    
     if (!escapedQuery) return safeText;
     
-    const regex = new RegExp(`(${escapedQuery})`, "gi");
-    return safeText.replace(regex, '<span class="search-highlight">$1</span>');
+    try {
+      const regex = new RegExp(`(${escapedQuery})`, "gi");
+      return safeText.replace(regex, '<span class="search-highlight">$1</span>');
+    } catch (e) {
+      console.warn('Regex error in highlightText:', e);
+      return safeText;
+    }
+  }
+  
+  // 备用HTML转义函数
+  escapeHtml(text) {
+    if (!text || typeof text !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+  
+  // 备用正则转义函数
+  escapeRegExp(string) {
+    if (!string || typeof string !== 'string') return '';
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
 
@@ -492,7 +516,7 @@ class ModernSearch {
           "mobile-sidebar-toggle"
         );
         if (mobileSidebarToggle) {
-          mobileSidebarToggle.innerHTML = "▲";
+          mobileSidebarToggle.innerHTML = "▲"; // 安全: 设置图标
           mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
         }
 
@@ -507,7 +531,7 @@ class ModernSearch {
         // 更新桌面端按钮状态
         const sidebarToggle = document.getElementById("sidebar-toggle");
         if (sidebarToggle) {
-          sidebarToggle.innerHTML = "«";
+          sidebarToggle.innerHTML = "«"; // 安全: 设置图标
           sidebarToggle.setAttribute("title", "折叠侧边栏");
         }
 
@@ -517,9 +541,14 @@ class ModernSearch {
   }
 }
 
-// 添加搜索相关的CSS样式
-const searchStyles = `
-<style>
+// 添加搜索相关的CSS样式（安全方式）
+function addSearchStyles() {
+  const styleId = 'modern-search-styles';
+  if (document.getElementById(styleId)) return;
+  
+  const style = document.createElement('style');
+  style.id = styleId;
+  style.textContent = `
 .search-results {
   padding: 1rem;
   max-height: 400px;
@@ -656,13 +685,14 @@ const searchStyles = `
   background: var(--accent-color);
   color: white;
 }
-</style>
 `;
+  document.head.appendChild(style);
+}
 
 // 初始化搜索功能
 document.addEventListener("DOMContentLoaded", () => {
   // 添加样式
-  document.head.insertAdjacentHTML("beforeend", searchStyles);
+  addSearchStyles();
 
   // 初始化搜索
   new ModernSearch();

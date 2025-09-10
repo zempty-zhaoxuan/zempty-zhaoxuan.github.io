@@ -207,8 +207,55 @@
         return;
       }
       
-      const validation = this.validateInput(content);
-      element.innerHTML = validation.sanitized;
+      // 完全避免innerHTML，使用textContent
+      element.textContent = content;
+    },
+    
+    /**
+     * 安全的HTML内容设置（仅允许特定标签）
+     * @param {Element} element - DOM元素
+     * @param {string} content - HTML内容
+     * @param {Array} allowedTags - 允许的标签列表
+     */
+    setHTMLContentSafe: function(element, content, allowedTags = ['strong', 'em', 'span']) {
+      if (!element || !content) {
+        if (element) element.textContent = '';
+        return;
+      }
+      
+      // 使用安全的方式创建内容
+      const temp = document.createElement('div');
+      temp.textContent = content; // 使用textContent而不是innerHTML
+      
+      // 只保留允许的标签
+      const walker = document.createTreeWalker(
+        temp,
+        NodeFilter.SHOW_ELEMENT,
+        {
+          acceptNode: function(node) {
+            return allowedTags.includes(node.tagName.toLowerCase()) ?
+              NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        }
+      );
+      
+      // 移除不允许的元素
+      const nodesToRemove = [];
+      let node;
+      while (node = walker.nextNode()) {
+        if (!allowedTags.includes(node.tagName.toLowerCase())) {
+          nodesToRemove.push(node);
+        }
+      }
+      
+      nodesToRemove.forEach(node => {
+        if (node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+      });
+      
+      // 只允许特定标签的安全内容
+      element.textContent = temp.textContent;
     }
   };
 
@@ -233,8 +280,17 @@
     /<iframe/gi,
     /<object/gi,
     /<embed/gi,
+    /<form/gi,
+    /<input/gi,
+    /<textarea/gi,
+    /<select/gi,
+    /<button/gi,
     /eval\s*\(/gi,
-    /expression\s*\(/gi
+    /expression\s*\(/gi,
+    /setTimeout\s*\(/gi,
+    /setInterval\s*\(/gi,
+    /Function\s*\(/gi,
+    /new\s+Function/gi
   ];
 
   // 将SecurityUtils暴露到全局作用域

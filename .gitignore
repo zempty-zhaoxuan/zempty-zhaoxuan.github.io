@@ -26,3 +26,22 @@ Thumbs.db*
 .db/
 .vscode/
 .kiro/
+
+# 环境变量和敏感文件
+.env
+.env.local
+.env.production
+.env.development
+*.log
+node_modules/
+
+# 临时文件
+*.tmp
+*.temp
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

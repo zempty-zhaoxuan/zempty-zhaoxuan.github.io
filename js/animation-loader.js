@@ -3,7 +3,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Hide loader when page is fully loaded
   setTimeout(function() {
-    document.querySelector('.loader').style.display = 'none';
+    const loader = document.querySelector('.loader');
+    if (loader) {
+      loader.style.display = 'none';
+    }
   }, 300);
 
   // Add loading class when clicking on links
@@ -17,8 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
         target.getAttribute('href').indexOf('#') !== 0) {
       
       // Show loading animation
-      document.querySelector('.loader').style.display = 'block';
-      document.getElementById('main').classList.add('loading');
+      const loader = document.querySelector('.loader');
+      const main = document.getElementById('main');
+      if (loader) {
+        loader.style.display = 'block';
+      }
+      if (main) {
+        main.classList.add('loading');
+      }
       
       // Save state to sessionStorage
       sessionStorage.setItem('isPageTransition', 'true');
@@ -28,11 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // Apply staggered animation to posts
   const articles = document.querySelectorAll('.posts article');
   articles.forEach((article, index) => {
+    if (!article) return;
     // Ensure animations only play after initial page load
+    const delay = Math.min(100 + (index * 100), 2000); // 限制最大延迟
     setTimeout(() => {
-      article.style.opacity = '1';
-      article.style.transform = 'translateY(0)';
-    }, 100 + (index * 100));
+      if (article) {
+        article.style.opacity = '1';
+        article.style.transform = 'translateY(0)';
+      }
+    }, delay);
   });
 
   // Add hover effect for images

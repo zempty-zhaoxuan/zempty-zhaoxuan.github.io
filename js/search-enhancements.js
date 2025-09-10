@@ -274,8 +274,12 @@
         result.matchedTerms.forEach(match => {
           if (match.field === 'title') {
             const escapedTerm = escapeHtml(match.term);
-            const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
-            highlightedTitle = highlightedTitle.replace(regex, `<mark>${escapedTerm}</mark>`);
+            try {
+              const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
+              highlightedTitle = highlightedTitle.replace(regex, `<mark>${escapedTerm}</mark>`);
+            } catch (e) {
+              console.warn('Regex error in title highlighting:', e);
+            }
           }
         });
 
@@ -284,8 +288,12 @@
         result.matchedTerms.forEach(match => {
           if (match.field === 'excerpt') {
             const escapedTerm = escapeHtml(match.term);
-            const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
-            highlightedExcerpt = highlightedExcerpt.replace(regex, `<mark>${escapedTerm}</mark>`);
+            try {
+              const regex = new RegExp(`(${escapeRegExp(escapedTerm)})`, 'gi');
+              highlightedExcerpt = highlightedExcerpt.replace(regex, `<mark>${escapedTerm}</mark>`);
+            } catch (e) {
+              console.warn('Regex error in excerpt highlighting:', e);
+            }
           }
         });
 
@@ -359,12 +367,14 @@
     }
 
     function escapeHtml(text) {
+      if (!text || typeof text !== 'string') return '';
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
 
     function escapeRegExp(string) {
+      if (!string || typeof string !== 'string') return '';
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
     

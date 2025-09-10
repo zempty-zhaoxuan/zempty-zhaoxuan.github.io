@@ -79,13 +79,22 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // 提取公共的图片加载逻辑
   function loadImage(img) {
+    if (!img || !img.dataset) return;
+    
     if (img.dataset.src) {
       // 验证URL安全性
-      const src = SecurityUtils ? SecurityUtils.sanitizeUrl(img.dataset.src) : sanitizeUrl(img.dataset.src);
-      img.src = src;
+      const src = (typeof SecurityUtils !== 'undefined' && SecurityUtils) ? 
+        SecurityUtils.sanitizeUrl(img.dataset.src) : 
+        sanitizeUrl(img.dataset.src);
+      if (src) {
+        img.src = src;
+      }
     }
     if (img.dataset.srcset) {
-      img.srcset = img.dataset.srcset;
+      const sanitizedSrcset = sanitizeSrcset(img.dataset.srcset);
+      if (sanitizedSrcset) {
+        img.srcset = sanitizedSrcset;
+      }
     }
     img.classList.remove('lazy');
     img.classList.add('lazy-loaded');
@@ -98,17 +107,40 @@ document.addEventListener("DOMContentLoaded", function() {
   // 安全工具函数（如果SecurityUtils不可用）
   function sanitizeUrl(url) {
     if (!url || typeof url !== 'string') return '';
+    
+    // 移除潜在的危险字符 - 使用不区分大小写的检查
+    url = url.trim();
+    const lowerUrl = url.toLowerCase();
+    if (lowerUrl.includes('javascript:') || lowerUrl.includes('data:') || lowerUrl.includes('vbscript:')) {
+      return '';
+    }
+    
     if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
       return url;
     }
     if (url.match(/^https?:\/\//)) {
       try {
         const urlObj = new URL(url);
-        return urlObj.href;
+        // 只允许http和https协议
+        if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+          return urlObj.href;
+        }
       } catch (e) {
         return '';
       }
     }
     return '';
+  }
+  
+  function sanitizeSrcset(srcset) {
+    if (!srcset || typeof srcset !== 'string') return '';
+    
+    return srcset.split(',').map(src => {
+      const parts = src.trim().split(' ');
+      const url = parts[0];
+      const descriptor = parts[1] || '';
+      const sanitizedUrl = sanitizeUrl(url);
+      return sanitizedUrl ? `${sanitizedUrl} ${descriptor}`.trim() : '';
+    }).filter(Boolean).join(', ');
   }
 }); 

@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // 根据当前主题设置正确的图标和tooltip
   function setInitialIconAndTooltip() {
     if (document.body.classList.contains('dark-theme')) {
-      themeToggle.innerHTML = '☀️'; // In dark mode, show sun to switch to light
+      themeToggle.innerHTML = '☀️'; // 安全: 设置图标 - In dark mode, show sun to switch to light
     } else {
-      themeToggle.innerHTML = '🌙'; // In light mode, show moon to switch to dark
+      themeToggle.innerHTML = '🌙'; // 安全: 设置图标 - In light mode, show moon to switch to dark
     }
     updateTooltip();
   }
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
           console.warn('Cannot save theme to localStorage:', e);
         }
-        themeToggle.innerHTML = '🌙'; // 显示月亮图标表示可以切换到深色模式
+        themeToggle.innerHTML = '🌙'; // 安全: 设置图标 - 显示月亮图标表示可以切换到深色模式
       } else {
         // 如果当前是浅色模式或没有设置
         document.body.classList.remove('light-theme');
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
           console.warn('Cannot save theme to localStorage:', e);
         }
-        themeToggle.innerHTML = '☀️'; // 显示太阳图标表示可以切换到浅色模式
+        themeToggle.innerHTML = '☀️'; // 安全: 设置图标 - 显示太阳图标表示可以切换到浅色模式
       }
     } catch (error) {
       console.error('Error switching theme:', error);

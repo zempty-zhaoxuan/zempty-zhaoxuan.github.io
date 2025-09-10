@@ -29,18 +29,15 @@ function load (location, callback) {
 function isValidUrl(url) {
   if (!url || typeof url !== 'string') return false;
   
-  // 只允许相对路径和安全的绝对路径
+  // 只允许相对路径
   if (url.startsWith('/') || url.startsWith('./')) {
+    // 防止路径遍历攻击
+    if (url.includes('..')) return false;
     return true;
   }
   
-  // 检查是否为安全的HTTP/HTTPS URL
-  try {
-    var urlObj = new URL(url);
-    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
-  } catch (e) {
-    return false;
-  }
+  // 不允许绝对URL以防止SSRF攻击
+  return false;
 }
 
 function createStateChangeListener (xhr, callback) {
