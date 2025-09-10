@@ -1,39 +1,117 @@
 // Modern Card Design System
 // 现代化卡片设计系统
 
+// CSS Custom Properties for Cards - 卡片CSS自定义属性
+:root {
+  // Card spacing
+  --card-padding: #{$space-lg};
+  --card-padding-sm: #{$space-md};
+  --card-padding-lg: #{$space-xl};
+  --card-gap: #{$space-md};
+  
+  // Card dimensions
+  --card-min-height: 280px;
+  --card-border-radius: #{$card-border-radius};
+  --card-border-width: 1px;
+  
+  // Card animations
+  --card-hover-transform: translateY(-8px);
+  --card-transition: all #{$transition-normal};
+  --card-hover-transition: all #{$transition-spring};
+}
+
 // Base Card Styles - 基础卡片样式
 .modern-card {
+  // Layout properties
   background: var(--card-background);
-  border: 1px solid var(--card-border);
-  border-radius: $card-border-radius;
+  border: var(--card-border-width) solid var(--card-border);
+  border-radius: var(--card-border-radius);
   box-shadow: var(--card-shadow);
-  transition: all $transition-normal;
   overflow: hidden;
   position: relative;
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--card-shadow-hover);
-    background: var(--card-background-hover);
+  
+  // Animation properties
+  transition: var(--card-transition);
+  transform-origin: center bottom;
+  
+  // Accessibility
+  &:focus-within {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
   }
 
-  // Card content spacing
+  &:hover {
+    transform: var(--card-hover-transform);
+    box-shadow: var(--card-shadow-hover);
+    background: var(--card-background-hover);
+    transition: var(--card-hover-transition);
+  }
+
+  // Card content spacing variants
   &-content {
-    padding: $space-lg;
+    padding: var(--card-padding);
+    
+    &--sm {
+      padding: var(--card-padding-sm);
+    }
+    
+    &--lg {
+      padding: var(--card-padding-lg);
+    }
   }
 
   &-header {
-    padding: $space-lg $space-lg $space-md;
+    padding: var(--card-padding) var(--card-padding) var(--card-gap);
+    border-bottom: 1px solid var(--divider-color);
+    background: var(--background-lighten-color);
+    
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+      color: var(--heading-color);
+    }
   }
 
   &-body {
-    padding: 0 $space-lg $space-lg;
+    padding: 0 var(--card-padding) var(--card-padding);
+    flex: 1;
   }
 
   &-footer {
-    padding: $space-md $space-lg $space-lg;
+    padding: var(--card-gap) var(--card-padding) var(--card-padding);
     border-top: 1px solid var(--divider-color);
     background: var(--background-lighten-color);
+    margin-top: auto;
+  }
+  
+  // Card variants
+  &--elevated {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  &--flat {
+    box-shadow: none;
+    border: 2px solid var(--divider-color);
+    
+    &:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+  }
+  
+  &--interactive {
+    cursor: pointer;
+    
+    &:hover {
+      transform: var(--card-hover-transform) scale(1.02);
+    }
+    
+    &:active {
+      transform: translateY(-4px) scale(0.98);
+    }
   }
 }
 
@@ -228,40 +306,96 @@
   }
 }
 
-// Grid Layout for Cards - 卡片网格布局
-.posts-grid {
+// Grid Layout System for Cards - 卡片网格布局系统
+.cards-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-xl;
+  gap: var(--card-gap);
   margin-bottom: $space-xxl;
-
-  @media (min-width: 768px) {
+  
+  // Default: Single column for mobile
+  grid-template-columns: 1fr;
+  
+  // Small tablets and up: 2 columns
+  @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: $space-lg;
   }
-
-  @media (min-width: 1200px) {
+  
+  // Medium screens: 2-3 columns based on content
+  @media (min-width: 768px) {
+    gap: $space-xl;
+  }
+  
+  // Large screens: 3 columns
+  @media (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
+  }
+  
+  // Extra large screens: 4 columns max
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  // Grid variants
+  &--2-col {
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  &--auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  &--dense {
+    grid-auto-flow: dense;
   }
 }
 
-// Alternative: Masonry-like layout for varied heights
-.posts-masonry {
+// Legacy support for existing posts-grid class
+.posts-grid {
+  @extend .cards-grid;
+}
+
+// Masonry Layout - 瀑布流布局
+.cards-masonry {
   columns: 1;
   column-gap: $space-xl;
   margin-bottom: $space-xxl;
+  
+  @media (min-width: 640px) {
+    columns: 2;
+    column-gap: $space-lg;
+  }
 
   @media (min-width: 768px) {
-    columns: 2;
+    column-gap: $space-xl;
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 1024px) {
     columns: 3;
   }
+  
+  @media (min-width: 1400px) {
+    columns: 4;
+  }
 
+  .modern-card,
   .post-card {
     break-inside: avoid;
     margin-bottom: $space-xl;
+    display: inline-block;
+    width: 100%;
   }
+}
+
+// Legacy support
+.posts-masonry {
+  @extend .cards-masonry;
 }
 
 // Featured Post Card - 特色文章卡片
@@ -342,57 +476,130 @@
   }
 }
 
-// Loading skeleton for cards - 卡片加载骨架屏
-.post-card-skeleton {
-  @extend .modern-card;
-  margin-bottom: $space-xl;
-  min-height: 280px;
-
-  .skeleton {
+// Skeleton Loading States - 骨架屏加载状态
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--background-lighten-color) 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    var(--background-lighten-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  
+  .dark-theme & {
     background: linear-gradient(
       90deg,
       var(--background-lighten-color) 25%,
-      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.1) 50%,
       var(--background-lighten-color) 75%
     );
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-  }
-
-  &-cover {
-    height: 200px;
-    @extend .skeleton;
-  }
-
-  &-title {
-    height: 24px;
-    width: 80%;
-    margin: $space-lg $space-lg $space-md;
-    @extend .skeleton;
-  }
-
-  &-excerpt {
-    height: 16px;
-    width: 100%;
-    margin: 0 $space-lg $space-sm;
-    @extend .skeleton;
-
-    &:nth-child(2) {
-      width: 90%;
-    }
-
-    &:nth-child(3) {
-      width: 60%;
-    }
   }
 }
 
-@keyframes loading {
+.card-skeleton {
+  @extend .modern-card;
+  margin-bottom: $space-xl;
+  min-height: var(--card-min-height);
+  pointer-events: none;
+  
+  &__cover {
+    height: 200px;
+    @extend .skeleton;
+    border-radius: 0;
+  }
+
+  &__content {
+    padding: var(--card-padding);
+  }
+
+  &__title {
+    height: 24px;
+    width: 80%;
+    margin-bottom: $space-md;
+    @extend .skeleton;
+  }
+
+  &__meta {
+    display: flex;
+    gap: $space-md;
+    margin-bottom: $space-md;
+    
+    &-item {
+      height: 16px;
+      width: 60px;
+      @extend .skeleton;
+    }
+  }
+
+  &__excerpt {
+    margin-bottom: $space-sm;
+    
+    &-line {
+      height: 16px;
+      margin-bottom: $space-xs;
+      @extend .skeleton;
+      
+      &:nth-child(1) { width: 100%; }
+      &:nth-child(2) { width: 90%; }
+      &:nth-child(3) { width: 60%; }
+    }
+  }
+  
+  &__tags {
+    display: flex;
+    gap: $space-xs;
+    margin-bottom: $space-md;
+    
+    &-item {
+      height: 20px;
+      width: 50px;
+      border-radius: 10px;
+      @extend .skeleton;
+    }
+  }
+  
+  &__button {
+    height: 36px;
+    width: 100px;
+    border-radius: 18px;
+    @extend .skeleton;
+  }
+}
+
+// Legacy support
+.post-card-skeleton {
+  @extend .card-skeleton;
+  
+  &-cover {
+    @extend .card-skeleton__cover;
+  }
+  
+  &-title {
+    @extend .card-skeleton__title;
+  }
+  
+  &-excerpt {
+    @extend .card-skeleton__excerpt-line;
+  }
+}
+
+@keyframes skeleton-loading {
   0% {
     background-position: -200% 0;
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+// Skeleton grid for multiple loading cards
+.skeleton-grid {
+  @extend .cards-grid;
+  
+  .card-skeleton {
+    margin-bottom: 0;
   }
 }
 

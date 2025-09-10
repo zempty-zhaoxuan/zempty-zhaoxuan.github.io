@@ -1,17 +1,21 @@
-// No longer need to wait for DOMContentLoaded as the script is at the end of the body.
-// Running it directly prevents the sidebar flicker.
-// document.addEventListener("DOMContentLoaded", function () {
-const SCREEN_SM = 768; // Small screens and below
-const SCREEN_MD_MIN = 768; // Medium screen (iPad) min-width
-const SCREEN_MD_MAX = 1024; // Medium screen (iPad) max-width
-const SCREEN_LG_MAX = 1200; // Large screen max-width for mobile-style sidebar
+// Enhanced Navigation System
+// 增强导航系统
 
+// Screen breakpoints
+const SCREEN_SM = 768;
+const SCREEN_MD_MIN = 768;
+const SCREEN_MD_MAX = 1024;
+const SCREEN_LG_MAX = 1200;
+
+// DOM elements
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
 const wrapper = document.querySelector(".wrapper-content");
 const sidebar = document.querySelector(".wrapper-sidebar");
 const themeToggle = document.getElementById("theme-toggle");
 const homeButton = document.getElementById("home-button");
+const navToggle = document.querySelector(".modern-nav-toggle");
+const navItems = document.querySelectorAll(".nav-item");
 
 // 检查关键元素是否存在
 if (!wrapper || !sidebar) {
@@ -195,5 +199,187 @@ if (!wrapper || !sidebar) {
 
   // 初始化时运行一次
   handleResize();
+
+  // Enhanced Navigation Features
+  initializeEnhancedNavigation();
 }
+
+// Enhanced Navigation System Functions
+function initializeEnhancedNavigation() {
+  // Smooth scroll navigation
+  initializeSmoothScroll();
+  
+  // Active state highlighting
+  initializeActiveStateHighlighting();
+  
+  // Mobile hamburger menu
+  initializeMobileMenu();
+  
+  // Keyboard navigation
+  initializeKeyboardNavigation();
+}
+
+// Smooth scroll for navigation links
+function initializeSmoothScroll() {
+  const navLinks = document.querySelectorAll('nav a[href^="#"], .nav-item[href^="#"]');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      
+      // Only handle hash links
+      if (href && href.startsWith('#')) {
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          e.preventDefault();
+          
+          // Smooth scroll to target
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update URL without jumping
+          history.pushState(null, null, href);
+          
+          // Close mobile menu if open
+          closeMobileMenu();
+        }
+      }
+    });
+  });
+}
+
+// Active state highlighting based on scroll position
+function initializeActiveStateHighlighting() {
+  const sections = document.querySelectorAll('section[id], article[id], .post[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"], .nav-item[href^="#"]');
+  
+  if (sections.length === 0 || navLinks.length === 0) return;
+  
+  function updateActiveStates() {
+    let currentSection = '';
+    const scrollPosition = window.scrollY + 100; // Offset for better UX
+    
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        currentSection = section.getAttribute('id');
+      }
+    });
+    
+    // Update nav link active states
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const targetId = href.substring(1);
+        
+        if (targetId === currentSection) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      }
+    });
+  }
+  
+  // Throttled scroll listener for performance
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(updateActiveStates, 10);
+  });
+  
+  // Initial check
+  updateActiveStates();
+}
+
+// Mobile hamburger menu functionality
+function initializeMobileMenu() {
+  if (!navToggle) return;
+  
+  navToggle.addEventListener('click', function() {
+    this.classList.toggle('active');
+    sidebar.classList.toggle('mobile-menu-open');
+    document.body.classList.toggle('mobile-menu-open');
+    
+    // Prevent body scroll when menu is open
+    if (sidebar.classList.contains('mobile-menu-open')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && !navToggle.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+  
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+    }
+  });
+}
+
+function closeMobileMenu() {
+  if (navToggle) {
+    navToggle.classList.remove('active');
+  }
+  if (sidebar) {
+    sidebar.classList.remove('mobile-menu-open');
+  }
+  document.body.classList.remove('mobile-menu-open');
+  document.body.style.overflow = '';
+}
+
+// Keyboard navigation support
+function initializeKeyboardNavigation() {
+  navItems.forEach((item, index) => {
+    item.addEventListener('keydown', function(e) {
+      let targetIndex;
+      
+      switch(e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          targetIndex = (index + 1) % navItems.length;
+          navItems[targetIndex].focus();
+          break;
+          
+        case 'ArrowUp':
+          e.preventDefault();
+          targetIndex = (index - 1 + navItems.length) % navItems.length;
+          navItems[targetIndex].focus();
+          break;
+          
+        case 'Home':
+          e.preventDefault();
+          navItems[0].focus();
+          break;
+          
+        case 'End':
+          e.preventDefault();
+          navItems[navItems.length - 1].focus();
+          break;
+          
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          item.click();
+          break;
+      }
+    });
+  });
+}
+
 // });

@@ -6,6 +6,7 @@
 @import "open-color";
 @import "variables";
 @import "themes"; // 导入主题文件
+@import "typography-utilities"; // 导入字体工具类
 @import "enhancements"; // 导入新的增强功能样式
 @import "mobile-enhancements"; // 导入移动端增强样式
 @import "modern-cards"; // 导入现代化卡片样式
@@ -26,14 +27,16 @@
 }
 */
 
+// Modern Font Loading Strategy with font-display optimization
 // JetBrains Mono - Regular
 @font-face {
   font-family: "JetBrains Mono";
   src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Regular.woff2")
     format("woff2");
-  font-weight: normal; // 400
+  font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: swap; // Prevents FOIT, allows FOUT for better performance
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 // JetBrains Mono - Bold
@@ -41,9 +44,10 @@
   font-family: "JetBrains Mono";
   src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Bold.woff2")
     format("woff2");
-  font-weight: bold; // 700
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 // JetBrains Mono - Italic
@@ -51,9 +55,10 @@
   font-family: "JetBrains Mono";
   src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-Italic.woff2")
     format("woff2");
-  font-weight: normal; // 400
+  font-weight: 400;
   font-style: italic;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 // JetBrains Mono - Bold Italic
@@ -61,9 +66,10 @@
   font-family: "JetBrains Mono";
   src: url("assets/fonts/JetBrainsMono-2.304/webfonts/JetBrainsMono-BoldItalic.woff2")
     format("woff2");
-  font-weight: bold; // 700
+  font-weight: 700;
   font-style: italic;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 // Syntax highlighting @import is at the bottom of this file
@@ -72,26 +78,86 @@
 /* BASE RULES */
 /**************/
 
+// Modern Typography System with Responsive Scaling
 html {
-  font-size: $base-font-size;
+  // Responsive base font size using clamp()
+  font-size: clamp(14px, 2.5vw, 18px);
+  
+  // Improved font loading performance
+  font-display: swap;
 }
 
 body {
   font-family: $base-font;
   color: var(--text-color);
   background-color: var(--background-color);
-  line-height: 1.9em;
-  letter-spacing: 0.03em;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  // Responsive line height for better readability
+  line-height: clamp(1.6, 1.5 + 0.5vw, 1.9);
+  
+  // Optimized letter spacing
+  letter-spacing: clamp(-0.01em, 0.02em, 0.03em);
+  
+  // Smooth transitions
+  transition: background-color 0.3s ease, color 0.3s ease, font-size 0.2s ease;
+  
+  // Enhanced text rendering
   text-rendering: optimizeLegibility;
   font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1, "calt" 1;
+  
+  // Responsive font weight for better readability
+  font-weight: clamp(300, 400, 500);
+  
+  // Improved text selection
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-// 深色主题文本渲染优化
+// Enhanced dark theme typography optimizations
 .dark-theme {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
+  
+  // Slightly lighter font weight for dark theme readability
+  font-weight: clamp(350, 420, 520);
+  
+  // Enhanced contrast for better readability
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.05);
+  
+  // Dark theme specific typography adjustments
+  h1, h2, h3, h4, h5, h6 {
+    // Slightly lighter font weight for headings in dark theme
+    font-weight: clamp(550, 650, 750);
+    
+    // Subtle text shadow for better contrast
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  p {
+    // Improved readability in dark theme
+    font-weight: clamp(380, 450, 520);
+    
+    // Better letter spacing for dark backgrounds
+    letter-spacing: clamp(0.01em, 0.025em, 0.04em);
+    
+    // Subtle text shadow
+    text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  // Enhanced code text in dark theme
+  code, pre {
+    font-weight: 400;
+    text-shadow: none;
+  }
+  
+  // Better link contrast in dark theme
+  a {
+    font-weight: clamp(450, 500, 550);
+    text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .container {
@@ -113,6 +179,7 @@ body {
   }
 }
 
+// Modern Responsive Typography Hierarchy
 h1,
 h2,
 h3,
@@ -120,65 +187,155 @@ h4,
 h5,
 h6 {
   font-family: $base-font;
-  line-height: 1.6;
-  margin-top: 1.8em;
-  margin-bottom: 0.8em;
+  color: var(--heading-color);
+  
+  // Responsive line height for headings
+  line-height: clamp(1.2, 1.1 + 0.5vw, 1.6);
+  
+  // Responsive margins with clamp()
+  margin-top: clamp(1.2em, 1.5em + 1vw, 2em);
+  margin-bottom: clamp(0.5em, 0.6em + 0.5vw, 1em);
   padding: 0;
+  
+  // Enhanced text rendering for headings
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  
+  // Smooth transitions
+  transition: color 0.3s ease, font-size 0.2s ease;
 
   @include mobile {
-    line-height: 1.4;
-    margin-top: 1.5em;
-    margin-bottom: 0.6em;
+    line-height: clamp(1.1, 1.2 + 0.3vw, 1.4);
+    margin-top: clamp(1em, 1.2em + 0.8vw, 1.8em);
+    margin-bottom: clamp(0.4em, 0.5em + 0.3vw, 0.8em);
   }
 }
 
+// Heading font weights
 h1,
 h2,
 h3,
 h5 {
-  font-weight: 700;
+  font-weight: clamp(600, 700, 800);
 }
 
+h4,
+h6 {
+  font-weight: clamp(500, 600, 700);
+}
+
+// Responsive heading sizes using clamp()
 h1 {
-  font-size: 2.2em;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--divider-color);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  padding-bottom: clamp(0.2em, 0.3em, 0.4em);
+  border-bottom: 2px solid var(--divider-color);
+  position: relative;
+  
+  // Enhanced visual hierarchy
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: clamp(40px, 15%, 80px);
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: 1px;
+  }
+  
   a {
     color: inherit;
+    text-decoration: none;
+    
+    &:hover {
+      color: var(--accent-color);
+    }
   }
 }
 
 h2 {
-  font-size: 1.8em;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
   border-bottom: 1px dashed var(--divider-color-light);
-  padding-bottom: 0.2em;
+  padding-bottom: clamp(0.15em, 0.2em, 0.3em);
+  position: relative;
+  
+  &:hover {
+    color: var(--accent-color);
+  }
 }
 
 h3 {
-  font-size: 1.5em;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  color: var(--heading-color);
+  
+  &:hover {
+    color: var(--accent-color);
+  }
 }
 
 h4 {
-  font-size: 1.2em;
-  font-weight: 600;
-  color: var(--blockquote-color);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--text-color-muted);
+  
+  &:hover {
+    color: var(--heading-color);
+  }
+}
+
+h5 {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--heading-color);
 }
 
 h6 {
-  font-size: 1em;
-  font-weight: normal;
-  color: var(--blockquote-color);
-  margin-top: 1em;
-  margin-bottom: 0.5em;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  color: var(--text-color-muted);
+  margin-top: clamp(0.8em, 1em, 1.2em);
+  margin-bottom: clamp(0.4em, 0.5em, 0.6em);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
+// Enhanced paragraph styling for better readability
 p {
   color: var(--text-color);
-  margin: 1.2em 0;
+  
+  // Responsive margins
+  margin: clamp(0.8em, 1em + 0.5vw, 1.5em) 0;
+  
+  // Improved text alignment for different screen sizes
   text-align: justify;
+  
+  // Enhanced hyphenation and text flow
   hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-last: always;
+  hyphenate-limit-zone: 8%;
+  
+  // Better typography controls
   widows: 2;
   orphans: 2;
+  
+  // Responsive font size for paragraphs
+  font-size: clamp(0.9rem, 1rem + 0.2vw, 1.1rem);
+  
+  // Enhanced line height for readability
+  line-height: clamp(1.5, 1.6 + 0.3vw, 1.8);
+  
+  // Better word spacing
+  word-spacing: clamp(-0.05em, 0em, 0.05em);
+  
+  // Improved text rendering
+  text-rendering: optimizeLegibility;
+  
+  @include mobile {
+    text-align: left; // Left align on mobile for better readability
+    hyphens: none; // Disable hyphenation on mobile
+    font-size: clamp(1rem, 1.1rem + 0.3vw, 1.2rem);
+    line-height: clamp(1.4, 1.5 + 0.2vw, 1.7);
+  }
 }
 
 a {

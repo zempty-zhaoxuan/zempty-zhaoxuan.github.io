@@ -1,0 +1,146 @@
+// Typography Utility Classes
+// 字体工具类系统
+
+// Font Size Utilities - 字体大小工具类
+.text-xs { font-size: clamp(0.75rem, 1.5vw, 0.875rem); }
+.text-sm { font-size: clamp(0.875rem, 2vw, 1rem); }
+.text-base { font-size: clamp(1rem, 2.5vw, 1.125rem); }
+.text-lg { font-size: clamp(1.125rem, 3vw, 1.25rem); }
+.text-xl { font-size: clamp(1.25rem, 3.5vw, 1.5rem); }
+.text-2xl { font-size: clamp(1.5rem, 4vw, 1.875rem); }
+.text-3xl { font-size: clamp(1.875rem, 5vw, 2.25rem); }
+.text-4xl { font-size: clamp(2.25rem, 6vw, 3rem); }
+
+// Font Weight Utilities - 字体粗细工具类
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extrabold { font-weight: var(--font-weight-extrabold); }
+
+// Line Height Utilities - 行高工具类
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-snug { line-height: var(--line-height-snug); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+// Letter Spacing Utilities - 字母间距工具类
+.tracking-tighter { letter-spacing: var(--letter-spacing-tighter); }
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+.tracking-wider { letter-spacing: var(--letter-spacing-wider); }
+.tracking-widest { letter-spacing: var(--letter-spacing-widest); }
+
+// Text Alignment Utilities - 文本对齐工具类
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+// Text Color Utilities - 文本颜色工具类
+.text-primary { color: var(--text-color); }
+.text-secondary { color: var(--text-color-muted); }
+.text-accent { color: var(--accent-color); }
+.text-link { color: var(--link-color); }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-error { color: var(--error-color); }
+
+// Text Transform Utilities - 文本转换工具类
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.normal-case { text-transform: none; }
+
+// Text Decoration Utilities - 文本装饰工具类
+.underline { text-decoration: underline; }
+.line-through { text-decoration: line-through; }
+.no-underline { text-decoration: none; }
+
+// Font Family Utilities - 字体族工具类
+.font-serif { font-family: var(--font-family-base); }
+.font-mono { font-family: var(--font-family-code); }
+
+// Responsive Typography Utilities - 响应式字体工具类
+@include mobile {
+  .mobile\:text-xs { font-size: clamp(0.75rem, 2vw, 0.875rem); }
+  .mobile\:text-sm { font-size: clamp(0.875rem, 2.5vw, 1rem); }
+  .mobile\:text-base { font-size: clamp(1rem, 3vw, 1.125rem); }
+  .mobile\:text-lg { font-size: clamp(1.125rem, 3.5vw, 1.25rem); }
+  .mobile\:text-xl { font-size: clamp(1.25rem, 4vw, 1.5rem); }
+  
+  .mobile\:text-left { text-align: left; }
+  .mobile\:text-center { text-align: center; }
+  
+  .mobile\:leading-tight { line-height: var(--line-height-tight); }
+  .mobile\:leading-normal { line-height: var(--line-height-normal); }
+  .mobile\:leading-relaxed { line-height: var(--line-height-relaxed); }
+}
+
+// Reading Experience Utilities - 阅读体验工具类
+.prose {
+  // Optimized reading width
+  max-width: 65ch;
+  
+  // Enhanced readability
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  
+  // Responsive line height
+  line-height: clamp(1.5, 1.6 + 0.3vw, 1.8);
+  
+  // Better word spacing
+  word-spacing: clamp(-0.05em, 0em, 0.05em);
+  
+  // Improved paragraph spacing
+  p + p {
+    margin-top: clamp(1em, 1.2em + 0.5vw, 1.5em);
+  }
+  
+  // Enhanced list spacing
+  ul, ol {
+    margin: clamp(1em, 1.2em + 0.5vw, 1.5em) 0;
+    
+    li + li {
+      margin-top: clamp(0.25em, 0.3em + 0.2vw, 0.5em);
+    }
+  }
+  
+  // Better blockquote styling
+  blockquote {
+    margin: clamp(1.5em, 2em + 0.5vw, 2.5em) 0;
+    padding-left: clamp(1em, 1.5em + 0.5vw, 2em);
+    font-style: italic;
+    font-size: clamp(1rem, 1.1rem + 0.2vw, 1.2rem);
+  }
+}
+
+// Dark theme adjustments for utilities
+.dark-theme {
+  .text-primary { color: var(--text-color); }
+  .text-secondary { color: var(--text-color-muted); }
+  
+  .prose {
+    // Better text shadow for dark theme
+    text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.2);
+    
+    // Improved letter spacing for dark backgrounds
+    letter-spacing: clamp(0.01em, 0.025em, 0.04em);
+  }
+}
+
+// Print styles for typography
+@media print {
+  .text-xs, .text-sm, .text-base, .text-lg, .text-xl, .text-2xl, .text-3xl, .text-4xl {
+    font-size: revert;
+  }
+  
+  .prose {
+    max-width: none;
+    line-height: 1.4;
+    text-shadow: none;
+  }
+}
