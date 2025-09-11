@@ -37,8 +37,14 @@ layout: default
     {{ content }}
   </div>
 
-  {% include disqus.html %}
-  {% include giscus.html %}
+  <div class="post-footer">
+    <!-- 分享占位容器：JS 将优先插入到此处 -->
+    <div id="post-share-slot" class="post-share-slot"></div>
+
+    <!-- 评论区域 -->
+    {% include disqus.html %}
+    {% include giscus.html %}
+  </div>
 </article>
 
 <div class="pagination">
@@ -81,3 +87,6 @@ layout: default
     window.addEventListener('resize', updateProgressBar);
   });
 </script>
+
+<!-- 引入文章分享脚本（仅文章页），附带版本参数避免缓存旧版逻辑 -->
+<script src="{{ site.baseurl }}/js/article-sharing.js?v={{ site.time | date: '%s' }}" defer></script>

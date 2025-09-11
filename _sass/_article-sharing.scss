@@ -43,7 +43,7 @@
   }
 
   .share-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: $space-xs;
     padding: $space-sm $space-md;
@@ -112,7 +112,7 @@
   }
 
   .copy-link-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: $space-xs;
     padding: $space-sm $space-md;
@@ -157,6 +157,12 @@
       font-weight: 500;
     }
   }
+}
+
+// 防御性隐藏：非文章页隐藏分享容器
+// 主页及列表页通常不包含 article.posts
+body:not(:has(article.posts)) .article-share-container {
+  display: none !important;
 }
 
 // WeChat QR Popup (no CSS needed as it's a separate window)

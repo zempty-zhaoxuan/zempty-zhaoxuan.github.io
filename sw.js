@@ -4,7 +4,7 @@
  * Provides offline functionality and performance improvements
  */
 
-const CACHE_VERSION = 'blog-cache-v1.2.0';
+const CACHE_VERSION = 'blog-cache-v1.3.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
@@ -13,7 +13,6 @@ const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
 const CACHE_CONFIG = {
   // Static assets - cache first strategy
   staticAssets: [
-    '/',
     '/style.css',
     '/assets/css/animations.css',
     '/assets/css/custom.css',

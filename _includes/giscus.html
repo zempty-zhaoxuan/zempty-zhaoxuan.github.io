@@ -75,11 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <style>
-/* 兜底样式，确保立即看到间距与卡片感；最终样式由 compiled CSS 覆盖 */
-.comments-area{margin-top:60px;padding-top:40px;border-top:1px solid rgba(0,0,0,.08)}
+/* 兜底样式（与新布局协调）：最终由 compiled CSS 覆盖 */
+article.posts .post-footer{margin-top:32px;padding-top:20px;border-top:1px solid rgba(0,0,0,.08)}
+.dark-theme article.posts .post-footer{border-top-color:rgba(255,255,255,.12)}
+.post-share-slot{margin:8px 0 16px 0}
+.comments-area{margin-top:20px;padding-top:20px;border-top:1px dashed rgba(0,0,0,.08)}
 .dark-theme .comments-area{border-top-color:rgba(255,255,255,.12)}
 .giscus-frame{width:100%!important;border:none!important;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .dark-theme .giscus-frame{box-shadow:0 2px 8px rgba(0,0,0,.25)}
-@media (max-width:600px){.comments-area{margin-top:40px;padding-top:30px}.giscus-frame{border-radius:6px}}
+@media (max-width:600px){article.posts .post-footer{margin-top:24px;padding-top:16px}.comments-area{margin-top:16px;padding-top:16px}.giscus-frame{border-radius:6px}}
 </style>
 {% endif %}

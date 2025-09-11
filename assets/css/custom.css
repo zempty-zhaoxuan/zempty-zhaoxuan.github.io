@@ -567,6 +567,121 @@ select:focus {
   width: 100% !important;
 }
 
+/* 防御性隐藏：确保首页卡片或列表中不显示分享组件 */
+.posts-grid .article-share-container,
+article.post-card .article-share-container,
+.post-card .article-share-container {
+  display: none !important;
+}
+
+/* 文章页页脚布局 */
+article.posts .post-footer {
+  margin-top: 36px !important;
+  padding-top: 24px !important;
+  border-top: 1px solid var(--divider-color) !important;
+}
+
+/* 分享与评论的布局与间距 */
+.post-share-slot {
+  margin: 8px 0 20px 0 !important;
+}
+
+.post-share-slot .article-share-container {
+  margin: 0 0 16px 0 !important;
+  padding: 12px 0 4px 0 !important;
+  border: none !important;
+}
+
+/* Share buttons sizing and spacing optimization */
+.article-share-container {
+  --share-gap: 8px;
+  --share-btn-font-size: 13px;
+  --share-btn-padding-y: 6px;
+  --share-btn-padding-x: 10px;
+  --share-btn-icon-size: 16px;
+  --share-btn-height: 32px;
+  --share-btn-min-width: 88px;
+  --share-btn-icon-text-gap: 6px;
+}
+
+.article-share-container .share-buttons {
+  gap: var(--share-gap) var(--share-gap) !important;
+}
+
+.article-share-container .share-btn,
+.article-share-container .copy-link-btn {
+  padding: var(--share-btn-padding-y) var(--share-btn-padding-x) !important;
+  font-size: var(--share-btn-font-size) !important;
+  line-height: 1 !important;
+  min-height: var(--share-btn-height) !important;
+  min-width: var(--share-btn-min-width) !important;
+  gap: var(--share-btn-icon-text-gap) !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.article-share-container .share-btn .icon,
+.article-share-container .copy-link-btn .icon {
+  width: var(--share-btn-icon-size) !important;
+  height: var(--share-btn-icon-size) !important;
+}
+
+.article-share-container .share-btn .icon svg,
+.article-share-container .copy-link-btn .icon svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.article-share-container .share-btn .text,
+.article-share-container .copy-link-btn .text {
+  font-size: inherit !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  position: static !important;
+  margin: 0 !important;
+}
+
+/* Mobile tweaks */
+@media screen and (max-width: 767px) {
+  .article-share-container {
+    --share-gap: 8px;
+    --share-btn-font-size: 12px;
+    --share-btn-padding-y: 5px;
+    --share-btn-padding-x: 8px;
+    --share-btn-icon-size: 15px;
+    --share-btn-height: 30px;
+    --share-btn-min-width: 80px;
+  }
+}
+
+/* 评论区与分享区的间隔更清晰 */
+article.posts .comments-area {
+  margin-top: 20px !important;
+  padding-top: 20px !important;
+  border-top: 1px dashed var(--divider-color) !important;
+}
+
+/* 移动端优化 */
+@media screen and (max-width: 767px) {
+  article.posts .post-footer {
+    margin-top: 28px !important;
+    padding-top: 18px !important;
+  }
+  .post-share-slot {
+    margin: 6px 0 16px 0 !important;
+  }
+  article.posts .comments-area {
+    margin-top: 16px !important;
+    padding-top: 16px !important;
+  }
+}
+
 .pagination .page_num,
 .pagination .pagination__page-number {
   flex: 0 0 auto !important;

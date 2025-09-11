@@ -16,6 +16,11 @@ layout: default
 <!-- 搜索功能由modern-search.js统一处理 -->
 
  
+<!-- 防御性样式：确保首页不显示分享组件（若缓存导致误注入） -->
+<style>
+  .posts-grid .article-share-container { display: none !important; }
+  .post-card .article-share-container { display: none !important; }
+</style>
 {% if site.posts.size == 0 %}
   <h2>No post found</h2>
 {% endif %}

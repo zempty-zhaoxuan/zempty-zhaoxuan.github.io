@@ -12,6 +12,10 @@ class ArticleSharing {
 
   init() {
     try {
+      // 仅在文章页初始化（存在 article.posts .entry 才启用）
+      if (!this.isPostPage()) {
+        return;
+      }
       this.createArticleShareButtons();
       this.bindEvents();
       
@@ -27,8 +31,8 @@ class ArticleSharing {
       return;
     }
 
-    // 只在文章页面显示分享按钮
-    const postContent = document.querySelector('.post .entry, .post-content, article');
+    // 只在文章页面显示分享按钮（post 布局）
+    const postContent = document.querySelector('article.posts .entry');
     if (!postContent) return;
 
     const shareContainer = document.createElement('div');
@@ -60,21 +64,35 @@ class ArticleSharing {
   }
 
   insertShareContainer(shareContainer) {
-    // 查找文章内容区域
-    const postContent = document.querySelector('.post .entry, .post-content, article');
-    const postContainer = postContent ? postContent.closest('.post') : null;
-    
-    if (postContainer) {
-      // 插入到文章容器的最后，保持固定位置
-      postContainer.appendChild(shareContainer);
-      console.log('Share container inserted at end of post container');
-    } else if (postContent) {
-      // 回退方案：插入到文章内容后面
+    // 优先插入到文章页的固定槽位
+    const slot = document.getElementById('post-share-slot');
+    if (slot) {
+      slot.innerHTML = '';
+      slot.appendChild(shareContainer);
+      console.log('Share container inserted into post-share-slot');
+      return;
+    }
+
+    // 回退：在文章布局中插入到正文后
+    const postContainer = document.querySelector('article.posts');
+    const postContent = document.querySelector('article.posts .entry');
+    if (postContainer && postContent && postContent.parentNode === postContainer) {
       postContent.parentNode.insertBefore(shareContainer, postContent.nextSibling);
       console.log('Share container inserted after post content');
+      return;
+    }
+
+    // 最终回退：插入到文章容器末尾
+    if (postContainer) {
+      postContainer.appendChild(shareContainer);
+      console.log('Share container appended to post container');
     } else {
       console.warn('Could not find suitable location for share container');
     }
+  }
+
+  isPostPage() {
+    return !!document.querySelector('article.posts .entry');
   }
 
   generateShareButtonsHTML() {
