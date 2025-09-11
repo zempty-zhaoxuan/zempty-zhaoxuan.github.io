@@ -182,8 +182,14 @@ class PerformanceUtils {
       '/assets/css/custom.css'
     ];
 
+    const baseMeta = document.querySelector('meta[name="base-url"]');
+    const baseUrl = baseMeta && baseMeta.content ? baseMeta.content : '';
+    const hasMain = !!document.querySelector('link[href*="/style.css"]');
+
     nonCriticalCSS.forEach(href => {
-      this.loadCSSAsync(href);
+      if (href === '/style.css' && hasMain) return; // avoid duplicate
+      const resolved = (baseUrl && baseUrl !== '/' && href.startsWith('/')) ? `${baseUrl}${href}` : href;
+      this.loadCSSAsync(resolved);
     });
   }
 
@@ -194,7 +200,7 @@ class PerformanceUtils {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'style';
-    link.href = href + '?v=' + (window.siteVersion || Date.now());
+    link.href = href + (href.includes('?') ? '&' : '?') + 'v=' + (window.siteVersion || Date.now());
     
     link.onload = () => {
       link.rel = 'stylesheet';

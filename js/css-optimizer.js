@@ -244,10 +244,17 @@ class CSSOptimizer {
 
     // Add version parameter
     const version = window.siteVersion || Date.now();
+    const baseMeta = document.querySelector('meta[name="base-url"]');
+    const baseUrl = baseMeta && baseMeta.content ? baseMeta.content : '';
+
+    // If main stylesheet already present (preloaded or loaded), skip reloading it
+    const hasMainStylesheet = !!document.querySelector('link[href*="/style.css"]');
+    const filesToLoad = cssFiles.filter(({ href }) => !(href === '/style.css' && hasMainStylesheet));
     
-    const loadPromises = cssFiles.map(({ href, priority }) => {
+    const loadPromises = filesToLoad.map(({ href, priority }) => {
       const versionedHref = `${href}?v=${version}`;
-      return this.loadCSSAsync(versionedHref, priority);
+      const resolvedHref = (baseUrl && baseUrl !== '/' && href.startsWith('/')) ? `${baseUrl}${versionedHref}` : versionedHref;
+      return this.loadCSSAsync(resolvedHref, priority);
     });
 
     try {
