@@ -1,23 +1,22 @@
-// Enhanced Theme System with smooth transitions and system preference detection
-// 增强主题系统
+// Theme System (Light/Dark only) with smooth transitions
+// 仅保留浅色/深色两种主题，移除自动跟随模式，修复需要点击两次的问题
 
-// FOUC Prevention - executed immediately
+// FOUC Prevention - executed immediately (after DOM parsed due to defer)
 (function() {
-  // Get stored theme preference or system preference
-  let storedTheme;
+  let storedTheme = null;
   try {
-    storedTheme = localStorage.getItem('theme-preference');
-  } catch (e) {
-    storedTheme = null;
-  }
-  
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-  // Apply theme immediately to prevent FOUC
-  if (storedTheme === 'dark' || (storedTheme === 'auto' && prefersDark) || (!storedTheme && prefersDark)) {
-    document.documentElement.classList.add('dark-theme');
-  } else {
-    document.documentElement.classList.add('light-theme');
+    // Prefer unified key 'theme'; fall back to legacy 'theme-preference'
+    storedTheme = localStorage.getItem('theme') || localStorage.getItem('theme-preference');
+    // Migrate legacy stored values like 'dark-theme'/'light-theme'
+    if (storedTheme === 'dark-theme') storedTheme = 'dark';
+    if (storedTheme === 'light-theme') storedTheme = 'light';
+  } catch (e) {}
+
+  const theme = storedTheme === 'light' ? 'light' : 'dark';
+  const cls = theme + '-theme';
+  document.documentElement.classList.add(cls);
+  if (document.body) {
+    document.body.classList.add(cls);
   }
 })();
 
@@ -29,15 +28,13 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
   
-  // Enhanced theme system
+  // Theme system (light/dark only)
   const ThemeManager = {
-    themes: ['light', 'dark', 'auto'],
-    currentTheme: 'auto',
-    prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)'),
+    themes: ['light', 'dark'],
+    currentTheme: 'dark',
     
     init() {
       this.loadThemePreference();
-      this.setupSystemPreferenceListener();
       this.applyTheme();
       this.updateUI();
       this.setupTransitions();
@@ -45,30 +42,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     loadThemePreference() {
       try {
-        const stored = localStorage.getItem('theme-preference');
-        this.currentTheme = stored || 'auto';
+        let stored = localStorage.getItem('theme') || localStorage.getItem('theme-preference');
+        if (stored === 'dark-theme') stored = 'dark';
+        if (stored === 'light-theme') stored = 'light';
+        this.currentTheme = stored === 'light' ? 'light' : 'dark';
       } catch (e) {
         console.warn('Cannot access localStorage:', e);
-        this.currentTheme = 'auto';
+        this.currentTheme = 'dark';
       }
     },
     
     saveThemePreference() {
       try {
-        localStorage.setItem('theme-preference', this.currentTheme);
+        localStorage.setItem('theme', this.currentTheme);
+        // Clean legacy key to avoid conflicts
+        localStorage.removeItem('theme-preference');
       } catch (e) {
         console.warn('Cannot save theme preference:', e);
       }
-    },
-    
-    setupSystemPreferenceListener() {
-      this.prefersDarkScheme.addEventListener('change', (e) => {
-        if (this.currentTheme === 'auto') {
-          this.applyTheme();
-          this.updateUI();
-          this.dispatchThemeEvent();
-        }
-      });
     },
     
     setupTransitions() {
@@ -81,16 +72,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 100);
     },
     
-    getEffectiveTheme() {
-      if (this.currentTheme === 'auto') {
-        return this.prefersDarkScheme.matches ? 'dark' : 'light';
-      }
-      return this.currentTheme;
-    },
+    getEffectiveTheme() { return this.currentTheme; },
     
     applyTheme() {
       const effectiveTheme = this.getEffectiveTheme();
-      
+
       // Add transition for smooth switching
       document.documentElement.classList.add('theme-transition');
       
@@ -131,33 +117,11 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     
     updateToggleButton(effectiveTheme) {
-      const icons = {
-        light: '🌙',
-        dark: '☀️',
-        auto: '🔄'
-      };
-      
-      const tooltips = {
-        light: '切换为深色主题',
-        dark: '切换为浅色主题', 
-        auto: '自动主题 (跟随系统)'
-      };
-      
-      // Show current mode icon, but tooltip shows what clicking will do
-      let displayIcon, tooltipText;
-      
-      if (this.currentTheme === 'auto') {
-        displayIcon = effectiveTheme === 'dark' ? '🌙' : '☀️';
-        tooltipText = '当前: 自动主题 (点击切换)';
-      } else {
-        displayIcon = icons[effectiveTheme];
-        const nextTheme = this.themes[(this.themes.indexOf(this.currentTheme) + 1) % this.themes.length];
-        tooltipText = tooltips[nextTheme] || '切换主题';
-      }
-      
-      themeToggle.innerHTML = displayIcon;
-      themeToggle.setAttribute('title', tooltipText);
-      themeToggle.setAttribute('aria-label', tooltipText);
+      const icon = effectiveTheme === 'dark' ? '☀️' : '🌙';
+      const tooltip = effectiveTheme === 'dark' ? '切换为浅色主题' : '切换为深色主题';
+      themeToggle.innerHTML = icon;
+      themeToggle.setAttribute('title', tooltip);
+      themeToggle.setAttribute('aria-label', tooltip);
     },
     
     updateMetaThemeColor(effectiveTheme) {
@@ -168,10 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.head.appendChild(metaThemeColor);
       }
       
-      const colors = {
-        light: '#ffffff',
-        dark: '#212529'
-      };
+      const colors = { light: '#ffffff', dark: '#212529' };
       
       metaThemeColor.content = colors[effectiveTheme] || colors.light;
     },

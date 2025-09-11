@@ -3,24 +3,19 @@
   {% include head.html %}
   <body>
     <script>
-      // Set theme on body right away to prevent FOUC
+      // Normalize theme early to avoid double-click issue; prefer 'theme' key with 'light'|'dark'
       (function () {
         try {
-          var stored = localStorage.getItem('theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var stored = localStorage.getItem('theme') || localStorage.getItem('theme-preference');
+          if (stored === 'dark-theme') stored = 'dark';
+          if (stored === 'light-theme') stored = 'light';
+          var theme = stored === 'light' ? 'light' : 'dark';
           var cls = document.body.classList;
-          // Ensure we don't wipe other classes
           cls.remove('dark-theme', 'light-theme');
-
-          if (stored === 'dark-theme' || stored === 'light-theme') {
-            cls.add(stored);
-          } else {
-            // Keep previous behavior: default to dark when not set
-            cls.add('dark-theme');
-            localStorage.setItem('theme', 'dark-theme');
-          }
+          cls.add(theme + '-theme');
+          localStorage.setItem('theme', theme);
+          localStorage.removeItem('theme-preference');
         } catch (e) {
-          // Fallback to dark theme if storage unavailable
           document.body.classList.add('dark-theme');
         }
       })();
