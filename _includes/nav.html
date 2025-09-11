@@ -78,14 +78,14 @@
         <span class="stat-label">标签</span>
       </div>
       <div class="stat-item">
-        {% assign total_words = 0 %}
-        {% for post in site.posts %}
-          {% assign words = post.content | number_of_words %}
-          {% assign total_words = total_words | plus: words %}
-        {% endfor %}
-        {% assign avg_words = total_words | divided_by: site.posts.size %}
-        {% assign avg_k = avg_words | plus: 500 | divided_by: 1000 %}
-        <span class="stat-number">{{ avg_k }}k</span>
+        {%- assign total_chars = 0 -%}
+        {%- for post in site.posts -%}
+          {%- assign text = post.content | strip_html | strip_newlines | replace: ' ', '' -%}
+          {%- assign char_count = text | size -%}
+          {%- assign total_chars = total_chars | plus: char_count -%}
+        {%- endfor -%}
+        {%- assign total_k = total_chars | plus: 500 | divided_by: 1000 -%}
+        <span class="stat-number">{{ total_k }}k</span>
         <span class="stat-label">字数</span>
       </div>
     </div>
