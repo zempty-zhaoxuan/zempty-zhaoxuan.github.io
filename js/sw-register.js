@@ -22,6 +22,13 @@ class ServiceWorkerManager {
       return;
     }
 
+    // Development: disable service worker on localhost to avoid stale cached JS/CSS
+    // (Local dev needs immediate feedback when tweaking UI behaviors like sidebar buttons)
+    if (this.isLocalhost()) {
+      await this.disableForLocalhost();
+      return;
+    }
+
     try {
       await this.registerServiceWorker();
       this.setupEventListeners();
@@ -73,6 +80,33 @@ class ServiceWorkerManager {
     } catch (error) {
       console.error('Service Worker registration failed:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Detect local dev environment (localhost / 127.0.0.1)
+   */
+  isLocalhost() {
+    const host = window.location.hostname;
+    return host === 'localhost' || host === '127.0.0.1';
+  }
+
+  /**
+   * Unregister any existing SW + clear caches on localhost, then skip registration.
+   */
+  async disableForLocalhost() {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+
+      console.log('Service Worker disabled for localhost (unregistered + caches cleared).');
+    } catch (e) {
+      console.warn('Failed to fully disable Service Worker on localhost:', e);
     }
   }
 

@@ -35,6 +35,10 @@ Thumbs.db*
 *.log
 node_modules/
 
+# Bundler
+.bundle/
+vendor/
+
 # 临时文件
 *.tmp
 *.temp

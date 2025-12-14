@@ -160,6 +160,7 @@ select:focus {
   min-height: 45px !important;
   max-width: 45px !important;
   max-height: 45px !important;
+  /* 重要：这里必须用 !important 覆盖上面的 `all: unset !important`（否则 display 会被重置，width/height/居中都会失效） */
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -203,8 +204,7 @@ select:focus {
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
   font-size: 20px !important;
-  /* 使用flex确保完美居中 */
-  display: inline-flex !important;
+  /* 使用 flex 确保完美居中（display 由通用规则/JS 控制，不在此处锁死） */
   align-items: center !important;
   justify-content: center !important;
   /* 移除可能影响对齐的属性 */
@@ -231,14 +231,108 @@ select:focus {
   padding-top: 1px !important;
 }
 
-/* 大屏幕桌面端适配 - 仅在超大屏幕显示桌面端按钮 */
-@media screen and (min-width: 1201px) {
-  #mobile-sidebar-toggle {
+/* ===============================
+   Sidebar 折叠按钮显示逻辑（修复：窗口变窄但侧边栏仍在左侧时，不应显示上下箭头）
+
+   - `#sidebar-toggle`：左右折叠（侧边栏在左侧）
+   - `#mobile-sidebar-toggle`：上下折叠（侧边栏在上方的移动布局）
+
+   默认用 CSS 给出“合理初始值”，实际最终显示由 `js/sidebar-toggle.js`
+   根据 sidebar 的真实布局动态切换（避免仅按屏幕宽度误判）。
+   =============================== */
+#sidebar-toggle {
+  display: inline-flex !important;
+}
+
+#mobile-sidebar-toggle {
+  display: none !important;
+}
+
+/* 小屏（侧边栏切换到顶部布局）默认显示上下折叠按钮 */
+@media screen and (max-width: 768px) {
+  #sidebar-toggle {
     display: none !important;
   }
-  
-  #sidebar-toggle {
+
+  #mobile-sidebar-toggle {
     display: inline-flex !important;
+  }
+}
+
+/* iPad 竖屏（768-1024）同样是顶部布局：同样使用上下折叠按钮 */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  #sidebar-toggle {
+    display: none !important;
+  }
+
+  #mobile-sidebar-toggle {
+    display: inline-flex !important;
+  }
+}
+
+/* ===============================
+   顶部（上下）侧边栏折叠功能修复
+
+   `js/sidebar-toggle.js` 会在上下布局下给 `.wrapper-sidebar` 切换 `mobile-collapsed`。
+   这里用“收起高度”的方式隐藏侧边栏，但**保持 width=100%**，避免 JS 通过宽度误判布局、
+   导致按钮/状态来回跳。
+   =============================== */
+@media screen and (max-width: 768px) {
+  /* Smooth collapse/expand animation for top-layout sidebar */
+  .wrapper-sidebar {
+    /* Use max-height animation to avoid measuring content height in JS */
+    max-height: 9999px;
+    opacity: 1;
+    overflow: hidden;
+    visibility: visible;
+    transition: max-height 0.28s ease, opacity 0.2s ease, visibility 0s linear 0s;
+    will-change: max-height, opacity;
+  }
+
+  .wrapper-sidebar.mobile-collapsed {
+    width: 100% !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    visibility: hidden !important;
+    transition: max-height 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s !important;
+  }
+}
+
+/* iPad 竖屏（768-1024）同样是顶部布局，保持一致的折叠体验 */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Smooth collapse/expand animation for iPad portrait top-layout sidebar */
+  .wrapper-sidebar {
+    max-height: 9999px;
+    opacity: 1;
+    overflow: hidden;
+    visibility: visible;
+    transition: max-height 0.28s ease, opacity 0.2s ease, visibility 0s linear 0s;
+    will-change: max-height, opacity;
+  }
+
+  .wrapper-sidebar.mobile-collapsed {
+    width: 100% !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    visibility: hidden !important;
+    transition: max-height 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s !important;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wrapper-sidebar {
+    transition: none !important;
   }
 }
 
@@ -259,13 +353,9 @@ select:focus {
     max-height: 42px !important;
     font-size: 18px !important;
   }
-  
-  #sidebar-toggle {
-    display: none !important;
-  }
-  
+
+  /* 仅做尺寸微调，不在这里强制切换横/竖按钮（由 JS 按真实布局决定） */
   #mobile-sidebar-toggle {
-    display: inline-flex !important;
     font-size: 16px !important;
   }
 }

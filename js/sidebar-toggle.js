@@ -1,11 +1,10 @@
 // Enhanced Navigation System
 // 增强导航系统
 
-// Screen breakpoints
-const SCREEN_SM = 768;
+// Screen breakpoints - 与 CSS 保持一致
 const SCREEN_MD_MIN = 768;
 const SCREEN_MD_MAX = 1024;
-const SCREEN_LG_MAX = 1200;
+const SCREEN_LG_MAX = 1199; // 保留，但不再用于移动按钮判定
 
 // DOM elements
 const sidebarToggle = document.getElementById("sidebar-toggle");
@@ -24,82 +23,211 @@ if (!wrapper || !sidebar) {
   );
   // return; // Can't return from top-level script, just stop execution if needed.
 } else {
-  const currentState = localStorage.getItem("sidebar-state");
-  const mobileSidebarState = localStorage.getItem("mobile-sidebar-state");
+  // Debug switch:
+  // - URL: ?debugSidebar=1
+  // - localStorage: debug-sidebar-toggle = "1"
+  const DEBUG_SIDEBAR_TOGGLE =
+    (new URLSearchParams(window.location.search).get("debugSidebar") === "1") ||
+    localStorage.getItem("debug-sidebar-toggle") === "1";
+
+  const debugLog = (...args) => {
+    if (!DEBUG_SIDEBAR_TOGGLE) return;
+    console.log(...args);
+  };
+
+  // Icons
+  const ICON_DESKTOP_EXPAND = "≡"; // collapsed -> expand
+  const ICON_DESKTOP_COLLAPSE = "«"; // expanded -> collapse
+  const ICON_TOP_EXPAND = "▼"; // collapsed -> expand
+  const ICON_TOP_COLLAPSE = "▲"; // expanded -> collapse
+
+  const normalizeState = (v) => (v === "collapsed" || v === "expanded" ? v : null);
+  const getStoredDesktopState = () => normalizeState(localStorage.getItem("sidebar-state"));
+  const getStoredTopState = () =>
+    normalizeState(localStorage.getItem("mobile-sidebar-state"));
+
+  // Unified state source-of-truth:
+  // We keep desktop & top states in sync to avoid confusing “desktop says 折叠 / mobile says 展开”.
+  // Defaults:
+  // - left layout: expanded
+  // - top layout: collapsed (mobile-friendly)
+  const getUnifiedStateForLayout = (layout) => {
+    const desktop = getStoredDesktopState();
+    const top = getStoredTopState();
+
+    if (desktop && top && desktop === top) return desktop;
+
+    if (layout === "top") {
+      if (top) return top;
+      if (desktop) return desktop;
+      return "collapsed";
+    }
+
+    // layout === 'left'
+    if (desktop) return desktop;
+    if (top) return top;
+    return "expanded";
+  };
+
+  const setUnifiedState = (state) => {
+    if (getStoredDesktopState() !== state) {
+      localStorage.setItem("sidebar-state", state);
+    }
+    if (getStoredTopState() !== state) {
+      localStorage.setItem("mobile-sidebar-state", state);
+    }
+  };
+
+  const setToggleButtonState = (btn, { icon, title, ariaLabel, expanded }) => {
+    if (!btn) return;
+    // Prefer textContent for plain-text icons (safer than innerHTML)
+    if (typeof icon === "string" && btn.textContent !== icon) {
+      btn.textContent = icon;
+    }
+    if (title && btn.getAttribute("title") !== title) {
+      btn.setAttribute("title", title);
+    }
+    if (ariaLabel && btn.getAttribute("aria-label") !== ariaLabel) {
+      btn.setAttribute("aria-label", ariaLabel);
+    }
+    if (typeof expanded === "boolean") {
+      const v = expanded ? "true" : "false";
+      if (btn.getAttribute("aria-expanded") !== v) {
+        btn.setAttribute("aria-expanded", v);
+      }
+    }
+  };
+
+  const setDisplayImportant = (el, display) => {
+    if (!el) return;
+    const current = el.style.getPropertyValue("display");
+    const priority = el.style.getPropertyPriority("display");
+    if (current === display && priority === "important") return;
+    el.style.setProperty("display", display, "important");
+  };
+
+  const updateDesktopToggleUI = (isCollapsed) => {
+    setToggleButtonState(sidebarToggle, {
+      icon: isCollapsed ? ICON_DESKTOP_EXPAND : ICON_DESKTOP_COLLAPSE,
+      title: isCollapsed ? "展开侧边栏" : "折叠侧边栏",
+      ariaLabel: isCollapsed ? "展开侧边栏" : "折叠侧边栏",
+      expanded: !isCollapsed,
+    });
+  };
+
+  const updateTopToggleUI = (isCollapsed) => {
+    setToggleButtonState(mobileSidebarToggle, {
+      icon: isCollapsed ? ICON_TOP_EXPAND : ICON_TOP_COLLAPSE,
+      title: isCollapsed ? "展开侧边栏" : "折叠侧边栏",
+      ariaLabel: isCollapsed ? "展开侧边栏" : "折叠侧边栏",
+      expanded: !isCollapsed,
+    });
+  };
+
+  const showDesktopToggle = () => {
+    setDisplayImportant(sidebarToggle, "inline-flex");
+    setDisplayImportant(mobileSidebarToggle, "none");
+  };
+
+  const showTopToggle = () => {
+    setDisplayImportant(sidebarToggle, "none");
+    setDisplayImportant(mobileSidebarToggle, "inline-flex");
+  };
+
+  const applyDesktopSidebarState = (state) => {
+    const isCollapsed = state === "collapsed";
+    wrapper.classList.toggle("sidebar-collapsed", isCollapsed);
+    sidebar.classList.toggle("collapsed", isCollapsed);
+    updateDesktopToggleUI(isCollapsed);
+  };
+
+  const applyTopSidebarState = (state) => {
+    const isCollapsed = state === "collapsed";
+    sidebar.classList.toggle("mobile-collapsed", isCollapsed);
+    document.body.classList.toggle("mobile-sidebar-collapsed", isCollapsed);
+    updateTopToggleUI(isCollapsed);
+  };
+
+  // Track current layout mode
+  let layoutMode = null; // 'left' | 'top' | null
+
   const sidebarArchive = document.querySelector(".sidebar-archive");
 
-  // 桌面版侧边栏状态应用
-  if (sidebarToggle) {
-    if (currentState === "collapsed") {
-      wrapper.classList.add("sidebar-collapsed");
-      sidebar.classList.add("collapsed");
-      sidebarToggle.innerHTML = "≡"; // 安全: 设置图标
-      sidebarToggle.setAttribute("title", "展开侧边栏");
-    } else {
-      sidebarToggle.innerHTML = "«";
-      sidebarToggle.setAttribute("title", "折叠侧边栏");
-    }
-  }
+  // Media queries used to determine "top sidebar layout"
+  const mqTopSmall = window.matchMedia("(max-width: 768px)");
+  const mqTopIPadPortrait = window.matchMedia(
+    "(min-width: 768px) and (max-width: 1024px) and (orientation: portrait)"
+  );
 
-  // 移动版侧边栏状态应用
-  if (mobileSidebarToggle) {
-    // Default to collapsed on mobile if no state is saved
-    if (mobileSidebarState === "expanded") {
-      mobileSidebarToggle.innerHTML = "▲";
-      mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
-    } else {
-      sidebar.classList.add("mobile-collapsed");
-      document.body.classList.add("mobile-sidebar-collapsed");
-      if (mobileSidebarToggle) mobileSidebarToggle.innerHTML = "▼";
-      mobileSidebarToggle.setAttribute("title", "展开侧边栏");
-    }
-  }
+  const getLiveLayoutMode = () => {
+    // IMPORTANT: do NOT use `.wrapper-content` left offset as a primary signal.
+    // When the desktop sidebar is collapsed, `.wrapper-content.sidebar-collapsed` may move to left=0,
+    // which would incorrectly look like "top layout" and break toggle behavior.
+    //
+    // We rely on the same media queries that control layout, plus a robust computed-style fallback:
+    // - Top layout: `.wrapper-sidebar` becomes `position: relative` (or not fixed)
+    // - Left layout: `.wrapper-sidebar` is `position: fixed`
+    if (mqTopSmall.matches || mqTopIPadPortrait.matches) return "top";
 
-  // 桌面版切换侧边栏状态
-  if (sidebarToggle) {
-    sidebarToggle.addEventListener("click", function () {
-      wrapper.classList.toggle("sidebar-collapsed");
-      sidebar.classList.toggle("collapsed");
+    const pos = window.getComputedStyle(sidebar).position;
+    return pos !== "fixed" ? "top" : "left";
+  };
 
+  // Initialize: choose state based on current layout, then sync both storages to it
+  const initialLayout = getLiveLayoutMode();
+  const initialState = getUnifiedStateForLayout(initialLayout);
+  setUnifiedState(initialState);
+  applyDesktopSidebarState(initialState);
+  applyTopSidebarState(initialState);
+
+  // Unified click handler: always operate based on *current* layout (more robust during rotation/resize)
+  const toggleSidebar = () => {
+    const mode = getLiveLayoutMode();
+    layoutMode = mode;
+
+    const isCollapsed =
+      mode === "top"
+        ? sidebar.classList.contains("mobile-collapsed")
+        : wrapper.classList.contains("sidebar-collapsed");
+
+    const nextState = isCollapsed ? "expanded" : "collapsed";
+    setUnifiedState(nextState);
+
+    if (mode === "top") {
+      // Ensure desktop-only classes don't leak into top layout
       if (wrapper.classList.contains("sidebar-collapsed")) {
-        localStorage.setItem("sidebar-state", "collapsed");
-        sidebarToggle.setAttribute("title", "展开侧边栏");
-        sidebarToggle.innerHTML = "≡";
-      } else {
-        localStorage.setItem("sidebar-state", "expanded");
-        sidebarToggle.setAttribute("title", "折叠侧边栏");
-        sidebarToggle.innerHTML = "«";
+        wrapper.classList.remove("sidebar-collapsed");
+      }
+      if (sidebar.classList.contains("collapsed")) {
+        sidebar.classList.remove("collapsed");
       }
 
-      // 触发布局重算，确保评论区(Giscus)在折叠/展开后自适应宽度
-      setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 50);
-    });
-  }
-
-  // 移动版切换侧边栏状态
-  if (mobileSidebarToggle) {
-    mobileSidebarToggle.addEventListener("click", function () {
-      sidebar.classList.toggle("mobile-collapsed");
-      document.body.classList.toggle("mobile-sidebar-collapsed");
-
+      applyTopSidebarState(nextState);
+      // Keep hidden desktop button UI in sync for seamless layout switches
+      updateDesktopToggleUI(nextState === "collapsed");
+    } else {
+      // Ensure top-only classes don't leak into left layout
       if (sidebar.classList.contains("mobile-collapsed")) {
-        localStorage.setItem("mobile-sidebar-state", "collapsed");
-        mobileSidebarToggle.innerHTML = "▼";
-        mobileSidebarToggle.setAttribute("title", "展开侧边栏");
-      } else {
-        localStorage.setItem("mobile-sidebar-state", "expanded");
-        mobileSidebarToggle.innerHTML = "▲";
-        mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
+        sidebar.classList.remove("mobile-collapsed");
+      }
+      if (document.body.classList.contains("mobile-sidebar-collapsed")) {
+        document.body.classList.remove("mobile-sidebar-collapsed");
       }
 
-      // 触发布局重算，确保评论区(Giscus)在移动端折叠/展开后自适应宽度
-      setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 50);
-    });
-  }
+      applyDesktopSidebarState(nextState);
+      // Keep hidden mobile button UI in sync for seamless layout switches
+      updateTopToggleUI(nextState === "collapsed");
+    }
+
+    // Trigger layout recalculation (comments/search/etc.)
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 50);
+  };
+
+  if (sidebarToggle) sidebarToggle.addEventListener("click", toggleSidebar);
+  if (mobileSidebarToggle)
+    mobileSidebarToggle.addEventListener("click", toggleSidebar);
 
   // 设置返回首页按钮的提示文字
   if (homeButton) {
@@ -146,8 +274,19 @@ if (!wrapper || !sidebar) {
     // 检测iPad Pro竖屏
     const isIPadProPortrait = isIPadPro && isPortrait;
     
+    // 根据真实布局判断（iPad 重点修复）：
+    // - 小屏（<=768）：CSS 会把侧边栏切到顶部布局
+    // - iPad 竖屏（768-1024 portrait）：CSS 也会把侧边栏切到顶部布局
+    // 这些场景优先用 matchMedia 判定最稳定，避免“旋转/逐渐缩放”时测量值不稳定导致按钮不切换。
+    const isTopSidebarLayout =
+      mqTopSmall.matches ||
+      mqTopIPadPortrait.matches ||
+      window.getComputedStyle(sidebar).position !== "fixed";
+
     // 调试信息 (可在控制台查看)
-    console.log(`Screen: ${windowWidth}x${windowHeight}, iPad Pro: ${isIPadPro}, iPad Pro Portrait: ${isIPadProPortrait}, Medium: ${isMediumScreen}, Portrait: ${isPortrait}, iPhone Landscape: ${isIPhoneLandscape}`);
+    debugLog(
+      `Screen: ${windowWidth}x${windowHeight}, sidebarPos: ${window.getComputedStyle(sidebar).position}, topLayout: ${isTopSidebarLayout}, mqTopSmall: ${mqTopSmall.matches}, mqIPadPortrait: ${mqTopIPadPortrait.matches}, iPad Pro: ${isIPadPro}, iPad Pro Portrait: ${isIPadProPortrait}, Medium: ${isMediumScreen}, Portrait: ${isPortrait}, iPhone Landscape: ${isIPhoneLandscape}`
+    );
     
     // 处理文章归档日历显示
     if (sidebarArchive) {
@@ -161,44 +300,99 @@ if (!wrapper || !sidebar) {
       }
     }
 
-    // 中等尺寸屏幕、移动设备、iPad Pro竖屏、iPhone横屏使用垂直折叠功能
-    if (
-      windowWidth <= SCREEN_LG_MAX ||
-      isIPadProPortrait ||
-      isIPhoneLandscape
-    ) {
-      // 强制重置桌面折叠状态，特别是对于手机横屏
-      wrapper.classList.remove("sidebar-collapsed");
-      sidebar.classList.remove("collapsed");
+    // 只看“真实布局”来决定按钮形态：
+    // - 侧边栏在上方（接近全宽）=> 上下折叠按钮
+    // - 侧边栏在左侧（宽度明显较小）=> 左右折叠按钮
+    // 这样即使窗口变窄但侧边栏仍在左侧，也不会误用上下折叠按钮。
+    const shouldUseMobileToggle = isTopSidebarLayout;
+    const unifiedState = getUnifiedStateForLayout(shouldUseMobileToggle ? "top" : "left");
+    // Keep desktop & top storages in sync (prevents cross-layout confusion)
+    setUnifiedState(unifiedState);
 
-      // 设置移动端折叠按钮
-      if (sidebarToggle) sidebarToggle.style.display = "none";
-      if (mobileSidebarToggle) mobileSidebarToggle.style.display = "flex";
-      console.log("使用移动端按钮 (垂直折叠)");
-      
-      // 确保箭头朝上或朝下
-      if (mobileSidebarToggle) {
-        if (sidebar.classList.contains("mobile-collapsed")) {
-          mobileSidebarToggle.innerHTML = "▼";
-        } else {
-          mobileSidebarToggle.innerHTML = "▲";
-        }
+    if (shouldUseMobileToggle) {
+      // Avoid redundant DOM writes when already in top layout
+      if (layoutMode !== "top") {
+        layoutMode = "top";
+        showTopToggle();
       }
+
+      // Top-layout：移除桌面折叠 class（避免影响顶部布局视觉），但保留 localStorage 中的桌面状态
+      if (wrapper.classList.contains("sidebar-collapsed")) {
+        wrapper.classList.remove("sidebar-collapsed");
+      }
+      if (sidebar.classList.contains("collapsed")) {
+        sidebar.classList.remove("collapsed");
+      }
+
+      // Apply unified state in top layout
+      applyTopSidebarState(unifiedState);
+      // Keep hidden desktop button UI in sync
+      updateDesktopToggleUI(unifiedState === "collapsed");
+
+      debugLog("使用顶部布局按钮 (上下折叠)");
     } else {
-      // 大屏幕桌面设备使用水平折叠功能
-      sidebar.classList.remove("mobile-collapsed");
-      document.body.classList.remove("mobile-sidebar-collapsed");
-      if (sidebarToggle) sidebarToggle.style.display = "flex";
-      if (mobileSidebarToggle) mobileSidebarToggle.style.display = "none";
-      console.log("使用桌面端按钮 (水平折叠)");
+      if (layoutMode !== "left") {
+        layoutMode = "left";
+        showDesktopToggle();
+      }
+
+      // Left-layout：移除顶部折叠状态（不影响桌面布局），但保留 localStorage 中的顶部状态
+      if (sidebar.classList.contains("mobile-collapsed")) {
+        sidebar.classList.remove("mobile-collapsed");
+      }
+      if (document.body.classList.contains("mobile-sidebar-collapsed")) {
+        document.body.classList.remove("mobile-sidebar-collapsed");
+      }
+
+      // Apply unified state in left layout
+      applyDesktopSidebarState(unifiedState);
+      // Keep hidden mobile button UI in sync
+      updateTopToggleUI(unifiedState === "collapsed");
+
+      debugLog("使用左侧布局按钮 (左右折叠)");
     }
   };
 
-  // 监听窗口大小变化
-  window.addEventListener("resize", handleResize);
+  // 统一调度：iPad 旋转时有时会先触发 resize，再应用媒体查询样式。
+  // 这里做一次轻量防抖：立即跑一遍 + 过一小段时间再跑一遍，确保按钮/图标最终一致。
+  let resizeTimer = null;
+  let resizeRaf = 0;
+  const scheduleLayoutSync = () => {
+    if (resizeRaf) cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      resizeRaf = 0;
+      handleResize();
+    });
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(handleResize, 160);
+  };
 
-  // 初始化时运行一次
-  handleResize();
+  const addMediaQueryListener = (mq, listener) => {
+    if (!mq) return;
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", listener);
+    } else if (typeof mq.addListener === "function") {
+      mq.addListener(listener);
+    }
+  };
+
+  // 监听窗口大小变化 / 方向变化（iPad 关键）
+  window.addEventListener("resize", scheduleLayoutSync);
+  window.addEventListener("orientationchange", scheduleLayoutSync);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleLayoutSync);
+  }
+
+  // 监听媒体查询变化（尤其是 iPad 竖屏那条规则）
+  addMediaQueryListener(mqTopSmall, scheduleLayoutSync);
+  addMediaQueryListener(mqTopIPadPortrait, scheduleLayoutSync);
+
+  // 初始化时运行一次（使用调度版本，避免初始媒体查询尚未稳定）
+  scheduleLayoutSync();
+
+  // CSS 加载完成/页面 load 后再同步一次，避免首次进入就处于 iPad 竖屏时图标未切换
+  window.addEventListener("load", scheduleLayoutSync, { once: true });
+  document.addEventListener("cssLoaded", () => setTimeout(scheduleLayoutSync, 0));
 
   // Enhanced Navigation Features
   initializeEnhancedNavigation();

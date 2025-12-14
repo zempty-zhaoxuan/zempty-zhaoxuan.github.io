@@ -502,41 +502,39 @@ class ModernSearch {
 
     if (!sidebar) return;
 
-    // 检查屏幕大小以决定使用哪种切换方式
-    const isMobileSize = window.innerWidth <= 1200;
+    // 不要仅按屏幕宽度判断（窗口变窄时侧边栏可能仍在左侧）。
+    // 依据当前折叠状态（mobile-collapsed / collapsed）来决定展开方式，更稳健。
+    const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
+    const sidebarToggle = document.getElementById("sidebar-toggle");
 
-    if (isMobileSize) {
-      // 移动端：使用垂直切换
-      if (sidebar.classList.contains("mobile-collapsed")) {
-        sidebar.classList.remove("mobile-collapsed");
-        document.body.classList.remove("mobile-sidebar-collapsed");
+    // 移动端（顶部布局）垂直折叠：展开
+    if (sidebar.classList.contains("mobile-collapsed")) {
+      sidebar.classList.remove("mobile-collapsed");
+      document.body.classList.remove("mobile-sidebar-collapsed");
 
-        // 更新移动端按钮状态
-        const mobileSidebarToggle = document.getElementById(
-          "mobile-sidebar-toggle"
-        );
-        if (mobileSidebarToggle) {
-          mobileSidebarToggle.innerHTML = "▲"; // 安全: 设置图标
-          mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
-        }
-
-        localStorage.setItem("mobile-sidebar-state", "expanded");
+      if (mobileSidebarToggle) {
+        mobileSidebarToggle.innerHTML = "▲"; // 安全: 设置图标
+        mobileSidebarToggle.setAttribute("title", "折叠侧边栏");
       }
-    } else {
-      // 桌面端：使用水平切换
-      if (sidebar.classList.contains("collapsed")) {
-        sidebar.classList.remove("collapsed");
-        if (wrapper) wrapper.classList.remove("sidebar-collapsed");
 
-        // 更新桌面端按钮状态
-        const sidebarToggle = document.getElementById("sidebar-toggle");
-        if (sidebarToggle) {
-          sidebarToggle.innerHTML = "«"; // 安全: 设置图标
-          sidebarToggle.setAttribute("title", "折叠侧边栏");
-        }
+      // Keep desktop & top sidebar states in sync (unified sidebar state)
+      localStorage.setItem("mobile-sidebar-state", "expanded");
+      localStorage.setItem("sidebar-state", "expanded");
+    }
 
-        localStorage.setItem("sidebar-state", "expanded");
+    // 桌面端（左侧布局）水平折叠：展开
+    if (sidebar.classList.contains("collapsed")) {
+      sidebar.classList.remove("collapsed");
+      if (wrapper) wrapper.classList.remove("sidebar-collapsed");
+
+      if (sidebarToggle) {
+        sidebarToggle.innerHTML = "«"; // 安全: 设置图标
+        sidebarToggle.setAttribute("title", "折叠侧边栏");
       }
+
+      // Keep desktop & top sidebar states in sync (unified sidebar state)
+      localStorage.setItem("sidebar-state", "expanded");
+      localStorage.setItem("mobile-sidebar-state", "expanded");
     }
   }
 }
