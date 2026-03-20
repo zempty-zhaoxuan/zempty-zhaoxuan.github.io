@@ -3,7 +3,7 @@ layout: post
 title: "效率工具大换血：从 Alfred + iTerm2 到 Raycast + Ghostty"
 date: "2026-03-19"
 toc: true
-excerpt: "用了多年的 Alfred + iTerm2 组合终于被替换。本文记录我切换到 Raycast + Ghostty 的体验、配置思路，以及为什么"多尝试"才是效率提升的底层逻辑。"
+excerpt: "用了多年的 Alfred + iTerm2 组合终于被替换。本文记录我切换到 Raycast + Ghostty 的体验、配置思路，以及为什么「多尝试」才是效率提升的底层逻辑。"
 tags: [效率工具, 生产力, macOS, 思考总结]
 comments: true
 author: zempty
