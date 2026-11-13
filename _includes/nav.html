@@ -1,152 +1,125 @@
-<div class="wrapper-sidebar">
-  <div class="sidebar">
-    <!-- 品牌区域 -->
-    <div class="site-branding">
-      <h1 class="site-name">
-        <a href="{{ site.baseurl }}/">{{ site.name }}</a>
-      </h1>
-      <p class="site-description">{{ site.description }}</p>
+<aside id="site-sidebar" class="site-sidebar wrapper-sidebar" aria-label="站点导航">
+  <div class="sidebar-inner">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <a class="site-name" href="{{ '/' | relative_url }}">{{ site.name }}</a>
+        <p class="site-description">{{ site.description }}</p>
+      </div>
+      <button class="icon-button sidebar-theme-toggle" id="theme-toggle" type="button" data-theme-toggle aria-label="切换主题" title="切换主题">
+        {% include icons.html name='moon' %}{% include icons.html name='sun' %}
+      </button>
+      <button class="icon-button sidebar-close" id="drawer-close" type="button" aria-label="关闭菜单">
+        {% include icons.html name='close' %}
+      </button>
     </div>
 
-    <!-- 现代化导航 -->
-    <div class="modern-nav">
-      {% for nav in site.navigation %} {% assign is_external = false %} {% if
-      nav.url contains 'http://' or nav.url contains 'https://' %} {% assign
-      is_external = true %} {% endif %} {% assign item_url = nav.url %} {%
-      unless is_external %} {% assign item_url = nav.url | relative_url %} {%
-      endunless %} 
-      
-      {% assign is_active = false %} 
-      
-      {% comment %} Check for exact URL match {% endcomment %}
-      {% if page.url == item_url %}
-        {% assign is_active = true %} 
-      {% endif %} 
-      
-      {% comment %} Check for home page {% endcomment %}
-      {% if item_url == "/" and page.url == "/index.html" %} 
-        {% assign is_active = true %} 
-      {% endif %}
-      
-      {% comment %} Check for tags page {% endcomment %}
-      {% if nav.name == "标签" and page.url contains "/tags" %}
-        {% assign is_active = true %}
-      {% endif %}
-      
-      {% comment %} Check for archive page {% endcomment %}
-      {% if nav.name == "归档" and page.url contains "/archive" %}
-        {% assign is_active = true %}
-      {% endif %}
-
-      <a
-        href="{{ item_url }}"
-        class="nav-item {% if is_active %}active{% endif %}"
-      >
-        <span class="nav-icon">
-          {% if nav.name == "首页" %}🏠 {% elsif nav.name == "标签" %}🏷️ {%
-          elsif nav.name == "归档" %}📚 {% elsif nav.name == "关于" %}👤 {% else
-          %}📄 {% endif %}
-        </span>
-        {{ nav.name }}
-      </a>
-      {% endfor %}
-    </div>
-
-    <!-- 搜索功能 -->
-    <div class="sidebar-search">
-      <h3>🔍 搜索</h3>
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="sidebar-search-input"
-          placeholder="搜索文章、标签..."
-          autocomplete="off"
-        />
-      </div>
-      <div id="sidebar-search-results" class="search-results"></div>
-    </div>
-
-    <!-- 博客统计 -->
-      <div class="blog-stats">
-      <div class="stat-item">
-        <span class="stat-number">{{ site.posts.size }}</span>
-        <span class="stat-label">文章</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">{{ site.tags.size }}</span>
-        <span class="stat-label">标签</span>
-      </div>
-      <div class="stat-item">
-        {%- assign total_chars = 0 -%}
-        {%- for post in site.posts -%}
-          {%- assign text = post.content | strip_html | strip_newlines | replace: ' ', '' -%}
-          {%- assign char_count = text | size -%}
-          {%- assign total_chars = total_chars | plus: char_count -%}
-        {%- endfor -%}
-        {%- assign total_k = total_chars | plus: 500 | divided_by: 1000 -%}
-        <span class="stat-number">{{ total_k }}k</span>
-        <span class="stat-label">字数</span>
-      </div>
-    </div>
-
-    <!-- 热门标签云 -->
-    <div class="popular-tags">
-      <h3>🏷️ 热门标签</h3>
-      <div class="tag-cloud">
-        {% assign sorted_tags = site.tags | sort %} {% for tag in sorted_tags
-        limit:12 %}
-        <a href="{{ site.baseurl }}/tags#{{ tag[0] | url_encode }}" class="tag-item">
-          <span class="tag-name">{{ tag[0] }}</span>
-          <span class="tag-count">{{ tag[1].size }}</span>
+    <nav class="sidebar-nav" aria-label="主导航">
+      {% for nav in site.navigation %}
+        {% assign nav_path = nav.url | strip %}
+        {% assign is_external = false %}
+        {% if nav_path contains '://' %}{% assign is_external = true %}{% endif %}
+        {% assign is_active = false %}
+        {% if nav_path == '/' %}
+          {% if page.url == '/' or page.url == '/index.html' or page.url contains '/page' %}{% assign is_active = true %}{% endif %}
+        {% elsif nav_path == '/tags' and page.url contains '/tags' %}
+          {% assign is_active = true %}
+        {% elsif nav_path == '/archive' and page.url contains '/archive' %}
+          {% assign is_active = true %}
+        {% elsif page.url == nav_path %}
+          {% assign is_active = true %}
+        {% endif %}
+        {% unless is_external %}{% assign nav_path = nav_path | relative_url %}{% endunless %}
+        <a class="nav-item{% if is_active %} active{% endif %}" href="{{ nav_path }}"{% if is_active %} aria-current="page"{% endif %}>
+          {% if nav.name == '首页' %}{% assign nav_icon = 'home' %}
+          {% elsif nav.name == '标签' %}{% assign nav_icon = 'tag' %}
+          {% elsif nav.name == '归档' %}{% assign nav_icon = 'archive' %}
+          {% else %}{% assign nav_icon = 'file' %}{% endif %}
+          {% include icons.html name=nav_icon %}
+          <span>{{ nav.name }}</span>
         </a>
+      {% endfor %}
+    </nav>
+
+    <button class="sidebar-search-trigger" type="button" data-search-open aria-haspopup="dialog">
+      {% include icons.html name='search' %}
+      <span>搜索文章…</span>
+      <kbd>⌘K</kbd>
+    </button>
+    {% assign total_chars = 0 %}
+    {% for post in site.posts %}
+      {% assign text = post.content | strip_html | strip_newlines | replace: ' ', '' %}
+      {% assign total_chars = total_chars | plus: text.size %}
+    {% endfor %}
+    {% assign total_k = total_chars | plus: 500 | divided_by: 1000 %}
+    <div class="blog-stats" aria-label="博客统计">
+      <div class="stat-item"><strong class="stat-number">{{ site.posts.size }}</strong><span class="stat-label">文章</span></div>
+      <div class="stat-item"><strong class="stat-number">{{ site.tags.size }}</strong><span class="stat-label">标签</span></div>
+      <div class="stat-item"><strong class="stat-number">{{ total_k }}k</strong><span class="stat-label">字数</span></div>
+    </div>
+
+    <section class="popular-tags" aria-labelledby="popular-tags-title">
+      <h2 class="sidebar-section-title" id="popular-tags-title">热门标签</h2>
+      <div class="tag-cloud">
+        {% assign name_sorted_tags = site.tags | sort %}
+        {% assign shown_tags = 0 %}
+        {% assign post_total = site.posts.size %}
+        {% for count in (1..post_total) reversed %}
+          {% for tag in name_sorted_tags %}
+            {% if tag[1].size == count and shown_tags < 12 %}
+              <a class="tag-item" href="{{ '/tags/' | relative_url }}#{{ tag[0] | url_encode | replace: '+', '%20' }}">
+                <span class="tag-name">{{ tag[0] }}</span><span class="tag-count">{{ count }}</span>
+              </a>
+              {% assign shown_tags = shown_tags | plus: 1 %}
+            {% endif %}
+          {% endfor %}
         {% endfor %}
       </div>
-    </div>
+    </section>
 
-    <!-- 最新文章 -->
-    <div class="recent-posts">
-      <h3>📄 最新文章</h3>
-      {% for post in site.posts limit:5 %}
-      <div class="recent-post-item">
-        <a href="{{ site.baseurl }}{{ post.url }}">
-          <div class="post-title">{{ post.title | truncate: 32 }}</div>
-          <div class="post-date">{{ post.date | date: "%m-%d" }}</div>
-        </a>
+    <section class="recent-posts" aria-labelledby="recent-posts-title">
+      <h2 class="sidebar-section-title" id="recent-posts-title">最新文章</h2>
+      <ol class="recent-post-list">
+        {% for post in site.posts limit:5 %}
+          <li><a class="recent-post-item" href="{{ post.url | relative_url }}"><span class="post-title">{{ post.title }}</span><time class="post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%m-%d' }}</time></a></li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <div class="sidebar-footer">
+      <div class="social-links" aria-label="社交链接">
+        {% for social in site.footer-links %}
+          {% assign social_name = social[0] %}
+          {% assign social_value = social[1] | strip %}
+          {% assign social_url = '' %}
+          {% if social_value != '' and social_name != 'rss' %}
+            {% case social_name %}
+              {% when 'email' %}{% assign social_url = 'mailto:' | append: social_value %}
+              {% when 'github' %}{% assign social_url = 'https://github.com/' | append: social_value %}
+              {% when 'zhihu' %}{% assign social_url = 'https://www.zhihu.com/people/' | append: social_value %}
+              {% when 'weibo' %}{% assign social_url = 'https://weibo.com/' | append: social_value %}
+              {% when 'facebook' %}{% assign social_url = 'https://www.facebook.com/' | append: social_value %}
+              {% when 'flickr' %}{% assign social_url = 'https://www.flickr.com/photos/' | append: social_value %}
+              {% when 'instagram' %}{% assign social_url = 'https://www.instagram.com/' | append: social_value %}
+              {% when 'linkedin' %}{% assign social_url = 'https://www.linkedin.com/in/' | append: social_value %}
+              {% when 'pinterest' %}{% assign social_url = 'https://www.pinterest.com/' | append: social_value %}
+              {% when 'tumblr' %}{% assign social_url = 'https://' | append: social_value | append: '.tumblr.com/' %}
+              {% when 'youtube' %}{% assign social_url = 'https://www.youtube.com/' | append: social_value %}
+              {% when 'twitter' %}{% assign social_url = 'https://x.com/' | append: social_value %}
+              {% when 'behance' %}{% assign social_url = 'https://www.behance.net/' | append: social_value %}
+              {% when 'dribbble' %}{% assign social_url = 'https://dribbble.com/' | append: social_value %}
+              {% when 'stackoverflow' %}{% assign social_url = 'https://stackoverflow.com/' | append: social_value %}
+            {% endcase %}
+            {% if social_url != '' %}
+              {% assign social_icon = 'link' %}
+              {% if social_name == 'github' %}{% assign social_icon = 'github' %}
+              {% elsif social_name == 'email' %}{% assign social_icon = 'mail' %}{% endif %}
+              <a href="{{ social_url }}" aria-label="{{ social_name | capitalize }}" title="{{ social_name | capitalize }}"{% unless social_name == 'email' %} target="_blank" rel="noopener noreferrer"{% endunless %}>{% include icons.html name=social_icon %}</a>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        <a href="{{ '/feed.xml' | relative_url }}" aria-label="RSS" title="RSS">{% include icons.html name='rss' %}</a>
       </div>
-      {% endfor %}
-    </div>
-
-    <!-- 现代化归档时间线 -->
-    <div class="archive-timeline">
-      <h3>📅 文章归档</h3>
-      {% assign post_months = site.posts | group_by_exp: "post", "post.date |
-      date: '%Y-%m'" %}
-      {% assign sorted_months_array = post_months | sort: "name" | reverse %}
-      {% for month in sorted_months_array limit:12 %} {% assign month_date =
-      month.name | split: "-" %} {% assign year = month_date[0] %} {% assign
-      month_num = month_date[1] %} {% case month_num %} {% when '01' %}{% assign
-      month_name = "一月" %} {% when '02' %}{% assign month_name = "二月" %} {%
-      when '03' %}{% assign month_name = "三月" %} {% when '04' %}{% assign
-      month_name = "四月" %} {% when '05' %}{% assign month_name = "五月" %} {%
-      when '06' %}{% assign month_name = "六月" %} {% when '07' %}{% assign
-      month_name = "七月" %} {% when '08' %}{% assign month_name = "八月" %} {%
-      when '09' %}{% assign month_name = "九月" %} {% when '10' %}{% assign
-      month_name = "十月" %} {% when '11' %}{% assign month_name = "十一月" %}
-      {% when '12' %}{% assign month_name = "十二月" %} {% endcase %}
-      <a
-        href="{{ site.baseurl }}/archive/#{{ month.name }}"
-        class="timeline-item"
-      >
-        <span class="archive-date">{{ month_name }} {{ year }}</span>
-        <span class="post-count">{{ month.items.size }}</span>
-      </a>
-      {% endfor %}
+      <small>© {{ site.time | date: '%Y' }} {{ site.name }}</small>
     </div>
   </div>
-
-  <!-- 桌面端底部固定区域 -->
-  <div class="wrapper-footer-desktop">
-    <footer class="footer">{% include footer.html %}</footer>
-  </div>
-</div>
+</aside>

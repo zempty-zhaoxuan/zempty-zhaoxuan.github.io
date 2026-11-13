@@ -1,108 +1,16 @@
-// Giscus 评论系统样式美化
-// 参考 gitalk 的设计风格，提供优雅的评论区样式
-
-// 评论区容器
 .comments-area {
-  margin-top: 60px; // 增加与文章内容的间距
-  padding-top: 40px;
-  border-top: 1px solid var(--border-color, #e1e4e8);
-  
-  @media (max-width: 600px) {
-    margin-top: 40px;
-    padding-top: 30px;
-  }
+  min-width: 0;
+  margin-top: var(--space-12);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border);
 }
-
-// Giscus 容器样式
-.giscus-container {
-  margin: 0 auto;
-  max-width: 100%;
-  padding: 0;
-  
-  // 主题过渡动画
-  * {
-    transition: background-color 0.3s ease, 
-                border-color 0.3s ease, 
-                color 0.3s ease;
-  }
-}
-
-// Giscus iframe 样式
+.giscus-container { min-width: 0; width: 100%; }
 .giscus-frame {
-  width: 100% !important;
-  border: none !important;
-  min-height: 300px;
-  color-scheme: light; // 默认浅色主题
-  
-  // 圆角和阴影效果
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  
-  // 深色主题
-  .dark-theme & {
-    color-scheme: dark;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-}
-
-// 加载提示样式
-.giscus-container:empty::before {
-  content: '评论加载中...';
   display: block;
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted, #666);
-  font-size: 14px;
-  
-  .dark-theme & {
-    color: var(--text-muted-dark, #999);
-  }
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color-scheme: light;
 }
-
-// 评论区标题样式（如果需要添加）
-.comments-title {
-  margin-bottom: 20px;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-color, #24292e);
-  
-  .dark-theme & {
-    color: var(--text-color-dark, #e6edf3);
-  }
-  
-  &::before {
-    content: '💬 ';
-    margin-right: 8px;
-  }
-}
-
-// 移动端优化
-@media (max-width: 600px) {
-  .giscus-container {
-    padding: 0 10px;
-  }
-  
-  .giscus-frame {
-    border-radius: 6px;
-  }
-}
-
-// 打印时隐藏评论区
-@media print {
-  .comments-area {
-    display: none;
-  }
-}
-
-// CSS 变量定义（与主题系统集成）
-:root {
-  --giscus-border-color: #e1e4e8;
-  --giscus-bg-color: #ffffff;
-  --giscus-text-color: #24292e;
-}
-
-.dark-theme {
-  --giscus-border-color: #30363d;
-  --giscus-bg-color: #0d1117;
-  --giscus-text-color: #e6edf3;
-}
+.dark-theme .giscus-frame { color-scheme: dark; }
+@media print { .comments-area { display: none; } }

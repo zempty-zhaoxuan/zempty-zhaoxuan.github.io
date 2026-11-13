@@ -1,88 +1,14 @@
 {% if page.comments != false and site.giscus.enabled %}
-<div class="comments-area">
-  <div class="giscus-container"></div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const container = document.querySelector('.giscus-container');
-  if (!container) return;
-
-  // Get current theme from body class
-  function getCurrentTheme() {
-    return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-  }
-
-  // Inject Giscus with correct initial theme to avoid dark flash in light mode  
-  const initialTheme = getCurrentTheme() === 'dark' ? 'dark' : 'noborder_light';
-  const el = document.createElement('script');
-  el.src = 'https://giscus.app/client.js';
-  el.async = true;
-  el.setAttribute('data-repo', '{{ site.giscus.repo }}');
-  el.setAttribute('data-repo-id', '{{ site.giscus.repo_id }}');
-  el.setAttribute('data-category', '{{ site.giscus.category }}');
-  el.setAttribute('data-category-id', '{{ site.giscus.category_id }}');
-  el.setAttribute('data-mapping', '{{ site.giscus.mapping }}');
-  el.setAttribute('data-strict', '0');
-  el.setAttribute('data-reactions-enabled', '{{ site.giscus.reactions_enabled }}');
-  el.setAttribute('data-emit-metadata', '{{ site.giscus.emit_metadata }}');
-  el.setAttribute('data-input-position', '{{ site.giscus.input_position }}');
-  el.setAttribute('data-theme', initialTheme);
-  el.setAttribute('data-lang', '{{ site.giscus.lang }}');
-  el.setAttribute('data-loading', 'lazy');
-  el.setAttribute('crossorigin', 'anonymous');
-  container.appendChild(el);
-
-  // Update theme for all giscus iframes
-  function applyGiscusTheme(theme) {
-    const frames = document.querySelectorAll('.giscus-frame');
-    if (!frames || frames.length === 0) return false;
-    frames.forEach((frame) => {
-      try {
-        frame.contentWindow.postMessage(
-          { giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'noborder_light' } } },
-          'https://giscus.app'
-        );
-      } catch (e) {}
-    });
-    return true;
-  }
-
-  // Observe iframe insertion to sync theme as soon as it loads
-  const observer = new MutationObserver(function(mutations) {
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (node && node.classList && node.classList.contains('giscus-frame')) {
-          setTimeout(() => applyGiscusTheme(getCurrentTheme()), 150);
-        }
-      }
-    }
-  });
-  observer.observe(container, { childList: true, subtree: true });
-
-  // Poll a few times as a fallback for slower loads
-  let attempts = 0;
-  const poller = setInterval(() => {
-    attempts++;
-    const ok = applyGiscusTheme(getCurrentTheme());
-    if (ok || attempts > 20) clearInterval(poller);
-  }, 500);
-
-  // Sync on theme change events
-  document.addEventListener('themeChanged', function(e) {
-    applyGiscusTheme(e.detail.theme);
-  });
-});
-</script>
-<style>
-/* 兜底样式（与新布局协调）：最终由 compiled CSS 覆盖 */
-article.posts .post-footer{margin-top:32px;padding-top:20px;border-top:1px solid rgba(0,0,0,.08)}
-.dark-theme article.posts .post-footer{border-top-color:rgba(255,255,255,.12)}
-.post-share-slot{margin:8px 0 16px 0}
-.comments-area{margin-top:20px;padding-top:20px;border-top:1px dashed rgba(0,0,0,.08)}
-.dark-theme .comments-area{border-top-color:rgba(255,255,255,.12)}
-.giscus-frame{width:100%!important;border:none!important;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.dark-theme .giscus-frame{box-shadow:0 2px 8px rgba(0,0,0,.25)}
-@media (max-width:600px){article.posts .post-footer{margin-top:24px;padding-top:16px}.comments-area{margin-top:16px;padding-top:16px}.giscus-frame{border-radius:6px}}
-</style>
+<section class="comments-area" aria-label="评论">
+  <div class="giscus-container"
+       data-repo="{{ site.giscus.repo | escape }}"
+       data-repo-id="{{ site.giscus.repo_id | escape }}"
+       data-category="{{ site.giscus.category | escape }}"
+       data-category-id="{{ site.giscus.category_id | escape }}"
+       data-mapping="{{ site.giscus.mapping | escape }}"
+       data-reactions-enabled="{{ site.giscus.reactions_enabled | escape }}"
+       data-emit-metadata="{{ site.giscus.emit_metadata | escape }}"
+       data-input-position="{{ site.giscus.input_position | escape }}"
+       data-lang="{{ site.giscus.lang | escape }}"></div>
+</section>
 {% endif %}

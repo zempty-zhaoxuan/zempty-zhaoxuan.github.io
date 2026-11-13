@@ -1,13 +1,4 @@
 {% if site.google_analytics %}
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ site.google_analytics }}', {
-      page_path: {{ (site.baseurl | append: page.url) | jsonify }},
-      page_title: {{ page.title | default: '' | jsonify }}
-    });
-  </script>
+  <script src="{{ '/js/analytics.js' | relative_url }}" data-id="{{ site.google_analytics | escape }}" data-page-path="{{ site.baseurl | append: page.url | escape }}" data-page-title="{{ page.title | default: '' | escape }}" defer></script>
+  <script src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics | url_encode }}" defer></script>
 {% endif %}

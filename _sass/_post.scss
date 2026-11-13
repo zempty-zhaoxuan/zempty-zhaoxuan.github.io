@@ -1,0 +1,68 @@
+.posts, .post-layout { min-width: 0; }
+.post-header { margin-bottom: var(--space-8); }
+.post-header h1 { margin: 0 0 var(--space-4); font-size: 2rem; line-height: 1.35; font-weight: 700; overflow-wrap: anywhere; }
+.post-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin: 0; color: var(--text-muted); font-size: .82rem; line-height: 1.5; }
+.post-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.post-cover-image { margin-top: var(--space-6); }
+.post-cover-image img { display: block; width: 100%; max-height: 420px; height: auto; object-fit: cover; border-radius: var(--radius-lg); }
+.post-footer { margin-top: var(--space-12); }
+
+.reading-progress-bar { position: fixed; top: 0; left: 0; z-index: 100; width: 0; height: 2px; background: var(--accent); pointer-events: none; }
+
+.post-toc { min-width: 0; color: var(--text-muted); font-size: .8rem; line-height: 1.55; }
+.post-toc--inline { margin: 0 0 var(--space-8); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.post-toc--inline summary { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); color: var(--text); font-weight: 650; cursor: pointer; list-style: none; }
+.post-toc--inline summary::-webkit-details-marker { display: none; }
+.post-toc--inline summary::after { content: "+"; color: var(--accent); font-size: 1.1rem; line-height: 1; }
+.post-toc--inline[open] summary::after { content: "−"; }
+.post-toc--inline .toc-list { margin: 0; padding: 0 var(--space-4) var(--space-4); max-height: 50vh; overflow-y: auto; }
+.post-toc--desktop { display: none; }
+.post-toc a { display: block; padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); color: var(--text-muted); text-decoration: none; overflow-wrap: anywhere; }
+.post-toc a:hover, .post-toc a.is-active, .post-toc a[aria-current="location"] { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+.toc-list { list-style: none; padding: 0; }
+.toc-list__item { margin: var(--space-1) 0; }
+.toc-list__item--h3 { padding-left: var(--space-4); }
+.heading-anchor { display: inline-block; margin-left: var(--space-2); color: var(--accent); font-size: .8em; font-weight: 400; opacity: 0; text-decoration: none; }
+.entry h2:hover .heading-anchor, .entry h3:hover .heading-anchor, .entry h4:hover .heading-anchor,
+.entry h2:focus-within .heading-anchor, .entry h3:focus-within .heading-anchor, .entry h4:focus-within .heading-anchor { opacity: 1; }
+@media (hover: none) { .heading-anchor { opacity: .7; } }
+
+.related-posts { margin-top: var(--space-12); }
+.related-posts h2 { margin: 0 0 var(--space-4); font-size: 1.25rem; line-height: 1.35; }
+.related-posts__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+.related-posts__card { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-decoration: none; }
+.related-posts__card:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.related-posts__title { overflow-wrap: anywhere; line-height: 1.5; font-size: .86rem; font-weight: 650; }
+.related-posts__card time { color: var(--text-muted); font-size: .72rem; }
+.post-pagination { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-10); }
+.post-pagination__card { display: block; min-width: 0; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-decoration: none; overflow-wrap: anywhere; }
+.post-pagination__card:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.post-pagination__card:only-child { grid-column: 1 / -1; }
+.post-pagination__label { display: block; margin-bottom: var(--space-1); color: var(--text-muted); font-size: .74rem; }
+.post-pagination__title { display: block; font-size: .88rem; line-height: 1.5; font-weight: 650; }
+
+.zoomable-image { cursor: zoom-in; }
+.image-zoom-overlay { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: var(--space-6); background: rgba(0, 0, 0, .9); cursor: zoom-out; }
+.image-zoom-overlay img { max-width: 100%; max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm); }
+.image-zoom-close { position: absolute; top: var(--space-4); right: var(--space-4); display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-size: 1.5rem; line-height: 1; }
+
+@media (min-width: 1280px) {
+  .wrapper-content.withtoc .container { max-width: 1040px; }
+  .post-layout:not(.post-layout--toc) { max-width: 760px; margin-inline: auto; }
+  .post-layout--toc { display: grid; grid-template-columns: minmax(0, 1fr) 240px; align-items: start; gap: var(--space-8); }
+  .post-layout--toc .posts { width: 100%; max-width: 760px; }
+  .post-toc--inline { display: none; }
+  .post-toc--desktop { display: block; position: sticky; top: var(--space-6); max-height: calc(100vh - 48px); overflow-y: auto; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .post-toc--desktop h2 { margin: 0 0 var(--space-3); color: var(--text); font-size: .82rem; line-height: 1.35; }
+  .post-toc--desktop .toc-list { margin: 0; }
+}
+@media (max-width: 767px) {
+  .post-header h1 { font-size: 1.7rem; }
+  .related-posts__list { grid-template-columns: minmax(0, 1fr); }
+  .post-pagination { grid-template-columns: minmax(0, 1fr); }
+  .post-pagination__card:only-child { grid-column: auto; }
+  .image-zoom-overlay { padding: var(--space-4); }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .related-posts__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

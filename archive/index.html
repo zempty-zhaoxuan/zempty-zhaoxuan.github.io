@@ -4,66 +4,30 @@ title: 归档
 permalink: /archive/
 ---
 
-{% if site.posts.size == 0 %}
-  <h2>没有找到文章</h2>
-{% endif %}
-
-<div class="archive-container">
-  {% assign post_months = site.posts | group_by_exp: "post", "post.date | date: '%Y-%m'" %}
-  {% assign sorted_months = post_months | sort: "name" | reverse %}
-  
-  {% for month_group in sorted_months %}
-    {% assign month_date = month_group.name | split: "-" %}
-    {% assign year = month_date[0] %}
-    {% assign month_num = month_date[1] %}
-    {% case month_num %}
-      {% when '01' %}{% assign month_name = "一月" %}
-      {% when '02' %}{% assign month_name = "二月" %}
-      {% when '03' %}{% assign month_name = "三月" %}
-      {% when '04' %}{% assign month_name = "四月" %}
-      {% when '05' %}{% assign month_name = "五月" %}
-      {% when '06' %}{% assign month_name = "六月" %}
-      {% when '07' %}{% assign month_name = "七月" %}
-      {% when '08' %}{% assign month_name = "八月" %}
-      {% when '09' %}{% assign month_name = "九月" %}
-      {% when '10' %}{% assign month_name = "十月" %}
-      {% when '11' %}{% assign month_name = "十一月" %}
-      {% when '12' %}{% assign month_name = "十二月" %}
-    {% endcase %}
-    
-    <div class="month-group" id="{{ month_group.name }}">
-      <h2 class="month-title">{{ year }}年{{ month_name }}</h2>
-      <ul class="month-posts">
-        {% for post in month_group.items %}
-          <li class="archive-item">
-            {% if post.link %}
-            <a href="{{ post.link }}">
-            {% else %}
-            <a href="{{ site.baseurl }}{{ post.url }}">
-            {% endif %}
-              {{ post.title }}
-            </a>
-            <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endfor %}
+{% assign post_years = site.posts | group_by_exp: 'post', "post.date | date: '%Y'" %}
+<div class="archive-page">
+  {% if site.posts.size == 0 %}
+    <p>暂无文章。</p>
+  {% else %}
+    {% for year_group in post_years %}
+      <section class="archive-year">
+        <h2 class="archive-year__title">{{ year_group.name }} <span class="archive-year__count">· {{ year_group.items.size }} 篇</span></h2>
+        <ol class="archive-year__list">
+          {% assign previous_month = '' %}
+          {% for post in year_group.items %}
+            {% assign year_month = post.date | date: '%Y-%m' %}
+            <li class="archive-entry"{% if year_month != previous_month %} id="{{ year_month }}"{% endif %}>
+              <time class="archive-entry__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%m-%d' }}</time>
+              {% if post.link %}
+                <a class="archive-entry__link" href="{{ post.link }}" target="_blank" rel="noopener noreferrer">{{ post.title }}</a>
+              {% else %}
+                <a class="archive-entry__link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+              {% endif %}
+            </li>
+            {% assign previous_month = year_month %}
+          {% endfor %}
+        </ol>
+      </section>
+    {% endfor %}
+  {% endif %}
 </div>
-
-<script>
-  // Check if we should scroll to a specific month (based on URL hash)
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.hash) {
-      const targetMonth = document.querySelector(window.location.hash);
-      if (targetMonth) {
-        setTimeout(function() {
-          window.scrollTo({
-            top: targetMonth.offsetTop - 100,
-            behavior: 'smooth'
-          });
-        }, 200);
-      }
-    }
-  });
-</script>

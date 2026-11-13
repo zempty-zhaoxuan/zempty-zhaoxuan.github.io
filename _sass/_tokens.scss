@@ -1,0 +1,67 @@
+/* Hallmark · genre: editorial · macrostructure: long document · design-system: redesign spec */
+:root,
+.light-theme {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --surface-2: #f3f4f2;
+  --text: #1f2328;
+  --text-muted: #5b616b;
+  --border: #e5e6e3;
+  --accent: #0f766e;
+  --accent-soft: rgba(15, 118, 110, .10);
+  --code-bg: #f6f8fa;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 4px 16px rgba(0, 0, 0, .05);
+  --overlay: rgba(17, 19, 21, .48);
+  --syntax-comment: #6e7781;
+  --syntax-keyword: #8250df;
+  --syntax-string: #0a3069;
+  --syntax-number: #0550ae;
+  --syntax-function: #8250df;
+  --syntax-name: #116329;
+  --syntax-error: #cf222e;
+  --syntax-deleted-bg: #ffebe9;
+  --syntax-inserted-bg: #dafbe1;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  color-scheme: light;
+}
+
+.dark-theme {
+  --bg: #111315;
+  --surface: #181b1f;
+  --surface-2: #20242a;
+  --text: #e6e8eb;
+  --text-muted: #9aa3ad;
+  --border: #2a2f36;
+  --accent: #2dd4bf;
+  --accent-soft: rgba(45, 212, 191, .12);
+  --code-bg: #161a1f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .3);
+  --overlay: rgba(0, 0, 0, .68);
+  --syntax-comment: #8b949e;
+  --syntax-keyword: #d2a8ff;
+  --syntax-string: #a5d6ff;
+  --syntax-number: #79c0ff;
+  --syntax-function: #d2a8ff;
+  --syntax-name: #7ee787;
+  --syntax-error: #ff7b72;
+  --syntax-deleted-bg: #3d2022;
+  --syntax-inserted-bg: #17382b;
+  color-scheme: dark;
+}

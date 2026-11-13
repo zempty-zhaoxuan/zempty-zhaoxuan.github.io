@@ -1,18 +1,36 @@
-    <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover'>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{% assign canonical_path = page.url | replace: 'index.html', '' %}
+{% assign canonical_url = canonical_path | absolute_url %}
+{% assign social_title = page.title | default: site.name %}
+{% if page.excerpt %}
+  {% assign social_description = page.excerpt | strip_html | strip_newlines | truncate: 160 %}
+{% else %}
+  {% assign social_description = site.description %}
+{% endif %}
+{% if page.cover_image %}
+  {% assign cover_prefix = page.cover_image | slice: 0, 4 %}
+  {% if cover_prefix == 'http' %}
+    {% assign social_image = page.cover_image %}
+  {% else %}
+    {% assign cover_path = '/images/' | append: page.cover_image %}
+    {% assign social_image = cover_path | absolute_url %}
+  {% endif %}
+{% else %}
+  {% assign social_image = site.avatar %}
+{% endif %}
 
-    {% if page.excerpt %}
-    <meta name="description" content="{{ page.excerpt | strip_html | escape }}" />
-    <meta property="og:description" content="{{ page.excerpt | strip_html | escape }}" />
-    {% else %}
-    <meta name="description" content="{{ site.description | escape }}">
-    <meta property="og:description" content="{{ site.description | escape }}" />
-    {% endif %}
-    <meta name="author" content="{{ site.name }}" />
-
-    {% if page.title %}
-    <meta property="og:title" content="{{ page.title | escape }}" />
-    <meta property="twitter:title" content="{{ page.title | escape }}" />
-    {% endif %}
+<meta name="description" content="{{ social_description | escape }}">
+<meta name="author" content="{{ site.name | escape }}">
+<link rel="canonical" href="{{ canonical_url | escape }}">
+<meta property="og:site_name" content="{{ site.name | escape }}">
+<meta property="og:title" content="{{ social_title | escape }}">
+<meta property="og:description" content="{{ social_description | escape }}">
+<meta property="og:url" content="{{ canonical_url | escape }}">
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:image" content="{{ social_image | escape }}">
+<meta property="og:locale" content="zh_CN">
+{% if page.layout == 'post' %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+<meta name="twitter:card" content="{% if page.cover_image %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ social_title | escape }}">
+<meta name="twitter:description" content="{{ social_description | escape }}">
+<meta name="twitter:image" content="{{ social_image | escape }}">

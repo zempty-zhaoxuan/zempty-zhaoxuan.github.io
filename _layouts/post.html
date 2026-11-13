@@ -2,91 +2,118 @@
 layout: default
 ---
 
-<div class="reading-progress-container">
-  <div id="reading-progress" class="reading-progress-bar"></div>
+{% assign post_chars = content | strip_html | strip_newlines | size %}
+{% assign reading_minutes = post_chars | plus: 399 | divided_by: 400 %}
+{% if reading_minutes < 1 %}{% assign reading_minutes = 1 %}{% endif %}
+{% assign h2_count = content | split: '<h2' | size | minus: 1 %}
+{% assign h3_count = content | split: '<h3' | size | minus: 1 %}
+{% assign toc_heading_count = h2_count | plus: h3_count %}
+{% assign show_toc = false %}
+{% if page.toc == true and toc_heading_count >= 2 %}{% assign show_toc = true %}{% endif %}
+
+<div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
+
+<div class="post-layout{% if show_toc %} post-layout--toc{% endif %}">
+  <article class="posts">
+    <header class="post-header">
+      <h1>{{ page.title }}</h1>
+      <p class="post-meta">
+        <time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%Y-%m-%d' }}</time>
+        <span aria-hidden="true">·</span>
+        {% if post_chars >= 1000 %}
+          {% assign post_chars_k = post_chars | divided_by: 1000.0 | round: 1 %}
+          <span>{{ post_chars_k }}k 字</span>
+        {% else %}
+          <span>{{ post_chars }} 字</span>
+        {% endif %}
+        <span aria-hidden="true">·</span>
+        <span>{{ reading_minutes }} 分钟阅读</span>
+      </p>
+      {% if page.tags.size > 0 %}
+        <div class="post-tags" aria-label="文章标签">
+          {% for tag in page.tags %}
+            <a class="tag-pill" href="{{ '/tags/' | relative_url }}#{{ tag | url_encode | replace: '+', '%20' }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if page.cover_image %}
+        {% assign cover_path = '/images/' | append: page.cover_image %}
+        <div class="post-cover-image"><img src="{{ cover_path | relative_url }}" alt="" loading="lazy"></div>
+      {% endif %}
+    </header>
+
+    {% if show_toc %}
+      <details class="post-toc post-toc--inline">
+        <summary>目录</summary>
+        {% include toc.html html=content %}
+      </details>
+    {% endif %}
+
+    <div class="entry">
+      {{ content }}
+    </div>
+
+    <div class="post-footer">
+      <div id="post-share-slot" class="post-share-slot"></div>
+
+      {% assign related_count = 0 %}
+      {% capture related_markup %}
+        {% if page.tags.size > 0 %}
+          {% for shared_score in (1..page.tags.size) reversed %}
+            {% for candidate in site.posts %}
+              {% if candidate.url != page.url and related_count < 3 %}
+                {% assign candidate_shared = 0 %}
+                {% for candidate_tag in candidate.tags %}
+                  {% if page.tags contains candidate_tag %}
+                    {% assign candidate_shared = candidate_shared | plus: 1 %}
+                  {% endif %}
+                {% endfor %}
+                {% if candidate_shared == shared_score %}
+                  <a class="related-posts__card" href="{{ candidate.url | relative_url }}">
+                    <span class="related-posts__title">{{ candidate.title }}</span>
+                    <time datetime="{{ candidate.date | date: '%Y-%m-%d' }}">{{ candidate.date | date: '%Y-%m-%d' }}</time>
+                  </a>
+                  {% assign related_count = related_count | plus: 1 %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      {% endcapture %}
+      {% if related_count > 0 %}
+        <section class="related-posts" aria-labelledby="related-posts-title">
+          <h2 id="related-posts-title">相关文章</h2>
+          <div class="related-posts__list">{{ related_markup }}</div>
+        </section>
+      {% endif %}
+
+      {% if page.previous.url or page.next.url %}
+        <nav class="post-pagination" aria-label="相邻文章">
+          {% if page.previous.url %}
+            <a class="post-pagination__card" href="{{ page.previous.url | relative_url }}">
+              <span class="post-pagination__label">上一篇</span>
+              <span class="post-pagination__title">{{ page.previous.title }}</span>
+            </a>
+          {% endif %}
+          {% if page.next.url %}
+            <a class="post-pagination__card" href="{{ page.next.url | relative_url }}">
+              <span class="post-pagination__label">下一篇</span>
+              <span class="post-pagination__title">{{ page.next.title }}</span>
+            </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+
+      {% include giscus.html %}
+    </div>
+  </article>
+
+  {% if show_toc %}
+    <aside class="post-toc post-toc--desktop" aria-label="文章目录">
+      <h2>目录</h2>
+      {% include toc.html html=content %}
+    </aside>
+  {% endif %}
 </div>
 
-<article class="posts">
-  {% if page.cover_image %}
-  <div class="post-cover-image">
-    <img src="{{ site.baseurl }}/images/{{ page.cover_image }}" alt="{{ page.title }} cover image" loading="lazy">
-  </div>
-  {% endif %}
-  
-  <h1>{{ page.title }}</h1>
-
-  <div clsss="meta">
-    <span class="date">
-      {{ page.date | date: "%Y-%m-%d" }}
-    </span>
-
-    <ul class="tag">
-      {% for tag in page.tags %}
-      <li>
-        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag | url_encode }}">
-          {{ tag }}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  
-
-  <div class="entry">
-    {{ content }}
-  </div>
-
-  <div class="post-footer">
-    <!-- 分享占位容器：JS 将优先插入到此处 -->
-    <div id="post-share-slot" class="post-share-slot"></div>
-
-    <!-- 评论区域 -->
-    {% include disqus.html %}
-    {% include giscus.html %}
-  </div>
-</article>
-
-<div class="pagination">
-  {% if page.previous.url %}
-    <span class="prev" >
-      <a href="{{ site.url }}{{ site.baseurl }}{{ page.previous.url }}">
-        ← 上一篇
-      </a>
-    </span>
-  {% endif %}
-  {% if page.next.url %}
-    <span class="next" >
-      <a href="{{ site.url }}{{ site.baseurl }}{{ page.next.url }}">
-        下一篇 →
-      </a>
-    </span>
-  {% endif %}
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Get the progress bar
-    const progressBar = document.getElementById('reading-progress');
-    
-    // Calculate and update progress
-    function updateProgressBar() {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
-      const scrollPosition = window.scrollY;
-      const progress = (scrollPosition / documentHeight) * 100;
-      
-      progressBar.style.width = progress + '%';
-    }
-    
-    // Initial calculation
-    updateProgressBar();
-    
-    // Update on scroll
-    window.addEventListener('scroll', updateProgressBar);
-    window.addEventListener('resize', updateProgressBar);
-  });
-</script>
-
-<!-- 引入文章分享脚本（仅文章页），附带版本参数避免缓存旧版逻辑 -->
-<script src="{{ site.baseurl }}/js/article-sharing.js?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/js/article-sharing.js' | relative_url }}" defer></script>

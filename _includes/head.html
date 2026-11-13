@@ -1,85 +1,47 @@
 <head>
-  <title>
-    {% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{
-    site.description }}
-  </title>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#fbfbfa">
+  <script>
+    (function () {
+      var theme = null;
+      try {
+        var stored = localStorage.getItem('theme');
+        var legacy = localStorage.getItem('theme-preference');
+        var normalize = function (value) {
+          if (value === 'light' || value === 'light-theme') return 'light';
+          if (value === 'dark' || value === 'dark-theme') return 'dark';
+          return null;
+        };
+        theme = normalize(stored) || normalize(legacy);
+        if (theme && (stored !== theme || legacy !== null)) {
+          localStorage.setItem('theme', theme);
+          localStorage.removeItem('theme-preference');
+        }
+      } catch (e) { /* Storage can be unavailable in private browsing. */ }
+      if (!theme) {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.classList.add(theme + '-theme');
+      document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#111315' : '#fbfbfa';
+    })();
+  </script>
+  <title>{% if page.title %}{{ page.title | escape }} – {{ site.name | escape }}{% else %}{{ site.name | escape }} – {{ site.description | escape }}{% endif %}</title>
 
   {% include meta.html %}
-  
-  <!-- Enhanced Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://giscus.app https://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; frame-src https://giscus.app; connect-src 'self' https://www.google-analytics.com https://busuanzi.ibruce.info https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
-  
-  <!-- Base URL for JavaScript -->
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://giscus.app https://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://giscus.app; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://busuanzi.ibruce.info; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+
   <meta name="base-url" content="{{ site.baseurl }}" />
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
   <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  
-  <!-- Security headers -->
+
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  
-  <!-- Security utilities - load first -->
-  <script src="{{ site.baseurl }}/js/security-utils.js?v={{ site.time | date: '%s' }}" integrity="" crossorigin="anonymous"></script>
 
-  <!-- Performance utilities - critical loading -->
-  <script>
-    // Inline critical performance utilities for immediate execution
-    window.siteVersion = '{{ site.time | date: "%s" }}';
-    
-    // Prevent FOUC by hiding content initially
-    document.documentElement.style.visibility = 'hidden';
-    
-    // Critical CSS will be injected by performance utils
-    // Non-critical CSS will be loaded asynchronously
-  </script>
-  <script src="{{ site.baseurl }}/js/css-optimizer.js?v={{ site.time | date: '%s' }}"></script>
-  <script src="{{ site.baseurl }}/js/performance-utils.js?v={{ site.time | date: '%s' }}"></script>
-  <script src="{{ site.baseurl }}/js/debug-check.js?v={{ site.time | date: '%s' }}"></script>
-  <script src="{{ site.baseurl }}/js/image-optimizer.js?v={{ site.time | date: '%s' }}" defer></script>
-  <script src="{{ site.baseurl }}/js/sw-register.js?v={{ site.time | date: '%s' }}" defer></script>
-
-  <!-- Fallback CSS for no-JS users -->
-  <noscript>
-    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css?v={{ site.time | date: '%s' }}" />
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/animations.css?v={{ site.time | date: '%s' }}">
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css?v={{ site.time | date: '%s' }}">
-  </noscript>
-  
-  <!-- Reveal content when main CSS is ready -->
-  <script>
-    (function() {
-      function reveal() {
-        document.documentElement.style.visibility = 'visible';
-        document.documentElement.classList.add('loading-visible');
-      }
-      // Try to reveal when style.css finishes loading (either our preload or optimizer's)
-      function attachToMainCss() {
-        var link = document.querySelector('link[as="style"][href*="/style.css"]');
-        if (!link) return false;
-        if (link.rel === 'stylesheet') {
-          reveal();
-        } else {
-          link.addEventListener('load', reveal, { once: true });
-        }
-        return true;
-      }
-
-      // Attach immediately if possible, otherwise retry shortly
-      if (!attachToMainCss()) {
-        // Retry on next tick to catch links added by scripts
-        setTimeout(attachToMainCss, 0);
-      }
-
-      // Also listen for optimizer's custom event
-      document.addEventListener('cssLoaded', function() { reveal(); }, { once: true });
-
-      // Safety timeout to avoid being stuck hidden
-      setTimeout(reveal, 2500);
-    })();
-  </script>
+  <link rel="stylesheet" href="{{ '/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <link
     rel="alternate"
     type="application/rss+xml"
@@ -87,86 +49,4 @@
     href="{{ site.baseurl }}/feed.xml"
   />
   <link rel="shortcut icon" href="{{ site.favicon }}" />
-  <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"> -->
-
-
-
-  <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-
-  <!-- Main stylesheet preload to prevent initial unstyled flash -->
-  <link rel="preload" as="style" href="{{ '/style.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ '/style.css' | relative_url }}"></noscript>
-
-  <!-- 添加自定义CSS文件用于隐藏代码行号 -->
-  <link rel="preload" as="style" href="{{ '/assets/css/custom.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}"></noscript>
-  
-  <!-- Image optimization styles -->
-  <link rel="preload" as="style" href="{{ '/assets/css/image-optimization.css' | relative_url }}" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ '/assets/css/image-optimization.css' | relative_url }}"></noscript>
-
-  <!-- 内联样式以确保行号被隐藏和代码适应移动设备 -->
-  <style>
-    .highlight table td.gutter,
-    .highlight table td.rouge-gutter,
-    .highlight .lineno,
-    table.rouge-table td.rouge-gutter,
-    .gutter,
-    .rouge-gutter {
-      display: none !important;
-      width: 0 !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      border: none !important;
-    }
-
-    /* 确保代码区域占据整个宽度 */
-    .highlight table td.code,
-    .highlight table td.rouge-code,
-    table.rouge-table td.rouge-code {
-      padding-left: 0 !important;
-      width: 100% !important;
-    }
-    
-    /* 移动端适配 */
-    @media screen and (max-width: 767px) {
-      /* 防止水平滚动 */
-      html, body {
-        overflow-x: hidden !important;
-        width: 100%;
-      }
-      
-      /* 代码块适配 */
-      pre, pre.highlight {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        white-space: pre;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      
-      /* 表格响应式 */
-      table {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-      
-      /* 确保代码复制按钮固定在右上角 */
-      .code-button-container {
-        position: sticky !important;
-        position: -webkit-sticky !important;
-        top: 0 !important;
-        right: 0 !important;
-        z-index: 1000 !important;
-      }
-      
-      /* 确保代码块可以水平滚动但垂直方向按钮可见 */
-      pre.highlight {
-        overflow-y: visible !important;
-        overflow-x: auto !important;
-      }
-    }
-  </style>
 </head>

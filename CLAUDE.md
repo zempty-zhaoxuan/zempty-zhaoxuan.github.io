@@ -4,44 +4,42 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Jekyll-based blog site hosted on GitHub Pages at `blog.zempty.sg`. The site is built using Jekyll 4.3.4 with a custom theme focused on technical writing, LeetCode problem solutions, and personal insights.
+This is a Jekyll-based blog site hosted on GitHub Pages at `blog.zempty.sg`. Production uses GitHub Pages' Jekyll 3.10 with a custom theme focused on technical writing, LeetCode problem solutions, and personal insights.
 
 ## Key Commands
 
 ### Blog Development
 - **Create new blog post**: `./create_blog_post.sh "Your Blog Post Title"` or `./create_blog_post.sh -d YYYY-MM-DD "Title"`
-- **Compile SASS**: `./compile_sass.sh` (compiles `style.scss` to `style.css`)
-- **Local development**: `bundle exec jekyll serve` (standard Jekyll development server)
-- **Build site**: `bundle exec jekyll build`
+- **Compile SASS**: `./compile_sass.sh` (compiles `style.scss` to `style.css`; uses `sass` on PATH, falls back to `npx sass`)
+- **Local development**: `bundle exec jekyll serve` / `bundle exec jekyll build`
 
-### Category Management
-- **Add categories to posts**: `./add_categories.sh` (comprehensive category assignment)
-- **Simple category addition**: `./add_categories_simple.sh`
-- **Fix category issues**: `./fix_categories.sh`
+### Build & Deploy Notes
+- There is no GitHub Actions workflow: GitHub Pages builds the site itself with **Jekyll 3.10** (the `github-pages` gem). The local `Gemfile` pins Jekyll 4.3, so local 4.x builds can pass while Pages fails. Keep templates Jekyll 3.10-compatible and use only Pages-whitelisted plugins (`jekyll-paginate`, `jekyll-sitemap`, `jekyll-feed`).
+- `style.scss` has no front matter, so Jekyll does not compile it. The committed `style.css` is what ships: always run `./compile_sass.sh` after editing anything in `_sass/` and commit the regenerated `style.css`.
+- The CSP in `_includes/head.html` includes `upgrade-insecure-requests`, so a plain `http://127.0.0.1` preview of `_site` loads no CSS/JS in some browsers; `jekyll serve` on localhost is unaffected in most browsers, otherwise strip that directive in a throwaway copy.
+- `sw.js` is a kill switch that clears caches and unregisters the old service worker. Do not reintroduce a caching worker.
 
 ### Other Utilities
-- **Preview sidebar**: `./preview-sidebar.sh`
+- **Security check**: `./security-check.sh`
 
 ## Architecture & Structure
 
 ### Content Organization
 - **Posts**: All blog posts are in `_posts/` with naming convention `YYYY-MM-DD-title-in-lowercase.md`
-- **Categories**: Organized into 6 main categories: `algorithms`, `development`, `tools`, `ai-productivity`, `life-insights`, `others`
-- **Tags**: Dynamic tagging system for cross-categorization
+- **Tags**: Posts are organized by tags only (no categories); `/tags/` and the sidebar sort tags by post count
 
 ### Theme Structure
 - **Layouts**: `_layouts/` contains `default.html`, `post.html`, `page.html`
 - **Includes**: `_includes/` has modular components (nav, footer, analytics, etc.)
-- **Styling**: SASS files in `_sass/` with modern enhancements, mobile responsiveness, and theme switching
-- **JavaScript**: `js/` directory contains interactive features (search, animations, sidebar toggle)
+- **Styling**: `style.scss` imports one partial per area: `_tokens` (light/dark CSS variables, the only place colors are defined), `_base`, `_prose` (article typography), `_layout`, `_sidebar`, `_home`, `_post`, `_search`, `_tags-archive`, `_highlights`, `_giscus`, `_share`. Breakpoint mixins live in `_variables.scss`. Avoid `!important`.
+- **JavaScript**: small, independent, `defer`-loaded scripts in `js/`: `theme-switcher`, `layout` (drawer, focus mode, back-to-top), `search` (⌘K / `/` palette), and post-only `toc`, `reading-progress`, `code-enhancements`, `image-zoom`, `giscus`, `article-sharing`.
 
 ### Key Features
-- Multi-language support (Chinese/English)
-- Advanced search functionality (`simple-jekyll-search`)
-- Table of contents generation
-- Mobile-responsive design with collapsible sidebar
-- Theme switching (light/dark modes)
-- Gitalk commenting system
+- Search palette backed by `search.json` and `js/search.js`
+- TOC (sticky on wide screens, collapsible otherwise) for posts with `toc: true`; related posts by shared tags; prev/next cards
+- Responsive layout: 280px sidebar ≥1024px (collapsible "focus mode"), top bar + drawer below
+- Theme follows the system unless the reader picks one; an inline script in `head.html` sets `light-theme`/`dark-theme` on `<html>` before paint, stores the choice in `localStorage.theme`, and fires a `themechange` event
+- Giscus commenting system
 - Google Analytics integration
 
 ### Front Matter Requirements
@@ -82,7 +80,7 @@ author: zempty
 ## Development Notes
 
 - Site uses Jekyll pagination (13 posts per page)
-- Custom fonts: JetBrains Mono for code, LXGW WenKai for Chinese text
-- Responsive breakpoints handled in `_mobile-enhancements.scss`
+- JetBrains Mono for code; system sans-serif fonts for prose
+- Responsive breakpoints and layout rules are in `_sass/_variables.scss` and `_sass/_layout.scss`
 - Search functionality indexes all posts via `search.json`
 - Analytics and commenting systems are configured in `_config.yml`

@@ -1,113 +1,87 @@
 ---
 layout: default
 ---
-<div class="modern-search-container">
-  <div class="search-input-wrapper">
-    <input type="text" id="search-input" class="search-input" placeholder="搜索博客文章..." autocomplete="off">
-    <div class="search-icon">🔍</div>
-    <button class="search-clear" id="search-clear" title="清除搜索">×</button>
-    <div class="search-shortcut">Ctrl+K</div>
-  </div>
-  <div class="modern-search-results" id="results-container">
-    <!-- 搜索结果将在这里显示 -->
-  </div>
-</div>
 
-<!-- 搜索功能由modern-search.js统一处理 -->
+<div class="home">
+  <header class="home-header">
+    <h1 class="home-title">最新文章</h1>
+    <p class="home-description">记录思考，整理行动。</p>
+  </header>
 
- 
-<!-- 防御性样式：确保首页不显示分享组件（若缓存导致误注入） -->
-<style>
-  .posts-grid .article-share-container { display: none !important; }
-  .post-card .article-share-container { display: none !important; }
-</style>
-{% if site.posts.size == 0 %}
-  <h2>No post found</h2>
-{% endif %}
-
-<div class="posts-grid">
-  {% for post in paginator.posts %}
-  {% unless post.draft %}
-    <article class="post-card{% if forloop.first %} post-card-featured{% endif %}">
-      {% if post.cover_image %}
-      <div class="post-card-cover">
-        <a href="{{ site.baseurl }}{{ post.url }}">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" data-src="{{ site.baseurl }}/images/{{ post.cover_image }}" alt="{{ post.title }} cover image" class="lazy" loading="lazy" onerror="this.onerror=null; this.src='{{ site.baseurl }}/images/blog.jpg';">
-        </a>
-      </div>
-      {% endif %}
-      
-      <div class="post-card-content">
-        <h2 class="post-card-title">
-          <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-        </h2>
-
-        <div class="post-card-meta">
-          <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
-          {% assign words = post.content | number_of_words %}
-          {% assign reading_time = words | divided_by: 200 %}
-          {% if reading_time == 0 %}{% assign reading_time = 1 %}{% endif %}
-          <span class="reading-time">{{ reading_time }} 分钟阅读</span>
-        </div>
-
-        {% if post.tags.size > 0 %}
-        <div class="post-card-tags">
-          {% for tag in post.tags limit:3 %}
-          <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}" class="tag">
-            {{ tag }}
-          </a>
-          {% endfor %}
-          {% if post.tags.size > 3 %}
-          <span class="tag">+{{ post.tags.size | minus: 3 }}</span>
+  {% if site.posts.size == 0 %}
+    <p class="home-empty">暂无文章。</p>
+  {% else %}
+    {% if paginator.page == 1 %}
+      {% assign featured_post = paginator.posts | first %}
+      {% if featured_post and featured_post.draft != true %}
+        {% assign featured_char_count = featured_post.content | strip_html | strip_newlines | size %}
+        {% assign featured_reading_time = featured_char_count | plus: 399 | divided_by: 400 %}
+        {% if featured_reading_time < 1 %}{% assign featured_reading_time = 1 %}{% endif %}
+        <article class="featured-card">
+          {% if featured_post.cover_image %}
+            {% assign featured_cover = '/images/' | append: featured_post.cover_image %}
+            <img class="featured-card__cover" src="{{ featured_cover | relative_url }}" alt="" loading="lazy">
           {% endif %}
-        </div>
+          <div class="featured-card__body">
+            <h2 class="featured-card__title"><a class="featured-card__link" href="{{ featured_post.url | relative_url }}">{{ featured_post.title }}</a></h2>
+            <p class="featured-card__meta">
+              <time datetime="{{ featured_post.date | date: '%Y-%m-%d' }}">{{ featured_post.date | date: '%Y-%m-%d' }}</time>
+              <span aria-hidden="true">·</span>
+              <span>{{ featured_reading_time }} 分钟阅读</span>
+            </p>
+            {% if featured_post.tags.size > 0 %}
+              <div class="featured-card__tags" aria-label="文章标签">
+                {% for tag in featured_post.tags limit: 3 %}<span class="tag-pill">{{ tag }}</span>{% endfor %}
+              </div>
+            {% endif %}
+            <div class="featured-card__excerpt">{{ featured_post.excerpt }}</div>
+          </div>
+        </article>
+      {% endif %}
+    {% endif %}
+
+    <div class="post-list">
+      {% for post in paginator.posts %}
+        {% assign is_featured = false %}
+        {% if paginator.page == 1 and forloop.first %}{% assign is_featured = true %}{% endif %}
+        {% unless post.draft or is_featured %}
+          {% assign char_count = post.content | strip_html | strip_newlines | size %}
+          {% assign reading_time = char_count | plus: 399 | divided_by: 400 %}
+          {% if reading_time < 1 %}{% assign reading_time = 1 %}{% endif %}
+          <article class="post-card">
+            {% if post.cover_image %}
+              {% assign cover = '/images/' | append: post.cover_image %}
+              <img class="post-card__cover" src="{{ cover | relative_url }}" alt="" loading="lazy">
+            {% endif %}
+            <div class="post-card__body">
+              <h2 class="post-card__title"><a class="post-card__link" href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+              <p class="post-card__meta">
+                <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y-%m-%d' }}</time>
+                <span aria-hidden="true">·</span>
+                <span>{{ reading_time }} 分钟阅读</span>
+              </p>
+              {% if post.tags.size > 0 %}
+                <div class="post-card__tags" aria-label="文章标签">
+                  {% for tag in post.tags limit: 3 %}<span class="tag-pill">{{ tag }}</span>{% endfor %}
+                </div>
+              {% endif %}
+              <p class="post-card__excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 120 }}</p>
+            </div>
+          </article>
+        {% endunless %}
+      {% endfor %}
+    </div>
+
+    {% if paginator.total_pages > 1 %}
+      <nav class="home-pagination" aria-label="文章分页">
+        {% if paginator.previous_page %}
+          <a class="home-pagination__link" href="{{ paginator.previous_page_path | relative_url }}">← 较新</a>
         {% endif %}
-
-        <div class="post-card-excerpt">
-          {{ post.excerpt | strip_html | truncate: 150 }}
-        </div>
-        
-        <a href="{{ site.baseurl }}{{ post.url }}" class="post-card-read-more">阅读全文</a>
-      </div>
-    </article>
-  {% endunless %}
-  {% endfor %}
-</div>
-
-<div class="pagination">
-  {% if paginator.previous_page %}
-    <span class="prev">
-      <a href="{{ site.baseurl }}{{ paginator.previous_page_path }}" class="prev page-button">
-        ← 上一页
-      </a>
-    </span>
+        <span class="home-pagination__status">页码 {{ paginator.page }} / {{ paginator.total_pages }}</span>
+        {% if paginator.next_page %}
+          <a class="home-pagination__link" href="{{ paginator.next_page_path | relative_url }}">较旧 →</a>
+        {% endif %}
+      </nav>
+    {% endif %}
   {% endif %}
-  <span class="page_num pagination__page-number">{{ paginator.page }} / {{ paginator.total_pages }}</span>
-  {% if paginator.next_page %}
-    <span class="next">
-      <a href="{{ site.baseurl}}{{ paginator.next_page_path }}" class="next page-button">
-        下一页 →
-      </a>
-    </span>
-  {% endif %}
-</div>
-
-<!--不算子网站访客统计-->
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    var s = document.createElement('script');
-    s.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-    s.async = true;
-    document.body.appendChild(s);
-  });
-</script>
-<!-- pv的方式，单个用户连续点击n篇文章，记录n次访问量 -->
-<div align="center">
-	<span id="busuanzi_container_site_pv" style="font-family:Consolas;color:Silver;font-size:12px;">
-		View:<span id="busuanzi_value_site_pv" style="font-family:Consolas;color:Silver;font-size:12px;"></span>
-	</span>
-	<!-- uv的方式，单个用户连续点击n篇文章，只记录1次访客数 -->
-	<span id="busuanzi_container_site_uv" style="font-family:Consolas;color:Silver;font-size:12px;">
-		User:<span id="busuanzi_value_site_uv" style="font-family:Consolas;color:Silver;font-size:12px;"></span>
-	</span>
 </div>

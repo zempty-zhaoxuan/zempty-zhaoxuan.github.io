@@ -10,8 +10,17 @@ awk 'BEGIN{skip=0} {
   if (skip==0) print $0
 }' style.scss > "$TMP_SCSS"
 
-sass --style=compressed --no-source-map --load-path=_sass "$TMP_SCSS" style.css
+if command -v sass >/dev/null 2>&1; then
+  SASS_CMD=(sass)
+elif npx --offline --yes sass --version >/dev/null 2>&1; then
+  # Prefer a cached Sass package when the network is unavailable.
+  SASS_CMD=(npx --offline --yes sass)
+else
+  SASS_CMD=(npx --yes sass)
+fi
+
+"${SASS_CMD[@]}" --style=compressed --no-source-map --load-path=_sass "$TMP_SCSS" style.css
 
 rm -f "$TMP_SCSS"
 
-echo "SASS compilation complete!" 
+echo "SASS compilation complete!"

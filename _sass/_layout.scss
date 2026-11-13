@@ -1,0 +1,92 @@
+.wrapper-content {
+  min-width: 0;
+  margin-left: 280px;
+  padding: var(--space-16) var(--space-6) var(--space-16);
+  transition: margin-left .24s ease;
+}
+.container { width: 100%; max-width: 760px; min-width: 0; margin-inline: auto; }
+.site-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  transition: transform .24s ease;
+}
+.mobile-topbar, .sidebar-overlay { display: none; }
+[hidden] { display: none; }
+.floating-buttons { position: fixed; right: var(--space-5); bottom: var(--space-5); z-index: 25; display: flex; flex-direction: column; gap: var(--space-2); }
+.floating-buttons button {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: transform .2s ease, background .2s ease;
+}
+.floating-buttons button:hover { transform: translateY(-2px); background: var(--surface-2); }
+.floating-buttons button[hidden] { display: none; }
+.floating-buttons .icon { width: 18px; height: 18px; }
+#sidebar-toggle { position: fixed; left: var(--space-4); bottom: var(--space-5); }
+body.sidebar-collapsed .site-sidebar { transform: translateX(-100%); }
+body.sidebar-collapsed .wrapper-content { margin-left: 0; }
+body.sidebar-collapsed #sidebar-toggle { color: var(--accent); }
+
+@include compact-layout {
+  .wrapper-content, body.sidebar-collapsed .wrapper-content { margin-left: 0; padding: var(--space-8) var(--space-5) var(--space-16); }
+  .mobile-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 60px;
+    padding: var(--space-2) var(--space-5);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-brand { min-width: 0; color: var(--text); font-size: 1rem; font-weight: 700; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mobile-topbar-actions { display: flex; align-items: center; gap: var(--space-1); flex: none; }
+  .mobile-topbar-actions button {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+  }
+  .mobile-topbar-actions button:hover { background: var(--surface-2); }
+  .mobile-topbar-actions .icon { width: 18px; height: 18px; }
+  .site-sidebar, body.sidebar-collapsed .site-sidebar { z-index: 60; width: min(320px, calc(100vw - 48px)); transform: translateX(-105%); box-shadow: var(--shadow); }
+  .sidebar-overlay:not([hidden]) { position: fixed; inset: 0; z-index: 50; display: block; background: rgba(0, 0, 0, .45); }
+  body.drawer-open { overflow: hidden; }
+  body.drawer-open .site-sidebar, body.drawer-open.sidebar-collapsed .site-sidebar { transform: translateX(0); }
+  body.drawer-open .sidebar-overlay { opacity: 1; visibility: visible; }
+  #sidebar-toggle { display: none; }
+  .floating-buttons { right: var(--space-4); bottom: var(--space-4); }
+}
+.site-footer { margin-left: 280px; padding: var(--space-6); border-top: 1px solid var(--border); color: var(--text-muted); font-size: .76rem; }
+.site-footer-inner { max-width: 760px; margin-inline: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); }
+.visitor-counts { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
+body.sidebar-collapsed .site-footer { margin-left: 0; }
+@include compact-layout { .site-footer, body.sidebar-collapsed .site-footer { margin-left: 0; padding-inline: var(--space-5); } }
+@include phone-only {
+  .wrapper-content, body.sidebar-collapsed .wrapper-content { padding-inline: var(--space-4); }
+  .mobile-topbar { padding-inline: var(--space-4); }
+}

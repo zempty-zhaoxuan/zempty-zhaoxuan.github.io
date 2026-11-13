@@ -2,192 +2,47 @@
 <html lang="zh-CN">
   {% include head.html %}
   <body>
-    <script>
-      // Normalize theme early to avoid double-click issue; prefer 'theme' key with 'light'|'dark'
-      (function () {
-        try {
-          var stored = localStorage.getItem('theme') || localStorage.getItem('theme-preference');
-          if (stored === 'dark-theme') stored = 'dark';
-          if (stored === 'light-theme') stored = 'light';
-          var theme = stored === 'light' ? 'light' : 'dark';
-          var cls = document.body.classList;
-          cls.remove('dark-theme', 'light-theme');
-          cls.add(theme + '-theme');
-          localStorage.setItem('theme', theme);
-          localStorage.removeItem('theme-preference');
-        } catch (e) {
-          document.body.classList.add('dark-theme');
-        }
-      })();
-    </script>
-    <style>
-      /* 文字选中样式优化 - 确保良好的对比度 */
-      ::-moz-selection {
-        color: #ffffff !important;
-        background: #1971c2 !important;
-      }
-
-      ::selection {
-        color: #ffffff !important;
-        background: #1971c2 !important;
-      }
-
-      /* 深色主题下的文字选中优化 */
-      .dark-theme ::-moz-selection {
-        color: #1a1a1a !important;
-        background: #74c0fc !important;
-      }
-
-      .dark-theme ::selection {
-        color: #1a1a1a !important;
-        background: #74c0fc !important;
-      }
-    </style>
-    {% include nav.html %} {% if page.toc==true %}
-    <aside class="toc">
-      <button
-        id="toc-toggle-button"
-        aria-label="展开/折叠目录"
-        title="展开/折叠目录"
-      >
-        目录 ▼
-      </button>
-      <div id="toc-content">{% include toc.html html=content %}</div>
-    </aside>
-    {% endif %}
-
-    <div id="main" role="main" class="wrapper-content page-transition">
-      <div class="container">
-        <div class="loader"></div>
-        {{ content }}
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="mobile-topbar">
+      <a class="mobile-brand topbar-brand" href="{{ '/' | relative_url }}">{{ site.name }}</a>
+      <div class="mobile-topbar-actions topbar-actions">
+        <button class="icon-button topbar-search topbar-button" type="button" data-search-open aria-haspopup="dialog" aria-label="搜索文章" title="搜索文章">
+          {% include icons.html name='search' %}
+        </button>
+        <button class="icon-button topbar-theme topbar-button" id="mobile-theme-toggle" type="button" data-theme-toggle aria-label="切换主题" title="切换主题">
+          {% include icons.html name='moon' %}{% include icons.html name='sun' %}
+        </button>
+        <button id="menu-toggle" class="icon-button topbar-button" type="button" aria-controls="site-sidebar" aria-expanded="false" aria-label="打开菜单" title="打开菜单">
+          {% include icons.html name='menu' %}
+        </button>
       </div>
-    </div>
+    </header>
 
-    <!-- 右下角浮动按钮组 -->
+    <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true" hidden></div>
+    {% include nav.html %}
+
+    <main id="main" tabindex="-1" class="wrapper-content{% if page.toc == true %} withtoc{% endif %}">
+      <div class="container">{{ content }}</div>
+    </main>
+
+    <footer class="site-footer">{% include footer.html %}</footer>
+
     <div class="floating-buttons">
-      <!-- 返回首页按钮 -->
-      <a
-        href="{{ site.baseurl }}/"
-        id="home-button"
-        aria-label="返回首页"
-        title="返回首页"
-        >🏠</a
-      >
-
-      <!-- 桌面端侧边栏折叠按钮 (水平折叠) -->
-      <button
-        id="sidebar-toggle"
-        aria-label="折叠/展开侧边栏"
-        title="折叠/展开侧边栏"
-      >
-        ☰
-      </button>
-
-      <!-- 移动端侧边栏折叠按钮 (垂直折叠) -->
-      <button
-        id="mobile-sidebar-toggle"
-        aria-label="折叠/展开侧边栏"
-        title="折叠/展开侧边栏"
-      >
-        ▼
-      </button>
-
-      <!-- 主题切换按钮 -->
-      <button
-        id="theme-toggle"
-        aria-label="切换深色/浅色主题"
-        title="切换深色/浅色主题"
-      >
-        🌙
-      </button>
+      <button id="back-to-top" class="icon-button" type="button" aria-label="返回顶部" title="返回顶部" hidden>{% include icons.html name='up' %}</button>
+      <button id="sidebar-toggle" class="icon-button" type="button" aria-label="进入专注模式" title="进入专注模式" aria-expanded="true" aria-controls="site-sidebar">{% include icons.html name='panel' %}</button>
     </div>
 
     {% include analytics.html %}
-
-    <!-- 引入主题切换脚本 -->
-    <script src="{{ site.baseurl }}/js/theme-switcher.js" defer></script>
-
-    <!-- 引入侧边栏折叠脚本 -->
-    <script src="{{ site.baseurl }}/js/sidebar-toggle.js" defer></script>
-
-    <!-- 引入动画效果脚本 -->
-    <script src="{{ site.baseurl }}/js/animation-loader.js" defer></script>
-
-    <!-- 引入阅读进度条脚本 -->
-    <script src="{{ site.baseurl }}/js/reading-progress.js" defer></script>
-
-    <!-- 引入代码增强脚本 -->
-    <script src="{{ site.baseurl }}/js/code-enhancements.js" defer></script>
-
-    <!-- 引入移动端增强脚本 -->
-    <script src="{{ site.baseurl }}/js/mobile-enhancements.js" defer></script>
-
-    <!-- 引入现代化增强脚本 -->
-    <script src="{{ site.baseurl }}/js/modern-enhancements.js" defer></script>
-
-    <!-- 引入懒加载脚本 -->
-    <script src="{{ site.baseurl }}/js/lazy-load.js" defer></script>
-
-    <!-- 引入增强搜索脚本 -->
-    <script src="{{ site.baseurl }}/js/search-enhancements.js" defer></script>
-    
-    <!-- 引入现代化搜索脚本 (作为回退) -->
-    <script src="{{ site.baseurl }}/js/modern-search.js" defer></script>
-
-    
-    <!-- 引入TOC折叠脚本 -->
-    {% if page.toc==true %}
-    <script src="{{ site.baseurl }}/js/toc-toggle.js" defer></script>
+    <script src="{{ '/js/theme-switcher.js' | relative_url }}" defer></script>
+    <script src="{{ '/js/layout.js' | relative_url }}" defer></script>
+    <script src="{{ '/js/search.js' | relative_url }}" defer></script>
+    {% if page.layout == 'post' %}
+      <script src="{{ '/js/reading-progress.js' | relative_url }}" defer></script>
+      <script src="{{ '/js/code-enhancements.js' | relative_url }}" defer></script>
+      <script src="{{ '/js/image-zoom.js' | relative_url }}" defer></script>
+      <script src="{{ '/js/toc.js' | relative_url }}" defer></script>
+      <script src="{{ '/js/giscus.js' | relative_url }}" defer></script>
     {% endif %}
-
-    <!-- 动态调整目录区域脚本 -->
-    {% if page.toc==true %}
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // 获取相关元素
-        const toc = document.querySelector(".toc");
-        const mainContent = document.querySelector(".wrapper-content");
-        const container = document.querySelector(".container");
-
-        // 自适应目录区域大小的函数
-        function adjustTocSize() {
-          // 获取内容区域的宽度
-          const contentWidth = mainContent.offsetWidth;
-          // 获取容器宽度
-          const containerWidth = container.offsetWidth;
-          // 计算内容区域的空白部分
-          const availableSpace = contentWidth - containerWidth;
-
-          // 如果有足够的空白，增加目录区域的宽度
-          if (availableSpace > 100) {
-            // 计算可用的额外空间，最多增加100px
-            const extraSpace = Math.min(availableSpace * 0.7, 100);
-            toc.style.width = 320 + extraSpace + "px";
-          } else {
-            // 否则使用默认宽度
-            toc.style.width = "";
-          }
-        }
-
-        // 页面加载和窗口大小改变时调整
-        adjustTocSize();
-        window.addEventListener("resize", adjustTocSize);
-
-        // 监听内容变化（如图片加载完成等）
-        const observer = new MutationObserver(adjustTocSize);
-        observer.observe(mainContent, { childList: true, subtree: true });
-      });
-    </script>
-    {% endif %}
+    <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script>
   </body>
-
-  {% if page.toc==true %}
-  <script>
-    document.getElementById("main").classList.add("withtoc");
-  </script>
-  {% endif %}
-
-  <div class="wrapper-footer-mobile">
-    <footer class="footer">{% include footer.html %}</footer>
-  </div>
 </html>
