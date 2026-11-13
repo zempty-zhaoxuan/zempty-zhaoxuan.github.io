@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Jekyll-based blog site hosted on GitHub Pages at `blog.zempty.sg`. Production uses GitHub Pages' Jekyll 3.10 with a custom theme focused on technical writing, LeetCode problem solutions, and personal insights.
+Personal Chinese-language Jekyll blog ("zempty 笔记") hosted on GitHub Pages at `https://blog.zempty.sg`. Production uses GitHub Pages' Jekyll 3.10; the local `Gemfile` uses Jekyll 4.3. The site has a custom theme and covers technical writing, LeetCode solutions, tools, and personal essays.
 
 ## Key Commands
 
 ### Blog Development
-- **Create new blog post**: `./create_blog_post.sh "Your Blog Post Title"` or `./create_blog_post.sh -d YYYY-MM-DD "Title"`
+- **Create new blog post**: `./create_blog_post.sh "English Title"` or `./create_blog_post.sh -d YYYY-MM-DD "English Title"`. The script keeps only `a-z0-9-` in the filename slug, so use an English title for the command, then edit the front matter `title:` to the intended Chinese title.
 - **Compile SASS**: `./compile_sass.sh` (compiles `style.scss` to `style.css`; uses `sass` on PATH, falls back to `npx sass`)
 - **Local development**: `bundle exec jekyll serve` / `bundle exec jekyll build`
 
@@ -21,6 +21,8 @@ This is a Jekyll-based blog site hosted on GitHub Pages at `blog.zempty.sg`. Pro
 
 ### Other Utilities
 - **Security check**: `./security-check.sh`
+
+There is no test suite or linter; verify site changes with a local build.
 
 ## Architecture & Structure
 
@@ -42,15 +44,21 @@ This is a Jekyll-based blog site hosted on GitHub Pages at `blog.zempty.sg`. Pro
 - Giscus commenting system
 - Google Analytics integration
 
+### Site Config
+- Permalinks use `/:title/` and pagination uses 13 posts per page at `/page:num/`.
+- `excerpt_separator: <!-- more -->` marks the end of a post introduction.
+- Kramdown uses GFM and Rouge highlighting, with line numbers disabled.
+- `tags/index.html` and `archive/index.html` provide the tag and archive pages.
+
 ### Front Matter Requirements
 All posts must include:
 ```yaml
 ---
 layout: post
-title: "Article Title"
+title: "文章标题"
 date: "YYYY-MM-DD"
 toc: true
-excerpt: "Brief article summary"
+excerpt: "简要摘要"
 tags: [tag1, tag2]
 comments: true
 author: zempty
@@ -61,8 +69,10 @@ author: zempty
 
 ### Blog Post Creation
 - Use the `create_blog_post.sh` script to ensure proper naming and front matter
-- Filename format: `YYYY-MM-DD-lowercase-title-with-hyphens.md`
-- Always include an excerpt and relevant tags
+- Filename format: `_posts/YYYY-MM-DD-lowercase-english-slug.md`; avoid Chinese characters in the filename
+- Fill in the generated empty excerpt and tags, and put `<!-- more -->` after the introduction
+- Escape or avoid double quotes inside `title` and `excerpt` strings so the YAML front matter remains valid
+- Reuse existing tags with consistent casing before adding new ones
 - Technical posts should have detailed code examples with syntax highlighting
 
 ### LeetCode Posts
@@ -70,6 +80,7 @@ author: zempty
 - Provide multiple solution approaches (minimum 3)
 - Include complexity analysis and execution examples
 - Use Java as the primary language for implementations
+- Explain the requirements, algorithm choice, and step-by-step execution; compare the solutions' time and space costs
 
 ### Styling
 - Code blocks should specify language for syntax highlighting
@@ -84,3 +95,4 @@ author: zempty
 - Responsive breakpoints and layout rules are in `_sass/_variables.scss` and `_sass/_layout.scss`
 - Search functionality indexes all posts via `search.json`
 - Analytics and commenting systems are configured in `_config.yml`
+- `.claude/agents/blog-reviewer.md` provides a proofreading agent for posts
